@@ -1,4 +1,4 @@
-import { Ionicons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import {
@@ -12,20 +12,16 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { COLORS } from "../../src/constants/colors";
-import { FONTS } from "../../src/constants/fonts";
+import { LinearGradient } from "expo-linear-gradient";
 
 const LoginScreen = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSendOTP = () => {
-    if (phoneNumber.length < 10) {
-      // In a real app, use Toast here
-      return;
-    }
+    if (phoneNumber.length < 10) return;
+
     setLoading(true);
-    // Mock API call
     setTimeout(() => {
       setLoading(false);
       router.push("/(auth)/otp");
@@ -33,167 +29,191 @@ const LoginScreen = () => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.container}
+    <LinearGradient
+      colors={["#FFF7ED", "#FFEDD5", "#FED7AA"]}
+      style={{ flex: 1 }}
     >
       <StatusBar barStyle="dark-content" />
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        <View style={styles.header}>
-          <View style={styles.logoContainer}>
-            <Ionicons name="sunny" size={80} color={COLORS.primary} />
-          </View>
-          <Text style={styles.title}>Panchasara Mandir</Text>
-          <Text style={styles.subtitle}>Welcome to the Divine Journey</Text>
-        </View>
 
-        <View style={styles.formContainer}>
-          <Text style={styles.label}>Mobile Number</Text>
-          <View style={styles.inputWrapper}>
-            <Text style={styles.prefix}>+91</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Enter your 10 digit number"
-              keyboardType="phone-pad"
-              maxLength={10}
-              value={phoneNumber}
-              onChangeText={setPhoneNumber}
-              placeholderTextColor={COLORS.textTertiary}
-            />
-          </View>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
+      >
+        <ScrollView contentContainerStyle={styles.scroll}>
+          {/* HEADER */}
+          <View style={styles.header}>
+            <View style={styles.logoWrapper}>
+              <LinearGradient
+                colors={["#FCD34D", "#F59E0B"]}
+                style={styles.logoCircle}
+              >
+                <MaterialCommunityIcons
+                  name="temple-hindu"
+                  size={60}
+                  color="#7C2D12"
+                />
+              </LinearGradient>
+            </View>
 
-          <TouchableOpacity
-            style={[
-              styles.button,
-              (phoneNumber.length < 10 || loading) && styles.buttonDisabled,
-            ]}
-            onPress={handleSendOTP}
-            disabled={phoneNumber.length < 10 || loading}
-          >
-            <Text style={styles.buttonText}>
-              {loading ? "Sending..." : "Send OTP"}
-            </Text>
-          </TouchableOpacity>
-
-          <View style={styles.footer}>
-            <Text style={styles.footerText}>
-              By continuing, you agree to our{" "}
-              <Text style={styles.link}>Terms & Conditions</Text>
+            <Text style={styles.title}>Panchasara Parivar</Text>
+            <Text style={styles.subtitle}>
+              🙏 Jay Mataji • Divine Darshan Awaits
             </Text>
           </View>
-        </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+
+          {/* CARD */}
+          <View style={styles.card}>
+            <Text style={styles.label}>Enter Mobile Number</Text>
+
+            <View style={styles.inputBox}>
+              <Text style={styles.prefix}>🇮🇳 +91</Text>
+
+              <TextInput
+                placeholder="10 digit mobile number"
+                keyboardType="phone-pad"
+                maxLength={10}
+                value={phoneNumber}
+                onChangeText={setPhoneNumber}
+                style={styles.input}
+                placeholderTextColor="#9CA3AF"
+              />
+            </View>
+
+            {/* BUTTON */}
+            <TouchableOpacity
+              activeOpacity={0.85}
+              style={[
+                styles.btn,
+                (phoneNumber.length < 10 || loading) && { opacity: 0.5 },
+              ]}
+              onPress={handleSendOTP}
+              disabled={phoneNumber.length < 10 || loading}
+            >
+              <LinearGradient
+                colors={["#EA580C", "#F59E0B"]}
+                style={styles.btnGradient}
+              >
+                <Text style={styles.btnText}>
+                  {loading ? "Sending OTP..." : "Continue to Darshan"}
+                </Text>
+              </LinearGradient>
+            </TouchableOpacity>
+
+            <Text style={styles.footer}>
+              Secure login for Panchasara Parivar members 🪔
+            </Text>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </LinearGradient>
   );
 };
 
 export default LoginScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.backgroundPrimary,
-  },
-  scrollContent: {
+  scroll: {
     flexGrow: 1,
-    paddingHorizontal: 24,
-    paddingTop: 80,
-    paddingBottom: 40,
+    justifyContent: "center",
+    padding: 24,
   },
+
   header: {
     alignItems: "center",
-    marginBottom: 60,
+    marginBottom: 50,
   },
-  logoContainer: {
+
+  logoWrapper: {
+    elevation: 12,
+  },
+
+  logoCircle: {
     width: 120,
     height: 120,
-    backgroundColor: COLORS.onboarding.illustrationBackground2,
     borderRadius: 60,
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 20,
-    borderWidth: 2,
-    borderColor: COLORS.secondary,
   },
+
   title: {
-    fontSize: 28,
-    fontFamily: FONTS.INTER_700,
-    color: COLORS.primaryDark,
-    marginBottom: 8,
+    fontSize: 32,
+    fontWeight: "800",
+    color: "#7C2D12",
+    marginTop: 16,
   },
+
   subtitle: {
-    fontSize: 16,
-    fontFamily: FONTS.INTER_400,
-    color: COLORS.textSecondary,
+    fontSize: 15,
+    color: "#92400E",
+    marginTop: 6,
+    textAlign: "center",
   },
-  formContainer: {
-    width: "100%",
+
+  card: {
+    backgroundColor: "#FFFFFFEE",
+    padding: 26,
+    borderRadius: 24,
+    shadowColor: "#000",
+    shadowOpacity: 0.08,
+    shadowRadius: 20,
+    elevation: 10,
   },
+
   label: {
     fontSize: 14,
-    fontFamily: FONTS.INTER_600,
-    color: COLORS.textPrimary,
-    marginBottom: 8,
+    fontWeight: "600",
+    color: "#374151",
+    marginBottom: 10,
   },
-  inputWrapper: {
+
+  inputBox: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: COLORS.backgroundSecondary,
-    borderRadius: 12,
+    backgroundColor: "#FFF7ED",
+    borderRadius: 14,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: "#FED7AA",
     paddingHorizontal: 16,
     height: 56,
     marginBottom: 24,
   },
+
   prefix: {
-    fontSize: 16,
-    fontFamily: FONTS.INTER_600,
-    color: COLORS.textPrimary,
-    marginRight: 12,
+    fontSize: 15,
+    fontWeight: "600",
+    marginRight: 10,
+    color: "#7C2D12",
   },
+
   input: {
     flex: 1,
     fontSize: 16,
-    fontFamily: FONTS.INTER_400,
-    color: COLORS.textPrimary,
-    height: "100%",
+    color: "#111827",
   },
-  button: {
-    backgroundColor: COLORS.primary,
-    height: 56,
-    borderRadius: 12,
+
+  btn: {
+    borderRadius: 16,
+    overflow: "hidden",
+    elevation: 6,
+  },
+
+  btnGradient: {
+    height: 58,
     justifyContent: "center",
     alignItems: "center",
-    shadowColor: COLORS.primary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 5,
   },
-  buttonDisabled: {
-    backgroundColor: COLORS.gray[300],
-    shadowOpacity: 0,
-    elevation: 0,
-  },
-  buttonText: {
+
+  btnText: {
+    color: "#FFF",
     fontSize: 18,
-    fontFamily: FONTS.INTER_700,
-    color: COLORS.white,
+    fontWeight: "700",
+    letterSpacing: 0.5,
   },
+
   footer: {
-    marginTop: 24,
-    alignItems: "center",
-  },
-  footerText: {
-    fontSize: 12,
-    fontFamily: FONTS.INTER_400,
-    color: COLORS.textTertiary,
     textAlign: "center",
-    lineHeight: 18,
-  },
-  link: {
-    color: COLORS.primary,
-    fontFamily: FONTS.INTER_600,
+    marginTop: 18,
+    fontSize: 12,
+    color: "#6B7280",
   },
 });

@@ -1,4 +1,4 @@
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useRef, useState } from "react";
 import {
@@ -12,29 +12,26 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { COLORS } from "../../src/constants/colors";
-import { FONTS } from "../../src/constants/fonts";
-import { SCREEN } from "../../src/constants/style";
+import { LinearGradient } from "expo-linear-gradient";
 import { useAuthStore } from "../../src/stores/authStore";
 
 const OTPScreen = () => {
   const [otp, setOtp] = useState(["", "", "", ""]);
   const [loading, setLoading] = useState(false);
-  const inputs = useRef<Array<TextInput | null>>([]);
+  const inputs: any = useRef([]);
   const login = useAuthStore((state) => state.login);
 
-  const handleOtpChange = (value: string, index: number) => {
+  const handleOtpChange = (value: any, index: any) => {
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
 
-    // Auto-focus next input
     if (value && index < 3) {
       inputs.current[index + 1]?.focus();
     }
   };
 
-  const handleKeyPress = (e: any, index: number) => {
+  const handleKeyPress = (e: any, index: any) => {
     if (e.nativeEvent.key === "Backspace" && !otp[index] && index > 0) {
       inputs.current[index - 1]?.focus();
     }
@@ -44,173 +41,186 @@ const OTPScreen = () => {
     if (otp.join("").length < 4) return;
 
     setLoading(true);
-    // Mock Verification Logic
+
     setTimeout(() => {
       setLoading(false);
-      // In a real app, you'd get the token and user from the API
+
       const mockToken = "mock-jwt-token";
-      const mockUser = {
-        id: "1",
-        mobilenumber: 1234567890,
-        firstname: "Mandir",
-        lastname: "User",
-        vehiclenumber: "GJ01AB1234",
-        upiid: "user@upi",
-        isriding: false,
-      };
+      const mockUser: any = { id: "1" };
+
       login(mockToken, mockUser);
       router.replace("/(user)/home");
     }, 1500);
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.container}
+    <LinearGradient
+      colors={["#FFF7ED", "#FFEDD5", "#FED7AA"]}
+      style={{ flex: 1 }}
     >
-      <StatusBar barStyle="dark-content" />
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
-          <Ionicons name="arrow-back" size={24} color={COLORS.textPrimary} />
-        </TouchableOpacity>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
+      >
+        <StatusBar barStyle="dark-content" />
 
-        <View style={styles.header}>
-          <Text style={styles.title}>Verify OTP</Text>
-          <Text style={styles.subtitle}>
-            Enter the 4-digit code sent to your mobile number
-          </Text>
-        </View>
+        <ScrollView contentContainerStyle={styles.scroll}>
+          {/* BACK */}
+          <TouchableOpacity
+            style={styles.backBtn}
+            onPress={() => router.back()}
+          >
+            <Ionicons name="arrow-back" size={22} color="#7C2D12" />
+          </TouchableOpacity>
 
-        <View style={styles.otpContainer}>
-          {otp.map((digit, index) => (
-            <TextInput
-              key={index}
-              ref={(ref) => {
-                inputs.current[index] = ref;
-              }}
-              style={styles.otpInput}
-              keyboardType="number-pad"
-              maxLength={1}
-              value={digit}
-              onChangeText={(value) => handleOtpChange(value, index)}
-              onKeyPress={(e) => handleKeyPress(e, index)}
+          {/* HEADER */}
+          <View style={styles.header}>
+            <MaterialCommunityIcons
+              name="bell-ring-outline"
+              size={50}
+              color="#C2410C"
             />
-          ))}
-        </View>
 
-        <TouchableOpacity
-          style={[
-            styles.button,
-            (otp.join("").length < 4 || loading) && styles.buttonDisabled,
-          ]}
-          onPress={handleVerify}
-          disabled={otp.join("").length < 4 || loading}
-        >
-          <Text style={styles.buttonText}>
-            {loading ? "Verifying..." : "Verify & Continue"}
-          </Text>
-        </TouchableOpacity>
+            <Text style={styles.title}>OTP Darshan</Text>
+            <Text style={styles.subtitle}>
+              Enter the divine 4-digit code 🙏
+            </Text>
+          </View>
 
-        <TouchableOpacity style={styles.resendContainer}>
-          <Text style={styles.resendText}>
-            Didn't receive the code? <Text style={styles.link}>Resend OTP</Text>
-          </Text>
-        </TouchableOpacity>
-      </ScrollView>
-    </KeyboardAvoidingView>
+          {/* CARD */}
+          <View style={styles.card}>
+            <View style={styles.otpRow}>
+              {otp.map((digit, index) => (
+                <TextInput
+                  key={index}
+                  ref={(ref: any) => (inputs.current[index] = ref)}
+                  style={styles.otpInput}
+                  keyboardType="number-pad"
+                  maxLength={1}
+                  value={digit}
+                  onChangeText={(v) => handleOtpChange(v, index)}
+                  onKeyPress={(e) => handleKeyPress(e, index)}
+                />
+              ))}
+            </View>
+
+            {/* BUTTON */}
+            <TouchableOpacity
+              style={[
+                styles.btn,
+                (otp.join("").length < 4 || loading) && { opacity: 0.6 },
+              ]}
+              onPress={handleVerify}
+              disabled={otp.join("").length < 4 || loading}
+            >
+              <LinearGradient
+                colors={["#D97706", "#F59E0B"]}
+                style={styles.btnGradient}
+              >
+                <Text style={styles.btnText}>
+                  {loading ? "Verifying..." : "Verify & Enter Mandir"}
+                </Text>
+              </LinearGradient>
+            </TouchableOpacity>
+
+            <Text style={styles.resend}>
+              Didn't receive?{" "}
+              <Text style={{ color: "#C2410C", fontWeight: "600" }}>
+                Resend OTP
+              </Text>
+            </Text>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </LinearGradient>
   );
 };
 
 export default OTPScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.backgroundPrimary,
-  },
-  scrollContent: {
+  scroll: {
     flexGrow: 1,
-    paddingHorizontal: 24,
-    paddingTop: 60,
-    paddingBottom: 40,
+    justifyContent: "center",
+    padding: 24,
   },
-  backButton: {
+
+  backBtn: {
+    backgroundColor: "#FFF",
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: COLORS.backgroundSecondary,
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 32,
+    marginBottom: 20,
+    elevation: 4,
   },
+
   header: {
-    marginBottom: 40,
+    alignItems: "center",
+    marginBottom: 30,
   },
+
   title: {
     fontSize: 28,
-    fontFamily: FONTS.INTER_700,
-    color: COLORS.textPrimary,
-    marginBottom: 8,
+    fontWeight: "bold",
+    color: "#7C2D12",
+    marginTop: 10,
   },
+
   subtitle: {
-    fontSize: 16,
-    fontFamily: FONTS.INTER_400,
-    color: COLORS.textSecondary,
-    lineHeight: 24,
+    fontSize: 15,
+    color: "#92400E",
+    marginTop: 6,
   },
-  otpContainer: {
+
+  card: {
+    backgroundColor: "#FFF",
+    padding: 24,
+    borderRadius: 20,
+    elevation: 8,
+  },
+
+  otpRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 40,
+    marginBottom: 30,
   },
+
   otpInput: {
-    width: (SCREEN.WIDTH - 48 - 45) / 4,
-    height: 64,
-    backgroundColor: COLORS.backgroundSecondary,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: COLORS.border,
+    width: 60,
+    height: 65,
+    borderRadius: 14,
+    backgroundColor: "#FFF7ED",
+    borderWidth: 2,
+    borderColor: "#F59E0B",
     fontSize: 24,
-    fontFamily: FONTS.INTER_700,
-    color: COLORS.textPrimary,
     textAlign: "center",
+    fontWeight: "bold",
+    color: "#7C2D12",
   },
-  button: {
-    backgroundColor: COLORS.primary,
-    height: 56,
-    borderRadius: 12,
+
+  btn: {
+    borderRadius: 14,
+    overflow: "hidden",
+  },
+
+  btnGradient: {
+    height: 55,
     justifyContent: "center",
     alignItems: "center",
-    shadowColor: COLORS.primary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 5,
   },
-  buttonDisabled: {
-    backgroundColor: COLORS.gray[300],
-    shadowOpacity: 0,
-    elevation: 0,
-  },
-  buttonText: {
+
+  btnText: {
+    color: "#FFF",
     fontSize: 18,
-    fontFamily: FONTS.INTER_700,
-    color: COLORS.white,
+    fontWeight: "bold",
   },
-  resendContainer: {
-    marginTop: 24,
-    alignItems: "center",
-  },
-  resendText: {
+
+  resend: {
+    textAlign: "center",
+    marginTop: 18,
     fontSize: 14,
-    fontFamily: FONTS.INTER_400,
-    color: COLORS.textSecondary,
-  },
-  link: {
-    color: COLORS.primary,
-    fontFamily: FONTS.INTER_600,
+    color: "#6B7280",
   },
 });
