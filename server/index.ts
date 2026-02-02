@@ -1,11 +1,12 @@
-import express from "express";
+import dotenv from "dotenv";
+dotenv.config();
 
-const app = express();
+import app from "./app.js";
+import { checkDBConnected } from "./database/index.js";
 
-app.get("/", (req, res) => {
-  res.send("API running 🚀");
-});
+const PORT = process.env.PORT || 5000;
 
-app.listen(5000, () => {
-  console.log("Server running on 5000");
+app.listen(PORT, () => {
+  checkDBConnected();
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
