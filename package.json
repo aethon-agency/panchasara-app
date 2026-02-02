@@ -1,0 +1,16 @@
+{
+  "name": "panchasara-app",
+  "devDependencies": {
+    "turbo": "^2.8.1"
+  },
+  "private": true,
+  "packageManager": "yarn@1.22.22",
+  "workspaces": [
+    "mobile-app",
+    "server"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build"
+  }
+}
