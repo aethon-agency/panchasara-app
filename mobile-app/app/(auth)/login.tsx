@@ -15,18 +15,28 @@ import {
   Dimensions,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { LanguageSelector } from "@/src/components/LanguageSelector";
+import { PrimaryButton } from "@/src/components/PrimaryButton";
 import { useLanguage } from "@/src/hooks/useLanguage";
 
-const { width } = Dimensions.get("window");
+const { width, height } = Dimensions.get("window");
 
 const LoginScreen = () => {
   const { t } = useLanguage();
+  const insets = useSafeAreaInsets();
+  const [activeTab, setActiveTab] = useState<"login" | "register">("login");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSendOTP = () => {
-    if (phoneNumber.length < 10) return;
+    if (activeTab === "login") {
+      if (phoneNumber.length < 10) return;
+    } else {
+      if (!firstName || !lastName || phoneNumber.length < 10) return;
+    }
 
     setLoading(true);
     // Simulate API Call
@@ -36,124 +46,179 @@ const LoginScreen = () => {
     }, 1500);
   };
 
+  const isFormValid =
+    activeTab === "login"
+      ? phoneNumber.length === 10
+      : firstName.trim() !== "" &&
+        lastName.trim() !== "" &&
+        phoneNumber.length === 10;
+
   return (
-    <LinearGradient
-      colors={["#FFF7ED", "#FFEDD5", "#FED7AA"]}
-      style={styles.container}
-    >
+    <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
 
-      <View style={styles.topHalo} />
+      {/* LIGHT SAFFRON BACKGROUND */}
+      <LinearGradient
+        colors={["#FFF7ED", "#FFEDD5", "#FED7AA"]}
+        style={StyleSheet.absoluteFill}
+      />
 
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={{ flex: 1 }}
-      >
-        <ScrollView
-          contentContainerStyle={styles.scrollContent}
-          showsVerticalScrollIndicator={false}
-        >
-          <View style={styles.languageRow}>
-            <LanguageSelector />
+      <View style={[styles.topHalo, { top: -width * 0.3 }]} />
+
+      <View style={styles.topSection}>
+        <View style={[styles.languageRow, { top: Math.max(insets.top, 10) }]}>
+          <LanguageSelector />
+        </View>
+
+        <View style={styles.logoWrapper}>
+          <View style={styles.logoHalo}>
+            <Image
+              source={require("../../assets/images/screen-logo.png")}
+              style={styles.logo}
+              resizeMode="contain"
+            />
           </View>
-          <View style={styles.header}>
-            <View style={styles.logoContainer}>
-              <View style={styles.logoOuterRing}>
-                <View style={styles.logoInnerRing}>
-                  <Image
-                    source={require("../../assets/images/screen-logo.png")}
-                    style={styles.logo}
-                    resizeMode="contain"
-                  />
-                </View>
-              </View>
-            </View>
+        </View>
+      </View>
+
+      {/* FORM SECTION (WHIT SHEET STYLE) */}
+      <View style={styles.formSheet}>
+        <View style={styles.sheetContent}>
+          {/* TAB SWITCHER */}
+          <View style={styles.tabBar}>
+            <TouchableOpacity
+              onPress={() => setActiveTab("login")}
+              style={[styles.tab, activeTab === "login" && styles.activeTab]}
+            >
+              <Text
+                style={[
+                  styles.tabText,
+                  activeTab === "login" && styles.activeTabText,
+                ]}
+              >
+                {t("login.loginTab") ?? "Login"}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setActiveTab("register")}
+              style={[styles.tab, activeTab === "register" && styles.activeTab]}
+            >
+              <Text
+                style={[
+                  styles.tabText,
+                  activeTab === "register" && styles.activeTabText,
+                ]}
+              >
+                {t("login.registerTab") ?? "Register"}
+              </Text>
+            </TouchableOpacity>
           </View>
 
-          {/* MANDIR DESIGN CARD */}
-          <View style={styles.mandirCard}>
-            {/* The Shikhar/Arch Accent */}
-            <View style={styles.cardArch} />
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={{ flex: 1 }}
+          >
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={[
+                styles.scrollForm,
+                { paddingBottom: insets.bottom + 20 },
+              ]}
+            >
+              {activeTab === "register" && (
+                <>
+                  <View style={styles.inputGroup}>
+                    <Text style={styles.inputLabel}>
+                      {t("login.firstNameLabel") ?? "First Name"}
+                    </Text>
+                    <View style={styles.inputField}>
+                      <MaterialCommunityIcons
+                        name="account-outline"
+                        size={20}
+                        color="#92400E"
+                      />
+                      <TextInput
+                        placeholder={
+                          t("login.firstNameLabel") ?? "Enter first name"
+                        }
+                        value={firstName}
+                        onChangeText={setFirstName}
+                        style={styles.textInput}
+                        placeholderTextColor="#A8A29E"
+                      />
+                    </View>
+                  </View>
 
-            <View style={styles.cardBody}>
-              <View style={styles.sheetHeader}>
-                <Text style={styles.sheetTitle}>
-                  {t("login.mobileTitle") ?? "Enter Mobile Number"}
+                  <View style={styles.inputGroup}>
+                    <Text style={styles.inputLabel}>
+                      {t("login.lastNameLabel") ?? "Last Name"}
+                    </Text>
+                    <View style={styles.inputField}>
+                      <MaterialCommunityIcons
+                        name="account-details-outline"
+                        size={20}
+                        color="#92400E"
+                      />
+                      <TextInput
+                        placeholder={
+                          t("login.lastNameLabel") ?? "Enter last name"
+                        }
+                        value={lastName}
+                        onChangeText={setLastName}
+                        style={styles.textInput}
+                        placeholderTextColor="#A8A29E"
+                      />
+                    </View>
+                  </View>
+                </>
+              )}
+
+              <View style={styles.inputGroup}>
+                <Text style={styles.inputLabel}>
+                  {t("login.mobileTitle") ?? "Mobile Number"}
                 </Text>
-              </View>
-
-              {/* Enhanced Input Group */}
-              <View style={styles.inputContainer}>
-                <View style={styles.phoneRow}>
-                  <TouchableOpacity
-                    activeOpacity={0.7}
-                    style={styles.countryPicker}
-                  >
-                    <Text style={styles.flag}>🇮🇳</Text>
-                    <Text style={styles.countryCode}>+91</Text>
-                    <MaterialCommunityIcons
-                      name="chevron-down"
-                      size={16}
-                      color="#92400E"
-                    />
-                  </TouchableOpacity>
-
-                  <View style={styles.inputDivider} />
-
+                <View style={styles.inputField}>
+                  <View style={styles.phonePrefix}>
+                    <Text style={styles.prefixText}>🇮🇳 +91</Text>
+                    <View style={styles.verticalDivider} />
+                  </View>
                   <TextInput
                     placeholder={t("login.mobilePlaceholder") ?? "00000 00000"}
                     keyboardType="phone-pad"
                     maxLength={10}
                     value={phoneNumber}
                     onChangeText={setPhoneNumber}
-                    style={styles.textInput}
+                    style={[styles.textInput, { letterSpacing: 1 }]}
                     placeholderTextColor="#A8A29E"
                   />
                 </View>
               </View>
 
-              <TouchableOpacity
-                activeOpacity={0.9}
-                style={[
-                  styles.submitBtn,
-                  (phoneNumber.length < 10 || loading) && styles.disabledBtn,
-                ]}
-                onPress={handleSendOTP}
-                disabled={phoneNumber.length < 10 || loading}
-              >
-                <LinearGradient
-                  colors={["#EA580C", "#9A3412"]} // Saffron to Vermillion
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 0 }}
-                  style={styles.btnGradient}
-                >
-                  <Text style={styles.btnText}>
-                    {loading
+              <View style={styles.buttonContainer}>
+                <PrimaryButton
+                  label={
+                    loading
                       ? t("login.sendingOtp")
-                      : (t("login.cta") ?? "Get OTP")}
-                  </Text>
-                  {!loading && (
-                    <MaterialCommunityIcons
-                      name="arrow-right"
-                      size={20}
-                      color="#FFF"
-                    />
-                  )}
-                </LinearGradient>
-              </TouchableOpacity>
-            </View>
-          </View>
+                      : (t("login.cta") ?? "Get OTP")
+                  }
+                  onPress={handleSendOTP}
+                  loading={loading}
+                  disabled={!isFormValid}
+                  icon="arrow-right"
+                />
+              </View>
 
-          {/* FOOTER */}
-          <View style={styles.footer}>
-            <Text style={styles.footerText}>
-              {t("login.footerText") ??
-                "By continuing, you agree to our Terms and Privacy Policy"}
-            </Text>
-          </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </LinearGradient>
+              <View style={styles.footer}>
+                <Text style={styles.footerText}>
+                  {t("login.footerText") ??
+                    "Secure portal for Panchasara Parivar members 🪔"}
+                </Text>
+              </View>
+            </ScrollView>
+          </KeyboardAvoidingView>
+        </View>
+      </View>
+    </View>
   );
 };
 
@@ -165,181 +230,127 @@ const styles = StyleSheet.create({
   },
   topHalo: {
     position: "absolute",
-    top: -width * 0.3,
     left: -width * 0.1,
     width: width * 1.2,
     height: width * 0.7,
-    backgroundColor: "rgba(251, 191, 36, 0.15)",
+    backgroundColor: "rgba(251, 191, 36, 0.25)",
     borderBottomLeftRadius: width,
     borderBottomRightRadius: width,
   },
-  scrollContent: {
-    flexGrow: 1,
-    paddingHorizontal: 24,
-    paddingBottom: 40,
+  topSection: {
+    height: height * 0.35,
+    justifyContent: "center",
+    alignItems: "center",
   },
   languageRow: {
-    alignItems: "flex-end",
-    marginTop: Platform.OS === "ios" ? 10 : 40,
+    position: "absolute",
+    right: 20,
+    zIndex: 10,
   },
-  header: {
-    alignItems: "center",
-    marginVertical: 30,
+  logoWrapper: {
+    marginTop: 20,
   },
-  logoContainer: {
-    marginBottom: 20,
-  },
-  logoOuterRing: {
-    padding: 12,
+  logoHalo: {
+    // padding: 12,
     borderRadius: 100,
-    backgroundColor: "rgba(251, 146, 60, 0.15)",
-  },
-  logoInnerRing: {
-    padding: 4,
-    borderRadius: 100,
-    backgroundColor: "#FFFFFF",
+    // backgroundColor: "rgba(255, 255, 255, 0.4)",
+    backgroundColor: "#FFF",
     borderWidth: 1.5,
     borderColor: "rgba(251, 146, 60, 0.3)",
   },
   logo: {
-    width: 150,
-    height: 150,
+    width: 180,
+    height: 180,
   },
-  title: {
-    fontSize: 28,
-    fontWeight: "900",
-    color: "#7C2D12",
-    textAlign: "center",
+  formSheet: {
+    flex: 1,
+    backgroundColor: "#FFF",
+    borderTopLeftRadius: 35,
+    borderTopRightRadius: 35,
+    paddingTop: 30,
+    marginTop: -20,
   },
-  subtitle: {
-    fontSize: 16,
-    color: "#9A3412",
-    opacity: 0.8,
-    marginTop: 6,
-    textAlign: "center",
-    fontWeight: "500",
+  sheetContent: {
+    flex: 1,
+    paddingHorizontal: 28,
   },
-  /* MANDIR CARD STYLING */
-  mandirCard: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 30,
-    shadowColor: "#7C2D12",
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.1,
-    shadowRadius: 20,
-    elevation: 8,
-    overflow: "hidden",
-    borderWidth: 1,
-    borderColor: "#FFEDD5",
-  },
-  cardArch: {
-    height: 6,
-    width: "35%",
-    backgroundColor: "#F59E0B",
-    alignSelf: "center",
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
-  },
-  cardBody: {
-    padding: 24,
-  },
-  sheetHeader: {
+  tabBar: {
     flexDirection: "row",
+    backgroundColor: "#F3F4F6",
+    borderRadius: 20,
+    padding: 6,
+    marginBottom: 30,
+  },
+  tab: {
+    flex: 1,
+    paddingVertical: 10,
     alignItems: "center",
+    borderRadius: 15,
+  },
+  activeTab: {
+    backgroundColor: "#FFF",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  tabText: {
+    fontSize: 15,
+    fontWeight: "600",
+    color: "#6B7280",
+  },
+  activeTabText: {
+    color: "#EA580C",
+    fontWeight: "800",
+  },
+  scrollForm: {
+    // paddingBottom set dynamically via insets
+  },
+  inputGroup: {
     marginBottom: 20,
   },
-  omIcon: {
-    marginRight: 8,
-    opacity: 0.7,
-  },
-  sheetTitle: {
-    fontSize: 20,
-    fontWeight: "800",
-    color: "#431407",
-  },
-  sheetSubtitle: {
+  inputLabel: {
     fontSize: 14,
-    color: "#78350F",
-    opacity: 0.6,
-    lineHeight: 20,
-    marginBottom: 24,
-  },
-  inputContainer: {
-    backgroundColor: "#FFF7ED",
-    borderRadius: 18,
-    borderWidth: 1,
-    borderColor: "#FED7AA",
-    padding: 4,
-  },
-  phoneRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    height: 54,
-  },
-  countryPicker: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 12,
-    gap: 4,
-  },
-  flag: {
-    fontSize: 18,
-  },
-  countryCode: {
-    fontSize: 16,
     fontWeight: "700",
-    color: "#92400E",
+    color: "#431407",
+    marginBottom: 8,
+    marginLeft: 4,
   },
-  inputDivider: {
-    width: 1,
-    height: "50%",
-    backgroundColor: "#FED7AA",
+  inputField: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#F9FAFB",
+    borderWidth: 1.5,
+    borderColor: "#E5E7EB",
+    borderRadius: 18,
+    height: 60,
+    paddingHorizontal: 16,
   },
   textInput: {
     flex: 1,
-    paddingHorizontal: 15,
-    fontSize: 18,
+    marginLeft: 12,
+    fontSize: 16,
     fontWeight: "600",
-    color: "#431407",
-    letterSpacing: 1,
+    color: "#111827",
   },
-  infoRow: {
+  phonePrefix: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
-    marginTop: 12,
-    gap: 4,
   },
-  helperText: {
-    fontSize: 12,
-    color: "#B45309",
-    fontWeight: "500",
+  prefixText: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#EA580C",
+    marginRight: 10,
   },
-  submitBtn: {
-    marginTop: 24,
-    borderRadius: 18,
-    overflow: "hidden",
-    shadowColor: "#EA580C",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 4,
+  verticalDivider: {
+    width: 1,
+    height: 24,
+    backgroundColor: "#E5E7EB",
   },
-  disabledBtn: {
-    opacity: 0.6,
-  },
-  btnGradient: {
-    height: 58,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 10,
-  },
-  btnText: {
-    color: "#FFFFFF",
-    fontSize: 18,
-    fontWeight: "800",
-    letterSpacing: 0.5,
+  buttonContainer: {
+    marginTop: 10,
   },
   footer: {
     marginTop: 30,
@@ -347,9 +358,9 @@ const styles = StyleSheet.create({
   },
   footerText: {
     fontSize: 12,
-    color: "#94A3B8",
+    color: "#9CA3AF",
     textAlign: "center",
-    paddingHorizontal: 40,
     lineHeight: 18,
+    paddingHorizontal: 20,
   },
 });
