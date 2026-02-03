@@ -19,12 +19,14 @@
     "submit": "Submit"
   },
   "login": {
-    "title": "Panchasara Parivar",
-    "subtitle": "🙏 Jay Mataji • Divine Darshan Awaits",
-    "mobileLabel": "Enter Mobile Number",
-    "mobilePlaceholder": "10 digit mobile number",
-    "cta": "Continue to Darshan",
+    "title": "Jai Mataji",
+    "subtitle": "Your gateway to divine blessings",
+    "mobileTitle": "Enter Mobile Number",
+    "mobileSubtitle": "Sign in to access Darshan, Pooja, and Seva",
+    "mobilePlaceholder": "00000 00000",
+    "cta": "Get OTP",
     "sendingOtp": "Sending OTP...",
-    "footer": "Secure login for Panchasara Parivar members 🪔"
+    "footer": "Secure login for Panchasara Parivar members 🪔",
+    "footerText": "By continuing, you agree to our Terms and Privacy Policy"
   }
 }

@@ -1,107 +1,158 @@
-import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import React, { useEffect, useRef } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Animated,
+  Easing,
+  Platform,
+} from "react-native";
 import { useLanguage } from "../hooks/useLanguage";
-import { COLORS } from "../constants/colors";
-
-const languages = [
-  { code: "en", label: "English", sub: "ENG" },
-  { code: "gu", label: "ગુજરાતી", sub: "GUJ" },
-] as const;
 
 export const LanguageSelector = () => {
-  const { currentLanguage, changeLanguage, t } = useLanguage();
+  const { currentLanguage, changeLanguage } = useLanguage();
+
+  // Animation value 0 to 1
+  const animValue = useRef(
+    new Animated.Value(currentLanguage === "gu" ? 1 : 0),
+  ).current;
+
+  useEffect(() => {
+    Animated.timing(animValue, {
+      toValue: currentLanguage === "gu" ? 1 : 0,
+      duration: 300,
+      easing: Easing.bezier(0.4, 0.0, 0.2, 1), // Smooth "Material" transition
+      useNativeDriver: false, // Background color and layout need false
+    }).start();
+  }, [currentLanguage]);
+
+  // Movement of the knob
+  const translateX = animValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [4, 84], // Adjusted for wider track (170 - 4 - 82 = 84)
+  });
+
+  // Background color morph: Light Gold -> Saffron
+  const trackColor = animValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: ["#FEF3C7", "#FFEDD5"],
+  });
+
+  const handleToggle = () => {
+    const nextLang = currentLanguage === "en" ? "gu" : "en";
+    changeLanguage(nextLang);
+  };
 
   return (
     <View style={styles.outerContainer}>
-      <View style={styles.container}>
-        {languages.map((lang) => (
-          <TouchableOpacity
-            key={lang.code}
-            activeOpacity={0.7}
-            style={[
-              styles.button,
-              currentLanguage === lang.code && styles.activeButton,
-            ]}
-            onPress={() => changeLanguage(lang.code)}
-          >
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={handleToggle}
+        style={styles.touchWrapper}
+      >
+        <Animated.View style={[styles.track, { backgroundColor: "#FEF3C7" }]}>
+          {/* Static Labels */}
+          <View style={styles.labelContainer}>
             <Text
+              numberOfLines={1}
               style={[
-                styles.buttonText,
-                currentLanguage === lang.code && styles.activeButtonText,
+                styles.label,
+                currentLanguage === "en" && styles.activeLabel,
               ]}
             >
-              {lang.label}
+              English
             </Text>
-            <View
+            <Text
+              numberOfLines={1}
               style={[
-                styles.dot,
-                currentLanguage === lang.code
-                  ? styles.activeDot
-                  : styles.inactiveDot,
+                styles.label,
+                currentLanguage === "gu" && styles.activeLabel,
               ]}
-            />
-          </TouchableOpacity>
-        ))}
-      </View>
+            >
+              ગુજરાતી
+            </Text>
+          </View>
+
+          {/* Sliding Knob */}
+          <Animated.View
+            style={[
+              styles.knob,
+              {
+                transform: [{ translateX }],
+              },
+            ]}
+          />
+        </Animated.View>
+      </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   outerContainer: {
-    alignItems: "center",
-    marginVertical: 20,
-    width: "100%",
+    alignItems: "flex-end",
+    marginVertical: 8,
   },
-  container: {
+  touchWrapper: {
+    borderRadius: 22,
+    ...Platform.select({
+      ios: {
+        shadowColor: "#7C2D12",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 2,
+      },
+    }),
+  },
+  track: {
+    width: 170, // Increased width to accommodate full text
+    height: 44, // Slightly taller for better touch target and text fit
+    borderRadius: 22,
     flexDirection: "row",
-    backgroundColor: "rgba(255, 255, 255, 0.8)",
-    borderRadius: 30,
-    padding: 4,
-    borderWidth: 1,
-    borderColor: "#FED7AA", // Light gold/orange border
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 10,
-    elevation: 2,
-  },
-  button: {
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 26,
     alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "column",
-    minWidth: 90,
+    paddingHorizontal: 0,
+    borderWidth: 1,
+    borderColor: "#FDE68A",
   },
-  activeButton: {
+  labelContainer: {
+    position: "absolute",
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    zIndex: 2,
+    paddingHorizontal: 4,
+  },
+  label: {
+    fontSize: 13,
+    fontWeight: "700",
+    color: "#B45309",
+    flex: 1, // Take equal space
+    textAlign: "center",
+  },
+  activeLabel: {
+    color: "#7C2D12",
+  },
+  knob: {
+    width: 82, // Approximately half width
+    height: 36,
+    borderRadius: 18,
     backgroundColor: "#FFFFFF",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  buttonText: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: "#92400E", // Darker gold/brown
-  },
-  activeButtonText: {
-    color: "#B91C1C", // Deep Red for active state
-    fontWeight: "800",
-  },
-  dot: {
-    width: 4,
-    height: 4,
-    borderRadius: 2,
-    marginTop: 4,
-  },
-  activeDot: {
-    backgroundColor: "#B91C1C",
-  },
-  inactiveDot: {
-    backgroundColor: "transparent",
+    zIndex: 1,
+    ...Platform.select({
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 2.5,
+      },
+      android: {
+        elevation: 4,
+      },
+    }),
   },
 });
