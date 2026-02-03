@@ -25,6 +25,7 @@ interface SwipeButtonProps {
   disabled?: boolean;
   height?: number;
   width?: number;
+  borderRadius?: number;
 }
 
 const { width: DEFAULT_WIDTH } = Dimensions.get("window");
@@ -40,9 +41,13 @@ export const SwipeButton: React.FC<SwipeButtonProps> = ({
   disabled = false,
   height = DEFAULT_BUTTON_HEIGHT,
   width: customWidth,
+  borderRadius,
 }) => {
-  const containerWidth = customWidth || DEFAULT_WIDTH - 60;
-  const HANDLE_SIZE = height - PADDING * 2 - 2;
+  const containerWidth = customWidth || DEFAULT_WIDTH - 52;
+  const containerRadius = borderRadius ?? height / 2;
+  const innerRadius = Math.max(0, containerRadius - PADDING);
+
+  const HANDLE_SIZE = height - PADDING * 2;
   const MAX_TRANSLATE_X = containerWidth - HANDLE_SIZE - PADDING * 2;
 
   const translateX = useSharedValue(0);
@@ -110,11 +115,6 @@ export const SwipeButton: React.FC<SwipeButtonProps> = ({
   // Handle Styling - Premium Saffron to Golden
   const animatedHandleStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: translateX.value }],
-    backgroundColor: interpolateColor(
-      translateX.value,
-      [0, MAX_TRANSLATE_X],
-      ["#EA580C", "#F59E0B"], // Shifts from Bright Saffron to Warm Amber/Golden
-    ),
     shadowColor: interpolateColor(
       translateX.value,
       [0, MAX_TRANSLATE_X],
@@ -122,9 +122,8 @@ export const SwipeButton: React.FC<SwipeButtonProps> = ({
     ),
   }));
 
-  // Progress Bar Gradient Styling
   const animatedProgressStyle = useAnimatedStyle(() => ({
-    width: translateX.value + HANDLE_SIZE + PADDING,
+    width: translateX.value + HANDLE_SIZE,
     opacity: interpolate(
       translateX.value,
       [0, 20],
@@ -180,7 +179,7 @@ export const SwipeButton: React.FC<SwipeButtonProps> = ({
     <View
       style={[
         styles.container,
-        { height, width: containerWidth },
+        { height, width: containerWidth, borderRadius: containerRadius },
         disabled && styles.disabled,
       ]}
     >
@@ -190,7 +189,11 @@ export const SwipeButton: React.FC<SwipeButtonProps> = ({
           colors={["rgba(253, 186, 116, 0.3)", "rgba(234, 88, 12, 0.6)"]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
-          style={[styles.progress, animatedProgressStyle]}
+          style={[
+            styles.progress,
+            animatedProgressStyle,
+            { borderRadius: innerRadius },
+          ]}
         />
       </View>
 
@@ -206,13 +209,17 @@ export const SwipeButton: React.FC<SwipeButtonProps> = ({
         <Animated.View
           style={[
             styles.handle,
-            { width: HANDLE_SIZE, height: HANDLE_SIZE },
+            {
+              width: HANDLE_SIZE,
+              height: HANDLE_SIZE,
+              borderRadius: innerRadius,
+            },
             animatedHandleStyle,
           ]}
         >
           <LinearGradient
             colors={["rgba(255,255,255,0.4)", "transparent"]}
-            style={styles.gradientOverlay}
+            style={[styles.gradientOverlay, { borderRadius: innerRadius }]}
           />
           {loading ? (
             <Animated.View style={animatedLoadingStyle}>
@@ -257,11 +264,10 @@ const styles = StyleSheet.create({
   track: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: "transparent",
-    paddingVertical: 4,
+    padding: PADDING - 2,
   },
   progress: {
     height: "100%",
-    borderRadius: 30,
   },
   labelContainer: {
     ...StyleSheet.absoluteFillObject,
@@ -278,7 +284,7 @@ const styles = StyleSheet.create({
     marginTop: -2,
   },
   handle: {
-    borderRadius: 35,
+    borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
     zIndex: 10,
@@ -289,13 +295,13 @@ const styles = StyleSheet.create({
         shadowRadius: 5,
       },
       android: {
-        elevation: 10,
+        elevation: 1,
       },
     }),
   },
   gradientOverlay: {
     ...StyleSheet.absoluteFillObject,
-    borderRadius: 35,
+    borderRadius: 20,
   },
   iconContainer: {
     width: "100%",

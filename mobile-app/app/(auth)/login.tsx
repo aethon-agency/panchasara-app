@@ -1,5 +1,5 @@
 import { router } from "expo-router";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -14,6 +14,14 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+  interpolate,
+  Extrapolation,
+  Easing,
+} from "react-native-reanimated";
 import { LanguageSelector } from "@/src/components/LanguageSelector";
 import { CustomInput } from "@/src/components/CustomInput";
 import { SwipeButton } from "@/src/components/SwipeButton";
@@ -29,6 +37,16 @@ const LoginScreen = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // Transition value: 0 for login, 1 for register
+  const transition = useSharedValue(0);
+
+  useEffect(() => {
+    transition.value = withTiming(activeTab === "register" ? 1 : 0, {
+      duration: 500,
+      easing: Easing.bezier(0.33, 1, 0.68, 1),
+    });
+  }, [activeTab]);
 
   const handleSendOTP = () => {
     if (activeTab === "login") {
@@ -52,6 +70,56 @@ const LoginScreen = () => {
         lastName.trim() !== "" &&
         phoneNumber.length === 10;
 
+  // ANIMATED STYLES
+  const animatedTopSectionStyle = useAnimatedStyle(() => {
+    // Total space at top when collapsed
+    const collapsedHeight = insets.top + 40;
+
+    const sectionHeight = interpolate(
+      transition.value,
+      [0, 1],
+      [height * 0.35, collapsedHeight],
+      Extrapolation.CLAMP,
+    );
+    const opacity = interpolate(
+      transition.value,
+      [0, 0.4],
+      [1, 0],
+      Extrapolation.CLAMP,
+    );
+
+    return {
+      height: sectionHeight,
+      opacity,
+    };
+  });
+
+  const animatedFormSheetStyle = useAnimatedStyle(() => {
+    // Margin Top interpolation to create the "floating" gap at the top
+    const marginTop = interpolate(
+      transition.value,
+      [0, 1],
+      [-25, 0], // In Register mode, it sits below the collapsed topSection (which is insets.top+40)
+      Extrapolation.CLAMP,
+    );
+
+    const borderRadius = interpolate(
+      transition.value,
+      [0, 1],
+      [40, 32],
+      Extrapolation.CLAMP,
+    );
+
+    return {
+      marginTop,
+      borderTopLeftRadius: borderRadius,
+      borderTopRightRadius: borderRadius,
+      // Bottom radius only in register mode for full "floating" card effect
+      borderBottomLeftRadius: interpolate(transition.value, [0, 1], [0, 32]),
+      borderBottomRightRadius: interpolate(transition.value, [0, 1], [0, 32]),
+    };
+  });
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
@@ -64,7 +132,7 @@ const LoginScreen = () => {
 
       <View style={[styles.topHalo, { top: -width * 0.3 }]} />
 
-      <View style={styles.topSection}>
+      <Animated.View style={[styles.topSection, animatedTopSectionStyle]}>
         <View style={[styles.languageRow, { top: Math.max(insets.top, 10) }]}>
           <LanguageSelector />
         </View>
@@ -78,15 +146,16 @@ const LoginScreen = () => {
             />
           </View>
         </View>
-      </View>
+      </Animated.View>
 
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         style={{ flex: 1 }}
         keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
       >
-        <View style={styles.formSheet}>
+        <Animated.View style={[styles.formSheet, animatedFormSheetStyle]}>
           <View style={styles.sheetHandle} />
+
           <View style={styles.sheetContent}>
             {/* MODERN TAB SWITCHER */}
             <View style={styles.tabBar}>
@@ -167,7 +236,8 @@ const LoginScreen = () => {
                 onSwipeComplete={handleSendOTP}
                 loading={loading}
                 disabled={!isFormValid}
-                height={52}
+                height={54}
+                borderRadius={28}
               />
 
               <View style={styles.footer}>
@@ -178,7 +248,7 @@ const LoginScreen = () => {
               </View>
             </ScrollView>
           </View>
-        </View>
+        </Animated.View>
       </KeyboardAvoidingView>
     </View>
   );
@@ -200,9 +270,9 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: width,
   },
   topSection: {
-    height: height * 0.35,
     justifyContent: "center",
     alignItems: "center",
+    overflow: "hidden",
   },
   languageRow: {
     position: "absolute",
@@ -235,11 +305,8 @@ const styles = StyleSheet.create({
   },
   formSheet: {
     flex: 1,
-    backgroundColor: "#FFFFFF", // Changed to White for premium contrast
-    borderTopLeftRadius: 40,
-    borderTopRightRadius: 40,
-    paddingTop: 12, // Reduced for handle
-    marginTop: -25,
+    backgroundColor: "#FFFFFF",
+    paddingTop: 12,
     ...Platform.select({
       ios: {
         shadowColor: "#000",
@@ -258,11 +325,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#E2E8F0",
     borderRadius: 3,
     alignSelf: "center",
-    marginBottom: 20,
+    marginBottom: 8,
   },
   sheetContent: {
     flex: 1,
-    paddingHorizontal: 28,
+    marginHorizontal: 24,
   },
   tabBar: {
     flexDirection: "row",
@@ -299,9 +366,7 @@ const styles = StyleSheet.create({
   activeTabText: {
     color: "#EA580C",
   },
-  scrollForm: {
-    // Dynamically padded
-  },
+  scrollForm: {},
   footer: {
     marginTop: 32,
     alignItems: "center",
