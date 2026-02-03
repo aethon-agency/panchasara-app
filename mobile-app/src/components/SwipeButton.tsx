@@ -132,28 +132,10 @@ export const SwipeButton: React.FC<SwipeButtonProps> = ({
     ),
   }));
 
-  // Shimmer Text Styling
-  const animatedTextStyle = useAnimatedStyle(() => {
-    const opacity = interpolate(
-      translateX.value,
-      [0, MAX_TRANSLATE_X / 2],
-      [1, 0],
-      Extrapolation.CLAMP,
-    );
-
-    return {
-      opacity,
-      transform: [
-        {
-          translateX: interpolate(
-            translateX.value,
-            [0, MAX_TRANSLATE_X],
-            [0, 30],
-          ),
-        },
-      ],
-    };
-  });
+  // No translation to ensure perfect overlap during the swipe
+  const animatedTextStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: -PADDING / 2 }], // Slight adjustment for handle offset
+  }));
 
   const animatedLoadingStyle = useAnimatedStyle(() => ({
     transform: [{ rotate: `${loadingRotation.value}deg` }],
@@ -183,25 +165,39 @@ export const SwipeButton: React.FC<SwipeButtonProps> = ({
         disabled && styles.disabled,
       ]}
     >
-      {/* Background Track with inner glow effect */}
+      {/* Elegant Label (Background) */}
+      <View style={[styles.labelContainer, { width: containerWidth }]}>
+        <Animated.Text style={[styles.label, animatedTextStyle]}>
+          {label}
+        </Animated.Text>
+      </View>
+
+      {/* Background Track with opaque white reveal label */}
       <View style={styles.track}>
         <AnimatedGradient
-          colors={["rgba(253, 186, 116, 0.3)", "rgba(234, 88, 12, 0.6)"]}
+          colors={["#FDBA74", "#EA580C"]} // Opaque colors to hide background text
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           style={[
             styles.progress,
             animatedProgressStyle,
-            { borderRadius: innerRadius },
+            { borderRadius: innerRadius, overflow: "hidden" },
           ]}
-        />
-      </View>
-
-      {/* Elegant Label */}
-      <View style={styles.labelContainer}>
-        <Animated.Text style={[styles.label, animatedTextStyle]}>
-          {label}
-        </Animated.Text>
+        >
+          {/* Offset back by PADDING to align with global center */}
+          <View
+            style={[
+              styles.labelContainer,
+              { width: containerWidth, left: -PADDING },
+            ]}
+          >
+            <Animated.Text
+              style={[styles.label, animatedTextStyle, { color: "#FFF" }]}
+            >
+              {label}
+            </Animated.Text>
+          </View>
+        </AnimatedGradient>
       </View>
 
       {/* The Handle / Swipeable element */}
@@ -273,14 +269,13 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     justifyContent: "center",
     alignItems: "center",
-    paddingLeft: 40, // Offset for the thumb
   },
   label: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: "900",
     color: "#9A3412", // Rich Deep Saffron
     textTransform: "uppercase",
-    letterSpacing: 2,
+    letterSpacing: 1.5,
     marginTop: -2,
   },
   handle: {
