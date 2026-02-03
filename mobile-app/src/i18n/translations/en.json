@@ -31,6 +31,11 @@
     "cta": "Get OTP",
     "sendingOtp": "Sending OTP...",
     "footer": "Secure login for Panchasara Parivar members 🪔",
-    "footerText": "By continuing, you agree to our Terms and Privacy Policy"
+    "footerText": "By joining, you agree to our Terms and Privacy Policy",
+    "otpTitle": "Verify OTP",
+    "otpSubtitle": "Enter the 4-digit code sent to your mobile",
+    "otpResendText": "Didn't receive code?",
+    "resendAction": "Resend OTP",
+    "verifyCta": "Verify & Continue"
   }
 }

@@ -11,17 +11,30 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Image,
+  Dimensions,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAuthStore } from "../../src/stores/authStore";
+import { LanguageSelector } from "@/src/components/LanguageSelector";
+import { PrimaryButton } from "@/src/components/PrimaryButton";
+import { useLanguage } from "@/src/hooks/useLanguage";
+
+const { width, height } = Dimensions.get("window");
 
 const OTPScreen = () => {
+  const { t } = useLanguage();
+  const insets = useSafeAreaInsets();
   const [otp, setOtp] = useState(["", "", "", ""]);
   const [loading, setLoading] = useState(false);
   const inputs: any = useRef([]);
   const login = useAuthStore((state) => state.login);
 
   const handleOtpChange = (value: any, index: any) => {
+    // Only allow numbers
+    if (value && !/^\d+$/.test(value)) return;
+
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
@@ -44,183 +57,254 @@ const OTPScreen = () => {
 
     setTimeout(() => {
       setLoading(false);
-
       const mockToken = "mock-jwt-token";
       const mockUser: any = { id: "1" };
-
       login(mockToken, mockUser);
       router.replace("/(user)/home");
     }, 1500);
   };
 
+  const isOtpComplete = otp.join("").length === 4;
+
   return (
-    <LinearGradient
-      colors={["#FFF7ED", "#FFEDD5", "#FED7AA"]}
-      style={{ flex: 1 }}
-    >
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={{ flex: 1 }}
-      >
-        <StatusBar barStyle="dark-content" />
+    <View style={styles.container}>
+      <StatusBar barStyle="dark-content" />
 
-        <ScrollView contentContainerStyle={styles.scroll}>
-          {/* BACK */}
-          <TouchableOpacity
-            style={styles.backBtn}
-            onPress={() => router.back()}
-          >
-            <Ionicons name="arrow-back" size={22} color="#7C2D12" />
-          </TouchableOpacity>
+      {/* LIGHT SAFFRON BACKGROUND */}
+      <LinearGradient
+        colors={["#FFF7ED", "#FFEDD5", "#FED7AA"]}
+        style={StyleSheet.absoluteFill}
+      />
 
-          {/* HEADER */}
-          <View style={styles.header}>
-            <MaterialCommunityIcons
-              name="bell-ring-outline"
-              size={50}
-              color="#C2410C"
+      <View style={[styles.topHalo, { top: -width * 0.3 }]} />
+
+      {/* TOP SECTION */}
+      <View style={styles.topSection}>
+        <View style={[styles.languageRow, { top: Math.max(insets.top, 10) }]}>
+          <LanguageSelector />
+        </View>
+
+        <TouchableOpacity
+          style={[styles.backButton, { top: Math.max(insets.top, 10) }]}
+          onPress={() => router.back()}
+        >
+          <Ionicons name="arrow-back" size={24} color="#7C2D12" />
+        </TouchableOpacity>
+
+        <View style={styles.logoWrapper}>
+          <View style={styles.logoHalo}>
+            <Image
+              source={require("../../assets/images/screen-logo.png")}
+              style={styles.logo}
+              resizeMode="contain"
             />
-
-            <Text style={styles.title}>OTP Darshan</Text>
-            <Text style={styles.subtitle}>
-              Enter the divine 4-digit code 🙏
-            </Text>
           </View>
+        </View>
+      </View>
 
-          {/* CARD */}
-          <View style={styles.card}>
-            <View style={styles.otpRow}>
-              {otp.map((digit, index) => (
-                <TextInput
-                  key={index}
-                  ref={(ref: any) => (inputs.current[index] = ref)}
-                  style={styles.otpInput}
-                  keyboardType="number-pad"
-                  maxLength={1}
-                  value={digit}
-                  onChangeText={(v) => handleOtpChange(v, index)}
-                  onKeyPress={(e) => handleKeyPress(e, index)}
-                />
-              ))}
-            </View>
+      {/* FORM SECTION (WHITE SHEET STYLE) */}
+      <View style={styles.formSheet}>
+        <View style={styles.sheetContent}>
+          <Text style={styles.sheetTitle}>
+            {t("login.otpTitle") ?? "Verify OTP"}
+          </Text>
+          <Text style={styles.sheetSubtitle}>
+            {t("login.otpSubtitle") ??
+              "Enter the 4-digit code sent to your mobile"}
+          </Text>
 
-            {/* BUTTON */}
-            <TouchableOpacity
-              style={[
-                styles.btn,
-                (otp.join("").length < 4 || loading) && { opacity: 0.6 },
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={{ flex: 1 }}
+          >
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={[
+                styles.scrollForm,
+                { paddingBottom: insets.bottom + 20 },
               ]}
-              onPress={handleVerify}
-              disabled={otp.join("").length < 4 || loading}
             >
-              <LinearGradient
-                colors={["#D97706", "#F59E0B"]}
-                style={styles.btnGradient}
-              >
-                <Text style={styles.btnText}>
-                  {loading ? "Verifying..." : "Verify & Enter Mandir"}
-                </Text>
-              </LinearGradient>
-            </TouchableOpacity>
+              <View style={styles.otpContainer}>
+                {otp.map((digit, index) => (
+                  <View
+                    key={index}
+                    style={[
+                      styles.otpInputWrapper,
+                      otp[index] ? styles.activeInputWrapper : null,
+                    ]}
+                  >
+                    <TextInput
+                      ref={(ref: any) => (inputs.current[index] = ref)}
+                      style={styles.otpInput}
+                      keyboardType="number-pad"
+                      maxLength={1}
+                      value={digit}
+                      onChangeText={(v) => handleOtpChange(v, index)}
+                      onKeyPress={(e) => handleKeyPress(e, index)}
+                      selectionColor="#EA580C"
+                    />
+                  </View>
+                ))}
+              </View>
 
-            <Text style={styles.resend}>
-              Didn't receive?{" "}
-              <Text style={{ color: "#C2410C", fontWeight: "600" }}>
-                Resend OTP
-              </Text>
-            </Text>
-          </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </LinearGradient>
+              <View style={styles.buttonContainer}>
+                <PrimaryButton
+                  label={
+                    loading
+                      ? "Verifying..."
+                      : (t("login.verifyCta") ?? "Verify & Continue")
+                  }
+                  onPress={handleVerify}
+                  loading={loading}
+                  disabled={!isOtpComplete}
+                  icon="check-decagram-outline"
+                />
+              </View>
+
+              <View style={styles.footer}>
+                <Text style={styles.footerText}>
+                  {t("login.footerText") ??
+                    "Secure portal for Panchasara Parivar members 🪔"}
+                </Text>
+              </View>
+            </ScrollView>
+          </KeyboardAvoidingView>
+        </View>
+      </View>
+    </View>
   );
 };
 
 export default OTPScreen;
 
 const styles = StyleSheet.create({
-  scroll: {
-    flexGrow: 1,
-    justifyContent: "center",
-    padding: 24,
+  container: {
+    flex: 1,
   },
-
-  backBtn: {
+  topHalo: {
+    position: "absolute",
+    left: -width * 0.1,
+    width: width * 1.2,
+    height: width * 0.7,
+    backgroundColor: "rgba(251, 191, 36, 0.25)",
+    borderBottomLeftRadius: width,
+    borderBottomRightRadius: width,
+  },
+  topSection: {
+    height: height * 0.35,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  languageRow: {
+    position: "absolute",
+    right: 20,
+    zIndex: 10,
+  },
+  backButton: {
+    position: "absolute",
+    left: 20,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: "rgba(255, 255, 255, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 10,
+  },
+  logoWrapper: {
+    marginTop: 20,
+  },
+  logoHalo: {
+    borderRadius: 100,
     backgroundColor: "#FFF",
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 20,
-    elevation: 4,
+    borderWidth: 1.5,
+    borderColor: "rgba(251, 146, 60, 0.3)",
   },
-
-  header: {
-    alignItems: "center",
+  logo: {
+    width: 170,
+    height: 170,
+  },
+  formSheet: {
+    flex: 1,
+    backgroundColor: "#FFF7ED", // Match theme
+    borderTopLeftRadius: 35,
+    borderTopRightRadius: 35,
+    paddingTop: 30,
+    marginTop: -20,
+  },
+  sheetContent: {
+    flex: 1,
+    paddingHorizontal: 28,
+  },
+  sheetTitle: {
+    fontSize: 26,
+    fontWeight: "900",
+    color: "#431407",
+    textAlign: "center",
+  },
+  sheetSubtitle: {
+    fontSize: 14,
+    color: "#92400E",
+    textAlign: "center",
+    marginTop: 6,
+    opacity: 0.7,
     marginBottom: 30,
   },
-
-  title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: "#7C2D12",
-    marginTop: 10,
+  scrollForm: {
+    // paddingBottom set dynamically
   },
-
-  subtitle: {
-    fontSize: 15,
-    color: "#92400E",
-    marginTop: 6,
-  },
-
-  card: {
-    backgroundColor: "#FFF",
-    padding: 24,
-    borderRadius: 20,
-    elevation: 8,
-  },
-
-  otpRow: {
+  otpContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 30,
+    marginBottom: 40,
+    paddingHorizontal: 10,
   },
-
-  otpInput: {
+  otpInputWrapper: {
     width: 60,
-    height: 65,
-    borderRadius: 14,
-    backgroundColor: "#FFF7ED",
+    height: 64,
+    borderRadius: 16,
+    backgroundColor: "#F9FAFB",
     borderWidth: 2,
-    borderColor: "#F59E0B",
-    fontSize: 24,
-    textAlign: "center",
-    fontWeight: "bold",
-    color: "#7C2D12",
-  },
-
-  btn: {
-    borderRadius: 14,
-    overflow: "hidden",
-  },
-
-  btnGradient: {
-    height: 55,
+    borderColor: "#E5E7EB",
     justifyContent: "center",
     alignItems: "center",
   },
-
-  btnText: {
-    color: "#FFF",
-    fontSize: 18,
-    fontWeight: "bold",
+  activeInputWrapper: {
+    borderColor: "#EA580C",
+    backgroundColor: "#FFF7ED",
   },
-
-  resend: {
+  otpInput: {
+    fontSize: 28,
+    fontWeight: "800",
+    color: "#431407",
     textAlign: "center",
-    marginTop: 18,
+    width: "100%",
+  },
+  buttonContainer: {
+    marginTop: 10,
+  },
+  resendButton: {
+    marginTop: 24,
+    alignItems: "center",
+  },
+  resendText: {
     fontSize: 14,
     color: "#6B7280",
+    fontWeight: "500",
+  },
+  resendLink: {
+    color: "#EA580C",
+    fontWeight: "700",
+  },
+  footer: {
+    marginTop: 40,
+    alignItems: "center",
+  },
+  footerText: {
+    fontSize: 12,
+    color: "#9CA3AF",
+    textAlign: "center",
+    lineHeight: 18,
+    paddingHorizontal: 20,
   },
 });

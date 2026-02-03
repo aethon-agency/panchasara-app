@@ -57,7 +57,6 @@ const LoginScreen = () => {
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
 
-      {/* LIGHT SAFFRON BACKGROUND */}
       <LinearGradient
         colors={["#FFF7ED", "#FFEDD5", "#FED7AA"]}
         style={StyleSheet.absoluteFill}
@@ -264,7 +263,7 @@ const styles = StyleSheet.create({
   },
   formSheet: {
     flex: 1,
-    backgroundColor: "#FFF",
+    backgroundColor: "#FFF7ED", // Match the lightest saffron from background
     borderTopLeftRadius: 35,
     borderTopRightRadius: 35,
     paddingTop: 30,
@@ -276,7 +275,7 @@ const styles = StyleSheet.create({
   },
   tabBar: {
     flexDirection: "row",
-    backgroundColor: "#F3F4F6",
+    backgroundColor: "rgba(251, 146, 60, 0.08)", // Subtle Saffron instead of Grey
     borderRadius: 20,
     padding: 6,
     marginBottom: 30,
@@ -288,7 +287,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
   activeTab: {
-    backgroundColor: "#FFF",
+    backgroundColor: "#FFF7ED", // Light saffron highlight instead of white
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
