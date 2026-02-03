@@ -368,7 +368,7 @@ const styles = StyleSheet.create({
   },
   scrollForm: {},
   footer: {
-    marginTop: 32,
+    marginTop: 12,
     alignItems: "center",
   },
   footerText: {

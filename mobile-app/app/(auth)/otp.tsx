@@ -1,4 +1,4 @@
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useRef, useState } from "react";
 import {
@@ -82,13 +82,6 @@ const OTPScreen = () => {
         <View style={[styles.languageRow, { top: Math.max(insets.top, 10) }]}>
           <LanguageSelector />
         </View>
-
-        <TouchableOpacity
-          style={[styles.backButton, { top: Math.max(insets.top, 10) }]}
-          onPress={() => router.back()}
-        >
-          <Ionicons name="arrow-back" size={24} color="#7C2D12" />
-        </TouchableOpacity>
 
         <View style={styles.logoWrapper}>
           <View style={styles.logoHalo}>
@@ -204,28 +197,6 @@ const styles = StyleSheet.create({
     right: 20,
     zIndex: 10,
   },
-  backButton: {
-    position: "absolute",
-    left: 20,
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: "rgba(255, 255, 255, 0.5)",
-    justifyContent: "center",
-    alignItems: "center",
-    zIndex: 10,
-    ...Platform.select({
-      ios: {
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-      },
-      android: {
-        elevation: 3,
-      },
-    }),
-  },
   logoWrapper: {
     marginTop: 20,
   },
@@ -337,7 +308,7 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
   },
   footer: {
-    marginTop: 32,
+    marginTop: 12,
     alignItems: "center",
   },
   footerText: {

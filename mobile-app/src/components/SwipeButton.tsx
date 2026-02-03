@@ -1,5 +1,12 @@
 import React, { useEffect } from "react";
-import { StyleSheet, View, Text, Dimensions, Platform } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Dimensions,
+  Platform,
+  ActivityIndicator,
+} from "react-native";
 import { GestureDetector, Gesture } from "react-native-gesture-handler";
 import Animated, {
   useAnimatedStyle,
@@ -236,9 +243,10 @@ export const SwipeButton: React.FC<SwipeButtonProps> = ({
             style={[styles.gradientOverlay, { borderRadius: innerRadius }]}
           />
           {loading ? (
-            <Animated.View style={animatedLoadingStyle}>
-              <MaterialCommunityIcons name="loading" size={30} color="#FFF" />
-            </Animated.View>
+            <ActivityIndicator
+              size={"small"}
+              color={"#FFF"}
+            ></ActivityIndicator>
           ) : (
             <Animated.View style={[styles.iconContainer, animatedIconStyle]}>
               <MaterialCommunityIcons
