@@ -18,7 +18,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAuthStore } from "../../src/stores/authStore";
 import { LanguageSelector } from "@/src/components/LanguageSelector";
-import { PrimaryButton } from "@/src/components/PrimaryButton";
+import { SwipeButton } from "@/src/components/SwipeButton";
 import { useLanguage } from "@/src/hooks/useLanguage";
 
 const { width, height } = Dimensions.get("window");
@@ -102,63 +102,67 @@ const OTPScreen = () => {
       </View>
 
       {/* FORM SECTION (WHITE SHEET STYLE) */}
-      <View style={styles.formSheet}>
-        <View style={styles.sheetContent}>
-          <Text style={styles.sheetTitle}>
-            {t("login.otpTitle") ?? "Verify OTP"}
-          </Text>
-          <Text style={styles.sheetSubtitle}>
-            {t("login.otpSubtitle") ??
-              "Enter the 4-digit code sent to your mobile"}
-          </Text>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        style={{ flex: 1 }}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
+      >
+        <View style={styles.formSheet}>
+          <View style={styles.sheetHandle} />
 
-          <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={{ flex: 1 }}
-          >
+          <View style={styles.sheetContent}>
+            <Text style={styles.sheetTitle}>
+              {t("login.otpTitle") ?? "Verify OTP"}
+            </Text>
+            <Text style={styles.sheetSubtitle}>
+              {t("login.otpSubtitle") ??
+                "Enter the 4-digit code sent to your mobile"}
+            </Text>
+
             <ScrollView
               showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled"
               contentContainerStyle={[
                 styles.scrollForm,
-                { paddingBottom: insets.bottom + 20 },
+                { paddingBottom: insets.bottom + 60 },
               ]}
             >
-              <View style={styles.otpContainer}>
-                {otp.map((digit, index) => (
-                  <View
-                    key={index}
-                    style={[
-                      styles.otpCard,
-                      otp[index] ? styles.activeOtpCard : null,
-                    ]}
-                  >
-                    <TextInput
-                      ref={(ref: any) => (inputs.current[index] = ref)}
-                      style={styles.otpInput}
-                      keyboardType="number-pad"
-                      maxLength={1}
-                      value={digit}
-                      onChangeText={(v) => handleOtpChange(v, index)}
-                      onKeyPress={(e) => handleKeyPress(e, index)}
-                      selectionColor="#EA580C"
-                    />
-                  </View>
-                ))}
+              <View style={styles.otpSection}>
+                <Text style={styles.inputLabel}>
+                  {t("login.otpLabel") ?? "Verification Code"}
+                </Text>
+                <View style={styles.otpContainer}>
+                  {otp.map((digit, index) => (
+                    <View
+                      key={index}
+                      style={[
+                        styles.otpCard,
+                        otp[index] ? styles.activeOtpCard : null,
+                      ]}
+                    >
+                      <TextInput
+                        ref={(ref: any) => (inputs.current[index] = ref)}
+                        style={styles.otpInput}
+                        keyboardType="number-pad"
+                        maxLength={1}
+                        value={digit}
+                        onChangeText={(v) => handleOtpChange(v, index)}
+                        onKeyPress={(e) => handleKeyPress(e, index)}
+                        selectionColor="#EA580C"
+                      />
+                    </View>
+                  ))}
+                </View>
               </View>
 
-              <View style={styles.buttonContainer}>
-                <PrimaryButton
-                  label={
-                    loading
-                      ? "Verifying..."
-                      : (t("login.verifyCta") ?? "Verify & Continue")
-                  }
-                  onPress={handleVerify}
-                  loading={loading}
-                  disabled={!isOtpComplete}
-                  icon="check-outline"
-                />
-              </View>
+              <SwipeButton
+                label={t("login.verifyCta") ?? "Slide to Verify"}
+                onSwipeComplete={handleVerify}
+                loading={loading}
+                disabled={!isOtpComplete}
+                height={54}
+                borderRadius={28}
+              />
 
               <View style={styles.footer}>
                 <Text style={styles.footerText}>
@@ -167,9 +171,9 @@ const OTPScreen = () => {
                 </Text>
               </View>
             </ScrollView>
-          </KeyboardAvoidingView>
+          </View>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </View>
   );
 };
@@ -193,6 +197,7 @@ const styles = StyleSheet.create({
     height: height * 0.35,
     justifyContent: "center",
     alignItems: "center",
+    overflow: "hidden",
   },
   languageRow: {
     position: "absolute",
@@ -205,10 +210,21 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: "rgba(255, 255, 255, 0.4)",
+    backgroundColor: "rgba(255, 255, 255, 0.5)",
     justifyContent: "center",
     alignItems: "center",
     zIndex: 10,
+    ...Platform.select({
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 3,
+      },
+    }),
   },
   logoWrapper: {
     marginTop: 20,
@@ -218,28 +234,59 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF",
     borderWidth: 1.5,
     borderColor: "rgba(251, 146, 60, 0.3)",
+    ...Platform.select({
+      ios: {
+        shadowColor: "#EA580C",
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 10,
+      },
+      android: {
+        elevation: 4,
+      },
+    }),
   },
   logo: {
-    width: 170,
-    height: 170,
+    width: 200,
+    height: 200,
   },
   formSheet: {
     flex: 1,
-    backgroundColor: "#FFF7ED",
+    backgroundColor: "#FFFFFF",
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
-    paddingTop: 32,
+    paddingTop: 12,
     marginTop: -25,
+    ...Platform.select({
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: -10 },
+        shadowOpacity: 0.1,
+        shadowRadius: 20,
+      },
+      android: {
+        elevation: 20,
+      },
+    }),
+  },
+  sheetHandle: {
+    width: 44,
+    height: 5,
+    backgroundColor: "#E2E8F0",
+    borderRadius: 3,
+    alignSelf: "center",
+    marginBottom: 8,
   },
   sheetContent: {
     flex: 1,
-    paddingHorizontal: 28,
+    marginHorizontal: 24,
   },
   sheetTitle: {
     fontSize: 26,
     fontWeight: "900",
     color: "#431407",
     textAlign: "center",
+    marginTop: 10,
   },
   sheetSubtitle: {
     fontSize: 14,
@@ -247,42 +294,39 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 6,
     opacity: 0.8,
+    marginBottom: 48,
+  },
+  scrollForm: {},
+  otpSection: {
+    width: "100%",
     marginBottom: 40,
   },
-  scrollForm: {
-    // paddingBottom dynamically set
+  inputLabel: {
+    fontSize: 12,
+    fontWeight: "700",
+    color: "#431407",
+    textTransform: "uppercase",
+    letterSpacing: 1,
+    marginBottom: 12,
+    opacity: 0.8,
   },
   otpContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 48,
-    paddingHorizontal: 10,
+    paddingHorizontal: 4,
   },
   otpCard: {
     width: 60,
-    height: 68,
-    borderRadius: 18,
-    backgroundColor: "#FFF",
-    borderWidth: 1,
-    borderColor: "#FFEDD5",
+    height: 60,
+    backgroundColor: "transparent",
+    borderBottomWidth: 1.5,
+    borderBottomColor: "#FED7AA", // Same as CustomInput's default underline
     justifyContent: "center",
     alignItems: "center",
-    ...Platform.select({
-      ios: {
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.04,
-        shadowRadius: 10,
-      },
-      android: {
-        elevation: 2,
-      },
-    }),
   },
   activeOtpCard: {
-    borderColor: "#EA580C",
-    backgroundColor: "#FFF7ED",
-    borderWidth: 2,
+    borderBottomColor: "#EA580C", // Same saffron color on focus/filled
+    borderBottomWidth: 2.5,
   },
   otpInput: {
     fontSize: 28,
@@ -290,12 +334,10 @@ const styles = StyleSheet.create({
     color: "#431407",
     textAlign: "center",
     width: "100%",
-  },
-  buttonContainer: {
-    marginTop: 10,
+    paddingBottom: 8,
   },
   footer: {
-    marginTop: 48,
+    marginTop: 32,
     alignItems: "center",
   },
   footerText: {

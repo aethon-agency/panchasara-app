@@ -112,14 +112,11 @@ export const SwipeButton: React.FC<SwipeButtonProps> = ({
       }
     });
 
-  // Handle Styling - Premium Saffron to Golden
+  // Handle Styling - Solid Premium Saffron
   const animatedHandleStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: translateX.value }],
-    shadowColor: interpolateColor(
-      translateX.value,
-      [0, MAX_TRANSLATE_X],
-      ["#EA580C", "#F59E0B"],
-    ),
+    backgroundColor: "#EA580C",
+    shadowColor: "#EA580C",
   }));
 
   const animatedProgressStyle = useAnimatedStyle(() => ({
@@ -135,9 +132,13 @@ export const SwipeButton: React.FC<SwipeButtonProps> = ({
   // No translation to ensure perfect overlap during the swipe
   const animatedTextStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: -PADDING / 2 }],
+    opacity: 1,
   }));
 
   const animatedIconStyle = useAnimatedStyle(() => {
+    const isStationary = translateX.value === 0;
+    const shouldAnimate = isStationary && !disabled;
+
     // Subtle nudge animation tied to shimmer or independent
     const nudge = interpolate(
       shimmerValue.value,
@@ -148,8 +149,8 @@ export const SwipeButton: React.FC<SwipeButtonProps> = ({
 
     return {
       transform: [
-        { translateX: translateX.value === 0 ? nudge : 0 },
-        { scale: translateX.value === 0 ? 1.05 : 1 },
+        { translateX: shouldAnimate ? nudge : 0 },
+        { scale: shouldAnimate ? 1.05 : 1 },
       ],
     };
   });
@@ -296,20 +297,11 @@ const styles = StyleSheet.create({
     marginTop: -2,
   },
   handle: {
+    backgroundColor: "#EA580C",
     borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
     zIndex: 10,
-    ...Platform.select({
-      ios: {
-        shadowOffset: { width: 0, height: 3 },
-        shadowOpacity: 0.4,
-        shadowRadius: 5,
-      },
-      android: {
-        elevation: 1,
-      },
-    }),
   },
   gradientOverlay: {
     ...StyleSheet.absoluteFillObject,
