@@ -15,8 +15,8 @@ import {
   Dimensions,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { useAuthStore } from "@/src/stores/authStore";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useAuthStore } from "../../src/stores/authStore";
 import { LanguageSelector } from "@/src/components/LanguageSelector";
 import { SwipeButton } from "@/src/components/SwipeButton";
 import { useLanguage } from "@/src/hooks/useLanguage";
@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
         shadowRadius: 10,
       },
       android: {
-        elevation: 4,
+        elevation: 1,
       },
     }),
   },
