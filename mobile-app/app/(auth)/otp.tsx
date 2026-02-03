@@ -32,7 +32,6 @@ const OTPScreen = () => {
   const login = useAuthStore((state) => state.login);
 
   const handleOtpChange = (value: any, index: any) => {
-    // Only allow numbers
     if (value && !/^\d+$/.test(value)) return;
 
     const newOtp = [...otp];
@@ -129,8 +128,8 @@ const OTPScreen = () => {
                   <View
                     key={index}
                     style={[
-                      styles.otpInputWrapper,
-                      otp[index] ? styles.activeInputWrapper : null,
+                      styles.otpCard,
+                      otp[index] ? styles.activeOtpCard : null,
                     ]}
                   >
                     <TextInput
@@ -157,7 +156,7 @@ const OTPScreen = () => {
                   onPress={handleVerify}
                   loading={loading}
                   disabled={!isOtpComplete}
-                  icon="check-decagram-outline"
+                  icon="check-outline"
                 />
               </View>
 
@@ -206,7 +205,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: "rgba(255, 255, 255, 0.5)",
+    backgroundColor: "rgba(255, 255, 255, 0.4)",
     justifyContent: "center",
     alignItems: "center",
     zIndex: 10,
@@ -226,11 +225,11 @@ const styles = StyleSheet.create({
   },
   formSheet: {
     flex: 1,
-    backgroundColor: "#FFF7ED", // Match theme
-    borderTopLeftRadius: 35,
-    borderTopRightRadius: 35,
-    paddingTop: 30,
-    marginTop: -20,
+    backgroundColor: "#FFF7ED",
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
+    paddingTop: 32,
+    marginTop: -25,
   },
   sheetContent: {
     flex: 1,
@@ -247,35 +246,47 @@ const styles = StyleSheet.create({
     color: "#92400E",
     textAlign: "center",
     marginTop: 6,
-    opacity: 0.7,
-    marginBottom: 30,
+    opacity: 0.8,
+    marginBottom: 40,
   },
   scrollForm: {
-    // paddingBottom set dynamically
+    // paddingBottom dynamically set
   },
   otpContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 40,
+    marginBottom: 48,
     paddingHorizontal: 10,
   },
-  otpInputWrapper: {
+  otpCard: {
     width: 60,
-    height: 64,
-    borderRadius: 16,
-    backgroundColor: "#F9FAFB",
-    borderWidth: 2,
-    borderColor: "#E5E7EB",
+    height: 68,
+    borderRadius: 18,
+    backgroundColor: "#FFF",
+    borderWidth: 1,
+    borderColor: "#FFEDD5",
     justifyContent: "center",
     alignItems: "center",
+    ...Platform.select({
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.04,
+        shadowRadius: 10,
+      },
+      android: {
+        elevation: 2,
+      },
+    }),
   },
-  activeInputWrapper: {
+  activeOtpCard: {
     borderColor: "#EA580C",
     backgroundColor: "#FFF7ED",
+    borderWidth: 2,
   },
   otpInput: {
     fontSize: 28,
-    fontWeight: "800",
+    fontWeight: "900",
     color: "#431407",
     textAlign: "center",
     width: "100%",
@@ -283,28 +294,16 @@ const styles = StyleSheet.create({
   buttonContainer: {
     marginTop: 10,
   },
-  resendButton: {
-    marginTop: 24,
-    alignItems: "center",
-  },
-  resendText: {
-    fontSize: 14,
-    color: "#6B7280",
-    fontWeight: "500",
-  },
-  resendLink: {
-    color: "#EA580C",
-    fontWeight: "700",
-  },
   footer: {
-    marginTop: 40,
+    marginTop: 48,
     alignItems: "center",
   },
   footerText: {
     fontSize: 12,
-    color: "#9CA3AF",
+    color: "#94A3B8",
     textAlign: "center",
     lineHeight: 18,
     paddingHorizontal: 20,
+    fontWeight: "500",
   },
 });

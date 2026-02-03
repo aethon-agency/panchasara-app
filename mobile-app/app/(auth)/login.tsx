@@ -18,6 +18,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { LanguageSelector } from "@/src/components/LanguageSelector";
 import { PrimaryButton } from "@/src/components/PrimaryButton";
+import { CustomInput } from "@/src/components/CustomInput";
 import { useLanguage } from "@/src/hooks/useLanguage";
 
 const { width, height } = Dimensions.get("window");
@@ -57,6 +58,7 @@ const LoginScreen = () => {
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
 
+      {/* LIGHT SAFFRON BACKGROUND */}
       <LinearGradient
         colors={["#FFF7ED", "#FFEDD5", "#FED7AA"]}
         style={StyleSheet.absoluteFill}
@@ -80,118 +82,87 @@ const LoginScreen = () => {
         </View>
       </View>
 
-      {/* FORM SECTION (WHIT SHEET STYLE) */}
-      <View style={styles.formSheet}>
-        <View style={styles.sheetContent}>
-          {/* TAB SWITCHER */}
-          <View style={styles.tabBar}>
-            <TouchableOpacity
-              onPress={() => setActiveTab("login")}
-              style={[styles.tab, activeTab === "login" && styles.activeTab]}
-            >
-              <Text
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        style={{ flex: 1 }}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
+      >
+        <View style={styles.formSheet}>
+          <View style={styles.sheetHandle} />
+          <View style={styles.sheetContent}>
+            {/* MODERN TAB SWITCHER */}
+            <View style={styles.tabBar}>
+              <TouchableOpacity
+                onPress={() => setActiveTab("login")}
+                style={[styles.tab, activeTab === "login" && styles.activeTab]}
+              >
+                <Text
+                  style={[
+                    styles.tabText,
+                    activeTab === "login" && styles.activeTabText,
+                  ]}
+                >
+                  {t("login.loginTab") ?? "Login"}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => setActiveTab("register")}
                 style={[
-                  styles.tabText,
-                  activeTab === "login" && styles.activeTabText,
+                  styles.tab,
+                  activeTab === "register" && styles.activeTab,
                 ]}
               >
-                {t("login.loginTab") ?? "Login"}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => setActiveTab("register")}
-              style={[styles.tab, activeTab === "register" && styles.activeTab]}
-            >
-              <Text
-                style={[
-                  styles.tabText,
-                  activeTab === "register" && styles.activeTabText,
-                ]}
-              >
-                {t("login.registerTab") ?? "Register"}
-              </Text>
-            </TouchableOpacity>
-          </View>
+                <Text
+                  style={[
+                    styles.tabText,
+                    activeTab === "register" && styles.activeTabText,
+                  ]}
+                >
+                  {t("login.registerTab") ?? "Register"}
+                </Text>
+              </TouchableOpacity>
+            </View>
 
-          <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={{ flex: 1 }}
-          >
             <ScrollView
               showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled"
               contentContainerStyle={[
                 styles.scrollForm,
-                { paddingBottom: insets.bottom + 20 },
+                { paddingBottom: insets.bottom + 60 },
               ]}
             >
               {activeTab === "register" && (
                 <>
-                  <View style={styles.inputGroup}>
-                    <Text style={styles.inputLabel}>
-                      {t("login.firstNameLabel") ?? "First Name"}
-                    </Text>
-                    <View style={styles.inputField}>
-                      <MaterialCommunityIcons
-                        name="account-outline"
-                        size={20}
-                        color="#92400E"
-                      />
-                      <TextInput
-                        placeholder={
-                          t("login.firstNameLabel") ?? "Enter first name"
-                        }
-                        value={firstName}
-                        onChangeText={setFirstName}
-                        style={styles.textInput}
-                        placeholderTextColor="#A8A29E"
-                      />
-                    </View>
-                  </View>
+                  <CustomInput
+                    label={t("login.firstNameLabel") ?? "First Name"}
+                    icon="account-outline"
+                    placeholder={
+                      t("login.firstNameLabel") ?? "Enter first name"
+                    }
+                    value={firstName}
+                    onChangeText={setFirstName}
+                  />
 
-                  <View style={styles.inputGroup}>
-                    <Text style={styles.inputLabel}>
-                      {t("login.lastNameLabel") ?? "Last Name"}
-                    </Text>
-                    <View style={styles.inputField}>
-                      <MaterialCommunityIcons
-                        name="account-details-outline"
-                        size={20}
-                        color="#92400E"
-                      />
-                      <TextInput
-                        placeholder={
-                          t("login.lastNameLabel") ?? "Enter last name"
-                        }
-                        value={lastName}
-                        onChangeText={setLastName}
-                        style={styles.textInput}
-                        placeholderTextColor="#A8A29E"
-                      />
-                    </View>
-                  </View>
+                  <CustomInput
+                    label={t("login.lastNameLabel") ?? "Last Name"}
+                    icon="account-details-outline"
+                    placeholder={t("login.lastNameLabel") ?? "Enter last name"}
+                    value={lastName}
+                    onChangeText={setLastName}
+                  />
                 </>
               )}
 
-              <View style={styles.inputGroup}>
-                <Text style={styles.inputLabel}>
-                  {t("login.mobileTitle") ?? "Mobile Number"}
-                </Text>
-                <View style={styles.inputField}>
-                  <View style={styles.phonePrefix}>
-                    <Text style={styles.prefixText}>🇮🇳 +91</Text>
-                    <View style={styles.verticalDivider} />
-                  </View>
-                  <TextInput
-                    placeholder={t("login.mobilePlaceholder") ?? "00000 00000"}
-                    keyboardType="phone-pad"
-                    maxLength={10}
-                    value={phoneNumber}
-                    onChangeText={setPhoneNumber}
-                    style={[styles.textInput, { letterSpacing: 1 }]}
-                    placeholderTextColor="#A8A29E"
-                  />
-                </View>
-              </View>
+              <CustomInput
+                label={t("login.mobileTitle") ?? "Mobile Number"}
+                prefix="🇮🇳 +91"
+                placeholder={t("login.mobilePlaceholder") ?? "00000 00000"}
+                keyboardType="phone-pad"
+                maxLength={10}
+                value={phoneNumber}
+                onChangeText={setPhoneNumber}
+                style={{ letterSpacing: 1.5 }}
+              />
 
               <View style={styles.buttonContainer}>
                 <PrimaryButton
@@ -204,6 +175,7 @@ const LoginScreen = () => {
                   loading={loading}
                   disabled={!isFormValid}
                   icon="arrow-right"
+                  height={54}
                 />
               </View>
 
@@ -214,9 +186,9 @@ const LoginScreen = () => {
                 </Text>
               </View>
             </ScrollView>
-          </KeyboardAvoidingView>
+          </View>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </View>
   );
 };
@@ -250,24 +222,52 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   logoHalo: {
-    // padding: 12,
     borderRadius: 100,
-    // backgroundColor: "rgba(255, 255, 255, 0.4)",
     backgroundColor: "#FFF",
     borderWidth: 1.5,
     borderColor: "rgba(251, 146, 60, 0.3)",
+    ...Platform.select({
+      ios: {
+        shadowColor: "#EA580C",
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 10,
+      },
+      android: {
+        elevation: 4,
+      },
+    }),
   },
   logo: {
-    width: 180,
-    height: 180,
+    width: 200,
+    height: 200,
   },
   formSheet: {
     flex: 1,
-    backgroundColor: "#FFF7ED", // Match the lightest saffron from background
-    borderTopLeftRadius: 35,
-    borderTopRightRadius: 35,
-    paddingTop: 30,
-    marginTop: -20,
+    backgroundColor: "#FFFFFF", // Changed to White for premium contrast
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
+    paddingTop: 12, // Reduced for handle
+    marginTop: -25,
+    ...Platform.select({
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: -10 },
+        shadowOpacity: 0.1,
+        shadowRadius: 20,
+      },
+      android: {
+        elevation: 20,
+      },
+    }),
+  },
+  sheetHandle: {
+    width: 44,
+    height: 5,
+    backgroundColor: "#E2E8F0",
+    borderRadius: 3,
+    alignSelf: "center",
+    marginBottom: 20,
   },
   sheetContent: {
     flex: 1,
@@ -275,91 +275,55 @@ const styles = StyleSheet.create({
   },
   tabBar: {
     flexDirection: "row",
-    backgroundColor: "rgba(251, 146, 60, 0.08)", // Subtle Saffron instead of Grey
-    borderRadius: 20,
+    backgroundColor: "rgba(251, 146, 60, 0.08)",
+    borderRadius: 24,
     padding: 6,
-    marginBottom: 30,
+    marginBottom: 32,
   },
   tab: {
     flex: 1,
-    paddingVertical: 10,
+    paddingVertical: 12,
     alignItems: "center",
-    borderRadius: 15,
+    borderRadius: 18,
   },
   activeTab: {
-    backgroundColor: "#FFF7ED", // Light saffron highlight instead of white
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
+    backgroundColor: "#FFF",
+    ...Platform.select({
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.05,
+        shadowRadius: 8,
+      },
+      android: {
+        elevation: 3,
+      },
+    }),
   },
   tabText: {
     fontSize: 15,
-    fontWeight: "600",
-    color: "#6B7280",
+    fontWeight: "700",
+    color: "#64748B",
   },
   activeTabText: {
     color: "#EA580C",
-    fontWeight: "800",
   },
   scrollForm: {
-    // paddingBottom set dynamically via insets
-  },
-  inputGroup: {
-    marginBottom: 20,
-  },
-  inputLabel: {
-    fontSize: 14,
-    fontWeight: "700",
-    color: "#431407",
-    marginBottom: 8,
-    marginLeft: 4,
-  },
-  inputField: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#F9FAFB",
-    borderWidth: 1.5,
-    borderColor: "#E5E7EB",
-    borderRadius: 18,
-    height: 60,
-    paddingHorizontal: 16,
-  },
-  textInput: {
-    flex: 1,
-    marginLeft: 12,
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#111827",
-  },
-  phonePrefix: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  prefixText: {
-    fontSize: 16,
-    fontWeight: "700",
-    color: "#EA580C",
-    marginRight: 10,
-  },
-  verticalDivider: {
-    width: 1,
-    height: 24,
-    backgroundColor: "#E5E7EB",
+    // Dynamically padded
   },
   buttonContainer: {
-    marginTop: 10,
+    marginTop: 12,
   },
   footer: {
-    marginTop: 30,
+    marginTop: 32,
     alignItems: "center",
   },
   footerText: {
     fontSize: 12,
-    color: "#9CA3AF",
+    color: "#94A3B8",
     textAlign: "center",
     lineHeight: 18,
     paddingHorizontal: 20,
+    fontWeight: "500",
   },
 });
