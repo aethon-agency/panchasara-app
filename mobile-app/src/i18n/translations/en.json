@@ -1,0 +1,30 @@
+{
+  "common": {
+    "welcome": "Welcome",
+    "login": "Login",
+    "signup": "Sign Up",
+    "home": "Home",
+    "settings": "Settings",
+    "language": "Language",
+    "english": "English",
+    "gujarati": "Gujarati",
+    "hindi": "Hindi",
+    "search": "Search",
+    "profile": "Profile",
+    "logout": "Logout",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "submit": "Submit"
+  },
+  "login": {
+    "title": "Panchasara Parivar",
+    "subtitle": "🙏 Jay Mataji • Divine Darshan Awaits",
+    "mobileLabel": "Enter Mobile Number",
+    "mobilePlaceholder": "10 digit mobile number",
+    "cta": "Continue to Darshan",
+    "sendingOtp": "Sending OTP...",
+    "footer": "Secure login for Panchasara Parivar members 🪔"
+  }
+}

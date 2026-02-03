@@ -5,6 +5,7 @@ import { COLORS } from "../src/constants/colors";
 import { useAppFonts } from "../src/constants/fonts";
 import { ToastProvider } from "../src/contexts/ToastProvider";
 import { useAuthStore } from "../src/stores/authStore";
+import "../src/i18n";
 
 export default function RootLayout() {
   const { token, isLoading } = useAuthStore();
