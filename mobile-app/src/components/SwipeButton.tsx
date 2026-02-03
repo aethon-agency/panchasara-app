@@ -56,7 +56,7 @@ export const SwipeButton: React.FC<SwipeButtonProps> = ({
   const loadingRotation = useSharedValue(0);
   const shimmerValue = useSharedValue(0);
 
-  // Label Shimmer Animation
+  // Label Shimmer Animation - flows opacity through the text
   useEffect(() => {
     shimmerValue.value = withRepeat(
       withTiming(1, { duration: 2000, easing: Easing.linear }),
@@ -134,8 +134,25 @@ export const SwipeButton: React.FC<SwipeButtonProps> = ({
 
   // No translation to ensure perfect overlap during the swipe
   const animatedTextStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: -PADDING / 2 }], // Slight adjustment for handle offset
+    transform: [{ translateX: -PADDING / 2 }],
   }));
+
+  const animatedIconStyle = useAnimatedStyle(() => {
+    // Subtle nudge animation tied to shimmer or independent
+    const nudge = interpolate(
+      shimmerValue.value,
+      [0, 0.8, 1],
+      [0, 6, 0],
+      Extrapolation.CLAMP,
+    );
+
+    return {
+      transform: [
+        { translateX: translateX.value === 0 ? nudge : 0 },
+        { scale: translateX.value === 0 ? 1.05 : 1 },
+      ],
+    };
+  });
 
   const animatedLoadingStyle = useAnimatedStyle(() => ({
     transform: [{ rotate: `${loadingRotation.value}deg` }],
@@ -222,13 +239,13 @@ export const SwipeButton: React.FC<SwipeButtonProps> = ({
               <MaterialCommunityIcons name="loading" size={30} color="#FFF" />
             </Animated.View>
           ) : (
-            <View style={styles.iconContainer}>
+            <Animated.View style={[styles.iconContainer, animatedIconStyle]}>
               <MaterialCommunityIcons
                 name={"chevron-right"}
-                size={34}
+                size={28}
                 color="#FFF"
               />
-            </View>
+            </Animated.View>
           )}
         </Animated.View>
       </GestureDetector>

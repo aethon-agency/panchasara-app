@@ -12,9 +12,9 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useLanguage } from "../hooks/useLanguage";
 
 // Configuration for easy adjustments
-const TRACK_WIDTH = 130;
-const TRACK_HEIGHT = 42;
-const KNOB_WIDTH = 62;
+const TRACK_WIDTH = 84;
+const TRACK_HEIGHT = 40;
+const KNOB_WIDTH = 38;
 const PADDING = 4;
 const TRAVEL_DISTANCE = TRACK_WIDTH - KNOB_WIDTH - PADDING * 2;
 
@@ -75,7 +75,7 @@ export const LanguageSelector = () => {
                     : styles.labelInactive,
                 ]}
               >
-                EN
+                En
               </Text>
             </View>
             <View style={styles.labelWrapper}>
@@ -87,7 +87,7 @@ export const LanguageSelector = () => {
                     : styles.labelInactive,
                 ]}
               >
-                ગુજરાતી
+                ગુજ
               </Text>
             </View>
           </View>
