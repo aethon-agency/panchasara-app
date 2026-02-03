@@ -1,4 +1,3 @@
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import {
@@ -8,7 +7,6 @@ import {
   StatusBar,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
   Image,
@@ -17,8 +15,8 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { LanguageSelector } from "@/src/components/LanguageSelector";
-import { PrimaryButton } from "@/src/components/PrimaryButton";
 import { CustomInput } from "@/src/components/CustomInput";
+import { SwipeButton } from "@/src/components/SwipeButton";
 import { useLanguage } from "@/src/hooks/useLanguage";
 
 const { width, height } = Dimensions.get("window");
@@ -164,20 +162,13 @@ const LoginScreen = () => {
                 style={{ letterSpacing: 1.5 }}
               />
 
-              <View style={styles.buttonContainer}>
-                <PrimaryButton
-                  label={
-                    loading
-                      ? t("login.sendingOtp")
-                      : (t("login.cta") ?? "Get OTP")
-                  }
-                  onPress={handleSendOTP}
-                  loading={loading}
-                  disabled={!isFormValid}
-                  icon="arrow-right"
-                  height={54}
-                />
-              </View>
+              <SwipeButton
+                label={t("login.cta") ?? "Slide to get OTP"}
+                onSwipeComplete={handleSendOTP}
+                loading={loading}
+                disabled={!isFormValid}
+                height={52}
+              />
 
               <View style={styles.footer}>
                 <Text style={styles.footerText}>
@@ -310,9 +301,6 @@ const styles = StyleSheet.create({
   },
   scrollForm: {
     // Dynamically padded
-  },
-  buttonContainer: {
-    marginTop: 12,
   },
   footer: {
     marginTop: 32,

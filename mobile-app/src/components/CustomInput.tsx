@@ -6,7 +6,6 @@ import {
   StyleSheet,
   Platform,
   TextInputProps,
-  Animated,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
@@ -26,8 +25,6 @@ export const CustomInput = ({
   ...props
 }: CustomInputProps) => {
   const [isFocused, setIsFocused] = useState(false);
-
-  // Modern underline style: thin when inactive, thicker/saffron when focused
   const underlineColor = error ? "#EF4444" : isFocused ? "#EA580C" : "#FED7AA";
   const underlineWidth = isFocused ? 2 : 1.2;
 
@@ -73,15 +70,6 @@ export const CustomInput = ({
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
         />
-
-        {/* Success Checkmark (Optional visual sugar) */}
-        {!error && props.value && props.value.length >= 10 && !isFocused && (
-          <MaterialCommunityIcons
-            name="check-circle"
-            size={18}
-            color="#10B981"
-          />
-        )}
       </View>
 
       {error && <Text style={styles.errorText}>{error}</Text>}

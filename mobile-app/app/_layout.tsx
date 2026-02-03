@@ -1,6 +1,7 @@
 import { Stack, useRouter, useSegments } from "expo-router";
 import React, { useEffect } from "react";
 import { ActivityIndicator, View } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { COLORS } from "../src/constants/colors";
 import { useAppFonts } from "../src/constants/fonts";
 import { ToastProvider } from "../src/contexts/ToastProvider";
@@ -43,11 +44,13 @@ export default function RootLayout() {
   }
 
   return (
-    <ToastProvider>
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-        <Stack.Screen name="(user)" options={{ headerShown: false }} />
-      </Stack>
-    </ToastProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <ToastProvider>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+          <Stack.Screen name="(user)" options={{ headerShown: false }} />
+        </Stack>
+      </ToastProvider>
+    </GestureHandlerRootView>
   );
 }
