@@ -8,8 +8,13 @@ import {
 } from "react-native";
 import { AppHeader } from "@/src/components/AppHeader";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
 import Animated, { FadeInUp, LinearTransition } from "react-native-reanimated";
+import { useRouter } from "expo-router";
+import {
+  HAVAN_EVENTS,
+  POONAM_REGULAR,
+  POONAM_SPECIAL,
+} from "@/src/constants/events";
 
 const TABS = [
   { id: "regular", label: "Poonam " },
@@ -17,62 +22,17 @@ const TABS = [
   { id: "special", label: "Special Events" },
 ];
 
-const POONAM_REGULAR = [
-  {
-    id: "1",
-    title: "Maha Poonam",
-    gujaratiPoonamName: "પૂનમ",
-    gujaratiMonth: "મહા",
-    date: "12-2-2026",
-    dayEnglish: "Thursday",
-    dayGujarati: "ગુરુવાર",
-    time: "06:00 AM - 08:00 PM",
-    organizerName: "શ્રી જયંતિભાઇ રાઘવજીભાઈ - જાલી",
-    desc: "Monthly divine gathering with Aarti and Prasad in the Village Mandir.",
-    location: "Main Village Mandir",
-  },
-  {
-    id: "2",
-    title: "Phalguna Poonam",
-    gujaratiPoonamName: "પૂનમ",
-    gujaratiMonth: "ફાગણ",
-    date: "14-3-2026",
-    dayEnglish: "Saturday",
-    dayGujarati: "શનિવાર",
-    time: "06:00 AM - 08:00 PM",
-    organizerName: "શ્રી રમેશભાઈ પ્રભુભાઈ",
-    desc: "Holi festival poonam celebration with special Bhakti Sangeet.",
-    location: "Main Village Mandir",
-  },
-];
-
-const POONAM_SPECIAL = [
-  {
-    id: "s1",
-    title: "Shravan Mahotsav",
-    date: "Aug 28, 2026",
-    time: "05:00 AM - 10:00 PM",
-    desc: "Grand Shravan Month culmination with traditional rituals.",
-    location: "Mandir Ground",
-  },
-];
-
-const HAVAN_EVENTS = [
-  {
-    id: "h1",
-    title: "Vishwakarma Mahayagya",
-    date: "Sept 17, 2026",
-    time: "07:00 AM - 04:00 PM",
-    desc: "Annual Havan for prosperity and well-being of the village community.",
-    location: "Yagya Shala",
-  },
-];
-
 export default function EventScreen() {
   const [activeTab, setActiveTab] = useState("regular");
+  const router = useRouter();
 
   const renderEventCard = (item: any, index: number) => {
-    const isPoonam = activeTab === "regular";
+    const goToDetails = () => {
+      router.push({
+        pathname: "/(user)/event-details",
+        params: { id: item.id },
+      });
+    };
 
     return (
       <Animated.View
@@ -80,43 +40,27 @@ export default function EventScreen() {
         entering={FadeInUp.delay(index * 100).duration(500)}
         style={styles.card}
       >
-        <View style={styles.cardHeader}>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={goToDetails}
+          style={styles.cardContent}
+        >
           <View style={styles.headerInfo}>
-            <View style={styles.titleRow}>
-              <Text style={styles.cardTitle}>{item.title}</Text>
-              {isPoonam && (
-                <Text style={styles.dayBadge}>
-                  {item.dayGujarati} | {item.dayEnglish}
-                </Text>
-              )}
-            </View>
+            <Text style={styles.cardTitle}>{item.title}</Text>
+
             <View style={styles.row}>
               <Ionicons name="calendar-outline" size={14} color="#EA580C" />
               <Text style={styles.subInfo}>{item.date}</Text>
+              <View style={styles.dot} />
+              <Text style={styles.dayLabel}>
+                {item.dayGujarati} | {item.dayEnglish}
+              </Text>
             </View>
           </View>
-        </View>
 
-        {isPoonam && (
-          <View style={styles.messageBox}>
-            <LinearGradient
-              colors={["#FFFBEB", "#FEF3C7"]}
-              style={styles.invitationGradient}
-            >
-              <Text style={styles.invitationText}>
-                સહર્ષ પરિવારજનોને જણાવવાનું કે {item.gujaratiMonth} માસની{" "}
-                {item.gujaratiPoonamName}નો કાર્યક્રમ તા. {item.date},{" "}
-                {item.dayGujarati}ના રોજ રાબેતા મુજબ છે, જેના ભોજન પ્રસાદના દાતા{" "}
-                <Text style={styles.boldGujarati}>{item.organizerName}</Text>{" "}
-                રહેશે.
-              </Text>
-            </LinearGradient>
+          <View style={styles.rightChevron}>
+            <Ionicons name="chevron-forward" size={20} color="#EA580C" />
           </View>
-        )}
-
-        <TouchableOpacity style={styles.detailsButton}>
-          <Text style={styles.detailsText}>View Event Details</Text>
-          <Ionicons name="chevron-forward" size={16} color="#EA580C" />
         </TouchableOpacity>
       </Animated.View>
     );
@@ -137,7 +81,7 @@ export default function EventScreen() {
 
   return (
     <View style={styles.container}>
-      <AppHeader title="Mandir Events" subtitle="Poornima & Yagya Schedule" />
+      <AppHeader title="Events" subtitle="Poornima & Yagya Schedule" />
 
       <View style={styles.tabContainer}>
         {TABS.map((tab) => (
@@ -243,8 +187,7 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: "#FFF",
-    borderRadius: 24,
-    padding: 16,
+    borderRadius: 20,
     marginBottom: 16,
     borderWidth: 1,
     borderColor: "#F1F5F9",
@@ -253,68 +196,37 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.08,
     shadowRadius: 10,
+    overflow: "hidden",
   },
-  cardHeader: {
+  cardContent: {
+    padding: 16,
     flexDirection: "row",
-    gap: 15,
-    marginBottom: 16,
-  },
-  dateBox: {
-    width: 60,
-    height: 60,
-    backgroundColor: "#FFF7ED",
-    borderRadius: 18,
-    justifyContent: "center",
     alignItems: "center",
-    borderWidth: 1,
-    borderColor: "#FFEDD5",
-  },
-  dateText: {
-    fontSize: 20,
-    fontWeight: "900",
-    color: "#EA580C",
-  },
-  monthLabel: {
-    fontSize: 10,
-    fontWeight: "800",
-    color: "#9A3412",
-    textTransform: "uppercase",
   },
   headerInfo: {
     flex: 1,
-    justifyContent: "center",
-  },
-  titleRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    marginBottom: 6,
   },
   cardTitle: {
     fontSize: 18,
     fontWeight: "900",
     color: "#431407",
-    flex: 1,
-  },
-  dayBadge: {
-    fontSize: 10,
-    fontWeight: "800",
-    color: "#9A3412",
-    backgroundColor: "#FFF7ED",
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 8,
-    overflow: "hidden",
+    marginBottom: 6,
   },
   row: {
     flexDirection: "row",
     alignItems: "center",
     gap: 4,
+    marginTop: 2,
   },
   subInfo: {
-    fontSize: 12,
+    fontSize: 13,
     color: "#64748B",
     fontWeight: "600",
+  },
+  dayLabel: {
+    fontSize: 12,
+    fontWeight: "700",
+    color: "#9A3412",
   },
   dot: {
     width: 4,
@@ -322,6 +234,15 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     backgroundColor: "#CBD5E1",
     marginHorizontal: 4,
+  },
+  rightChevron: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: "#FFF7ED",
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: 10,
   },
   messageBox: {
     borderRadius: 16,
