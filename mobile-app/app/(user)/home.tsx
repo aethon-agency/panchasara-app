@@ -43,7 +43,7 @@ const HomeScreen = () => {
       <StatusBar barStyle="dark-content" />
 
       <AppHeader
-        title="Jai Jinendra"
+        title="Jai Mataji"
         subtitle={user?.firstname || "Devotee"}
         rightAction={
           <TouchableOpacity style={styles.notiButton} onPress={() => {}}>
@@ -115,20 +115,6 @@ const HomeScreen = () => {
           />
           <QuickAction icon="hands-pray" label="Seva" mdi delay={400} />
         </View>
-
-        {/* TIMING CARD (DYNAMIC) */}
-        <LinearGradient
-          colors={["#431407", "#7C2D12"]}
-          style={styles.timingCard}
-        >
-          <View>
-            <Text style={styles.timingLabel}>Next Event</Text>
-            <Text style={styles.timingTitle}>Evening Sandhya Aarti</Text>
-          </View>
-          <View style={styles.timeBadge}>
-            <Text style={styles.timeText}>07:00 PM</Text>
-          </View>
-        </LinearGradient>
 
         {/* ANNOUNCEMENTS SECTION */}
         <View style={styles.sectionHeader}>
