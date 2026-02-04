@@ -2,12 +2,12 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { AppHeader } from "@/src/components/AppHeader";
 
-export default function DonationScreen() {
+export default function ExploreScreen() {
   return (
     <View style={styles.container}>
-      <AppHeader title="Donation" subtitle="Support the Mandir" />
+      <AppHeader title="Explore" subtitle="Discover Mandir Activities" />
       <View style={styles.content}>
-        <Text style={styles.text}>Coming Soon: Donation Portal</Text>
+        <Text style={styles.text}>Coming Soon: Explore Portal</Text>
       </View>
     </View>
   );

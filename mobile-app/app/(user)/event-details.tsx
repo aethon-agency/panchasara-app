@@ -50,7 +50,7 @@ export default function EventDetailsScreen() {
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
       <AppHeader
-        title="Event Details"
+        title="Event Invitation"
         subtitle={event.title}
         showBack={true}
         onBack={() => router.back()}
@@ -60,92 +60,126 @@ export default function EventDetailsScreen() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* Title Section */}
-        <View style={styles.section}>
-          <Text style={styles.eventTitle}>{event.title}</Text>
-          <View style={styles.badgesRow}>
+        <LinearGradient
+          colors={["#FFFBEB", "#FEF3C7", "#FFFBEB"]}
+          style={styles.invitationCard}
+        >
+          {/* Decorative Corner Icons */}
+          <MaterialCommunityIcons
+            name="flower-tulip"
+            size={24}
+            color="#EA580C"
+            style={styles.topLeftIcon}
+          />
+          <MaterialCommunityIcons
+            name="flower-tulip"
+            size={24}
+            color="#EA580C"
+            style={styles.topRightIcon}
+          />
+          <MaterialCommunityIcons
+            name="flower-tulip"
+            size={24}
+            color="#EA580C"
+            style={styles.bottomLeftIcon}
+          />
+          <MaterialCommunityIcons
+            name="flower-tulip"
+            size={24}
+            color="#EA580C"
+            style={styles.bottomRightIcon}
+          />
+
+          {/* Invitation Header */}
+          <View style={styles.headerDecoration}>
+            <View style={styles.decorationLine} />
+            <MaterialCommunityIcons name="om" size={32} color="#EA580C" />
+            <View style={styles.decorationLine} />
+          </View>
+
+          <Text style={styles.invitationHeaderTitle}>Jay Bhavani Maa</Text>
+          <Text style={styles.invitationSubHeader}>
+            Cordially Invites You To
+          </Text>
+
+          {/* Event Title */}
+          <View style={styles.titleSection}>
+            <Text style={styles.eventTitle}>{event.title}</Text>
             <View style={styles.typeBadge}>
               <Text style={styles.typeBadgeText}>
                 {getEventLabel(event.type).toUpperCase()}
               </Text>
             </View>
-            <Text style={styles.dayLabel}>
-              {event.dayGujarati} | {event.dayEnglish}
-            </Text>
-          </View>
-        </View>
-
-        {/* Quick Info Grid */}
-        <View style={styles.infoGrid}>
-          <View style={styles.infoCard}>
-            <LinearGradient
-              colors={["#FFF7ED", "#FFEDD5"]}
-              style={styles.iconCircle}
-            >
-              <Ionicons name="calendar" size={20} color="#EA580C" />
-            </LinearGradient>
-            <Text style={styles.infoLabel}>Date</Text>
-            <Text style={styles.infoValue}>{event.date}</Text>
           </View>
 
-          <View style={styles.infoCard}>
-            <LinearGradient
-              colors={["#FFF7ED", "#FFEDD5"]}
-              style={styles.iconCircle}
-            >
-              <Ionicons name="time" size={20} color="#EA580C" />
-            </LinearGradient>
-            <Text style={styles.infoLabel}>Time</Text>
-            <Text style={styles.infoValue}>{event.time}</Text>
-          </View>
-        </View>
+          {/* Save the Date Section */}
+          <View style={styles.divider} />
 
-        {/* Special Poonam Message Section */}
-        {isPoonam && (
-          <View style={styles.messageSection}>
-            <Text style={styles.gujaratiTitle}>ભોજન પ્રસાદ આમંત્રણ</Text>
-            <LinearGradient
-              colors={["#FFFBEB", "#FEF3C7"]}
-              style={styles.messageBox}
-            >
-              <MaterialCommunityIcons
-                name="flower-tulip"
-                size={30}
-                color="#EA580C"
-                style={styles.flowerIcon}
-              />
+          <View style={styles.dateTimeSection}>
+            <View style={styles.infoRow}>
+              <Ionicons name="calendar-clear" size={28} color="#EA580C" />
+              <View>
+                <Text style={styles.infoTextDate}>{event.date}</Text>
+                <Text style={styles.dayTextLarge}>
+                  {event.dayGujarati} | {event.dayEnglish}
+                </Text>
+              </View>
+            </View>
+
+            <View style={styles.timeRow}>
+              <Ionicons name="time-outline" size={16} color="#64748B" />
+              <Text style={styles.timeTextSmall}>
+                Time: {isPoonam ? "10:00 AM - 01:00 PM" : event.time}
+              </Text>
+            </View>
+          </View>
+
+          <View style={styles.divider} />
+
+          {/* Venue Section */}
+          <View style={styles.venueSection}>
+            <Ionicons name="location" size={24} color="#EA580C" />
+            <Text style={styles.venueLabel}>VENUE</Text>
+            <Text style={styles.venueValue}>{event.location}</Text>
+          </View>
+
+          {/* Specific Message for Poonam or Description */}
+          {isPoonam ? (
+            <View style={styles.messageContainer}>
+              <Text style={styles.gujaratiTitle}>ભોજન પ્રસાદ આમંત્રણ</Text>
               <Text style={styles.gujaratiMessage}>
                 સહર્ષ પરિવારજનોને જણાવવાનું કે {event.gujaratiMonth} માસની{" "}
                 {event.gujaratiPoonamName}નો કાર્યક્રમ તા. {event.date},{" "}
                 {event.dayGujarati}ના રોજ રાબેતા મુજબ છે, જેના ભોજન પ્રસાદના
-                દાતા <Text style={styles.donorName}>{event.organizerName}</Text>{" "}
+                દાતા{"\n"}
+                <Text style={styles.donorName}>
+                  “{event.organizerName}”
+                </Text>{" "}
                 રહેશે.
               </Text>
-              <MaterialCommunityIcons
-                name="flower-tulip"
-                size={30}
-                color="#EA580C"
-                style={styles.flowerIconBottom}
-              />
-            </LinearGradient>
-          </View>
-        )}
+            </View>
+          ) : (
+            <View style={styles.descriptionContainer}>
+              <Text style={styles.descriptionLabel}>ABOUT EVENT</Text>
+              <Text style={styles.descriptionText}>{event.desc}</Text>
+            </View>
+          )}
 
-        <View style={styles.locationCard}>
-          <Ionicons name="location" size={22} color="#9A3412" />
-          <View>
-            <Text style={styles.locationLabel}>Venue</Text>
-            <Text style={styles.locationValue}>{event.location}</Text>
+          <View style={styles.footerDecoration}>
+            <MaterialCommunityIcons name="flower" size={30} color="#EA580C" />
           </View>
+
+          <Text style={styles.welcomeNote}>— All are welcome to join —</Text>
+        </LinearGradient>
+
+        {/* Action Buttons */}
+        <View style={styles.actionSection}>
+          <TouchableOpacity style={styles.shareButton}>
+            <Ionicons name="share-social-outline" size={20} color="#EA580C" />
+            <Text style={styles.shareButtonText}>Share Invitation</Text>
+          </TouchableOpacity>
         </View>
 
-        {/* Description Section */}
-        <View style={styles.descriptionSection}>
-          <Text style={styles.sectionTitle}>About this Event</Text>
-          <Text style={styles.descriptionText}>{event.desc}</Text>
-        </View>
-
-        {/* Additional Info / Footer */}
         <View style={styles.footer}>
           <Text style={styles.footerText}>
             For more information or inquiries, please contact the Mandir Office.
@@ -162,154 +196,223 @@ const styles = StyleSheet.create({
     backgroundColor: "#FCF9F1",
   },
   scrollContent: {
-    padding: 20,
-    paddingBottom: 60,
+    padding: 16,
+    paddingBottom: 40,
   },
-  section: {
-    marginBottom: 24,
+  invitationCard: {
+    backgroundColor: "#FFF",
+    borderRadius: 30,
+    padding: 30,
+    paddingTop: 8,
+    marginTop: 10,
+    borderWidth: 2,
+    borderColor: "#FDE68A",
+    elevation: 8,
+    shadowColor: "#92400E",
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.15,
+    shadowRadius: 20,
+    alignItems: "center",
+    position: "relative",
   },
-  eventTitle: {
-    fontSize: 28,
-    fontWeight: "900",
-    color: "#431407",
-    marginBottom: 10,
+  topLeftIcon: { position: "absolute", top: 15, left: 15, opacity: 0.6 },
+  topRightIcon: { position: "absolute", top: 15, right: 15, opacity: 0.6 },
+  bottomLeftIcon: { position: "absolute", bottom: 15, left: 15, opacity: 0.6 },
+  bottomRightIcon: {
+    position: "absolute",
+    bottom: 15,
+    right: 15,
+    opacity: 0.6,
   },
-  badgesRow: {
+
+  headerDecoration: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 12,
+    marginHorizontal: 20,
+    marginBottom: 15,
+    gap: 15,
+  },
+  decorationLine: {
+    height: 1.5,
+    flex: 1,
+    backgroundColor: "#FDE68A",
+  },
+  invitationHeaderTitle: {
+    fontSize: 22,
+    fontWeight: "900",
+    color: "#9A3412",
+    fontFamily: "System",
+    letterSpacing: 0.5,
+  },
+  invitationSubHeader: {
+    fontSize: 14,
+    color: "#64748B",
+    marginTop: 4,
+    fontStyle: "italic",
+    fontWeight: "600",
+  },
+  titleSection: {
+    alignItems: "center",
+    marginVertical: 20,
+  },
+  eventTitle: {
+    fontSize: 32,
+    fontWeight: "900",
+    color: "#431407",
+    textAlign: "center",
+    marginBottom: 10,
   },
   typeBadge: {
     backgroundColor: "#EA580C",
     paddingHorizontal: 12,
-    paddingVertical: 5,
-    borderRadius: 8,
+    paddingVertical: 4,
+    borderRadius: 20,
   },
   typeBadgeText: {
     color: "#FFF",
     fontSize: 10,
-    fontWeight: "800",
-    letterSpacing: 1,
+    fontWeight: "900",
+    letterSpacing: 1.5,
   },
-  dayLabel: {
-    fontSize: 13,
+  divider: {
+    width: "80%",
+    height: 1,
+    backgroundColor: "#FDE68A",
+    marginVertical: 15,
+  },
+  dateTimeSection: {
+    alignItems: "center",
+    gap: 12,
+    marginVertical: 5,
+  },
+  infoRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 15,
+  },
+  infoTextDate: {
+    fontSize: 28,
+    fontWeight: "900",
+    color: "#431407",
+    lineHeight: 34,
+  },
+  dayTextLarge: {
+    fontSize: 16,
     fontWeight: "700",
     color: "#9A3412",
+    marginTop: 2,
   },
-  infoGrid: {
+  timeRow: {
     flexDirection: "row",
-    gap: 15,
-    marginBottom: 20,
-  },
-  infoCard: {
-    flex: 1,
-    backgroundColor: "#FFF",
+    alignItems: "center",
+    gap: 6,
+    backgroundColor: "#FFF7ED",
+    paddingHorizontal: 12,
+    paddingVertical: 5,
     borderRadius: 20,
-    padding: 16,
-    borderWidth: 1,
-    borderColor: "#F1F5F9",
-    alignItems: "center",
+    marginTop: 4,
   },
-  iconCircle: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 10,
-  },
-  infoLabel: {
-    fontSize: 12,
+  timeTextSmall: {
+    fontSize: 13,
+    fontWeight: "700",
     color: "#64748B",
-    fontWeight: "600",
-    marginBottom: 4,
   },
-  infoValue: {
-    fontSize: 14,
+  venueSection: {
+    alignItems: "center",
+    marginVertical: 10,
+  },
+  venueLabel: {
+    fontSize: 11,
+    fontWeight: "800",
+    color: "#64748B",
+    letterSpacing: 2,
+    marginTop: 5,
+  },
+  venueValue: {
+    fontSize: 18,
     fontWeight: "800",
     color: "#431407",
     textAlign: "center",
+    marginTop: 4,
   },
-  locationCard: {
-    flexDirection: "row",
+  messageContainer: {
+    marginTop: 20,
     alignItems: "center",
-    backgroundColor: "#FFF",
-    padding: 16,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: "#F1F5F9",
-    gap: 15,
-    marginBottom: 24,
-  },
-  locationLabel: {
-    fontSize: 12,
-    color: "#64748B",
-    fontWeight: "600",
-  },
-  locationValue: {
-    fontSize: 15,
-    fontWeight: "800",
-    color: "#431407",
-  },
-  messageSection: {
-    marginBottom: 24,
   },
   gujaratiTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "900",
     color: "#431407",
     marginBottom: 12,
-    textAlign: "center",
-  },
-  messageBox: {
-    padding: 24,
-    borderRadius: 24,
-    borderWidth: 1.5,
-    borderColor: "#FDE68A",
-    position: "relative",
-  },
-  flowerIcon: {
-    position: "absolute",
-    top: 5,
-    left: 5,
-    opacity: 0.2,
-  },
-  flowerIconBottom: {
-    position: "absolute",
-    bottom: 5,
-    right: 5,
-    opacity: 0.2,
+    textDecorationLine: "underline",
   },
   gujaratiMessage: {
     fontSize: 18,
     color: "#431407",
     lineHeight: 32,
     textAlign: "center",
-    fontWeight: "500",
+    fontWeight: "600",
   },
   donorName: {
     fontWeight: "900",
     color: "#9A3412",
-    textDecorationLine: "underline",
+    fontSize: 20,
   },
-  descriptionSection: {
-    marginBottom: 30,
+  descriptionContainer: {
+    marginTop: 20,
+    alignItems: "center",
+    paddingHorizontal: 10,
   },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "900",
-    color: "#431407",
-    marginBottom: 12,
+  descriptionLabel: {
+    fontSize: 11,
+    fontWeight: "800",
+    color: "#64748B",
+    letterSpacing: 2,
+    marginBottom: 8,
   },
   descriptionText: {
     fontSize: 15,
     color: "#475569",
     lineHeight: 24,
+    textAlign: "center",
+    fontStyle: "italic",
+  },
+  footerDecoration: {
+    marginTop: 25,
+    marginBottom: 10,
+  },
+  welcomeNote: {
+    fontSize: 13,
+    color: "#64748B",
+    fontWeight: "700",
+    fontStyle: "italic",
+  },
+  actionSection: {
+    marginTop: 25,
+    alignItems: "center",
+  },
+  shareButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    backgroundColor: "#FFF",
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderRadius: 15,
+    borderWidth: 1.5,
+    borderColor: "#FFEDD5",
+    elevation: 2,
+  },
+  shareButtonText: {
+    fontSize: 14,
+    fontWeight: "800",
+    color: "#EA580C",
   },
   footer: {
+    marginTop: 30,
+    paddingTop: 20,
     borderTopWidth: 1,
     borderTopColor: "#E2E8F0",
-    paddingTop: 20,
     alignItems: "center",
   },
   footerText: {

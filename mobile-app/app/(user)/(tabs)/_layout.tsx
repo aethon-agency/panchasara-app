@@ -102,10 +102,10 @@ const renderIcon = (name: string, isFocused: boolean) => {
           color={color}
         />
       );
-    case "account":
+    case "explore":
       return (
-        <FontAwesome
-          name={isFocused ? "file-text" : "file-text-o"}
+        <Ionicons
+          name={isFocused ? "compass" : "compass-outline"}
           size={24}
           color={color}
         />
@@ -131,7 +131,7 @@ export default function TabsLayout() {
     >
       <Tabs.Screen name="home" options={{ title: "Home" }} />
       <Tabs.Screen name="event" options={{ title: "Events" }} />
-      <Tabs.Screen name="account" options={{ title: "Account" }} />
+      <Tabs.Screen name="explore" options={{ title: "Explore" }} />
       <Tabs.Screen name="profile" options={{ title: "Profile" }} />
     </Tabs>
   );
