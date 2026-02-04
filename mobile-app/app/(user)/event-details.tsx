@@ -11,12 +11,12 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { AppHeader } from "@/src/components/AppHeader";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { ALL_EVENTS } from "../../src/constants/events";
+import { ALL_EVENTS, MandirEvent } from "../../src/constants/events";
 
 export default function EventDetailsScreen() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
-  const event: any = ALL_EVENTS.find((e) => e.id === id);
+  const event = ALL_EVENTS.find((e) => e.id === id) as MandirEvent;
 
   if (!event) {
     return (
@@ -29,16 +29,18 @@ export default function EventDetailsScreen() {
     );
   }
 
-  const isPoonam = event.type === "regular";
+  const isPoonam = event.type === "poonam";
 
   const getEventLabel = (type: string) => {
     switch (type) {
-      case "regular":
+      case "poonam":
         return "Poonam";
       case "havan":
         return "Havan";
       case "special":
         return "Special Event";
+      case "meeting":
+        return "Community Meeting";
       default:
         return "Event";
     }

@@ -10,7 +10,7 @@ import { AppHeader } from "@/src/components/AppHeader";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import Animated, { FadeInUp, LinearTransition } from "react-native-reanimated";
 import { useRouter } from "expo-router";
-import { ALL_EVENTS } from "@/src/constants/events";
+import { ALL_EVENTS, MandirEvent } from "@/src/constants/events";
 
 export default function EventScreen() {
   const router = useRouter();
@@ -26,7 +26,7 @@ export default function EventScreen() {
 
   const getEventBadgeStyle = (type: string) => {
     switch (type) {
-      case "regular":
+      case "poonam":
         return { bg: "#FFF7ED", text: "#EA580C", label: "Poonam" };
       case "havan":
         return { bg: "#EEF2FF", text: "#4F46E5", label: "Havan" };
@@ -37,7 +37,7 @@ export default function EventScreen() {
     }
   };
 
-  const renderEventCard = (item: any, index: number) => {
+  const renderEventCard = (item: MandirEvent, index: number) => {
     const goToDetails = () => {
       router.push({
         pathname: "/(user)/event-details",

@@ -1,7 +1,24 @@
-export const POONAM_REGULAR = [
+export type EventType = "poonam" | "special" | "havan" | "meeting";
+
+export interface MandirEvent {
+  id: string;
+  type: EventType;
+  title: string;
+  date: string;
+  dayEnglish: string;
+  dayGujarati: string;
+  time: string;
+  desc: string;
+  location: string;
+  gujaratiPoonamName?: string;
+  gujaratiMonth?: string;
+  organizerName?: string;
+}
+
+export const ALL_EVENTS: MandirEvent[] = [
   {
     id: "p1",
-    type: "regular",
+    type: "poonam",
     title: "Maha Poonam",
     gujaratiPoonamName: "પૂનમ",
     gujaratiMonth: "મહા",
@@ -15,7 +32,7 @@ export const POONAM_REGULAR = [
   },
   {
     id: "p2",
-    type: "regular",
+    type: "poonam",
     title: "Phalguna Poonam",
     gujaratiPoonamName: "પૂનમ",
     gujaratiMonth: "ફાગણ",
@@ -27,9 +44,6 @@ export const POONAM_REGULAR = [
     desc: "Holi festival poonam celebration with special Bhakti Sangeet.",
     location: "Main Village Mandir",
   },
-];
-
-export const POONAM_SPECIAL = [
   {
     id: "s1",
     type: "special",
@@ -41,9 +55,6 @@ export const POONAM_SPECIAL = [
     desc: "Grand Shravan Month culmination with traditional rituals.",
     location: "Mandir Ground",
   },
-];
-
-export const HAVAN_EVENTS = [
   {
     id: "h1",
     type: "havan",
@@ -55,10 +66,15 @@ export const HAVAN_EVENTS = [
     desc: "Annual Havan for prosperity and well-being of the village community.",
     location: "Yagya Shala",
   },
-];
-
-export const ALL_EVENTS = [
-  ...POONAM_REGULAR,
-  ...POONAM_SPECIAL,
-  ...HAVAN_EVENTS,
+  {
+    id: "e1",
+    type: "meeting",
+    title: "Community Meeting",
+    date: "20-10-2026",
+    dayEnglish: "Tuesday",
+    dayGujarati: "મંગળવાર",
+    time: "08:00 PM - 09:30 PM",
+    desc: "Monthly meeting to discuss mandir maintenance and upcoming festivals.",
+    location: "Mandir Hall",
+  },
 ];
