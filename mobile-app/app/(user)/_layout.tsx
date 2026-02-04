@@ -1,7 +1,11 @@
 import React from "react";
 import { View, StyleSheet, Platform, TouchableOpacity } from "react-native";
 import { Tabs } from "expo-router";
-import { FontAwesome, Ionicons } from "@expo/vector-icons";
+import {
+  FontAwesome,
+  Ionicons,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Haptics from "expo-haptics";
 import Animated, {
@@ -78,7 +82,6 @@ const CustomTabBar = ({ state, descriptors, navigation }: any) => {
 };
 
 const renderIcon = (name: string, isFocused: boolean) => {
-  // Deep Brown for active, Saffron-tinted grey for inactive
   const color = isFocused ? "#431407" : "#9A3412";
   const size = 22;
 
@@ -91,19 +94,19 @@ const renderIcon = (name: string, isFocused: boolean) => {
           color={color}
         />
       );
-    case "darshan":
+    case "event":
+      return (
+        <MaterialCommunityIcons
+          name={isFocused ? "account-group" : "account-group-outline"}
+          size={size}
+          color={color}
+        />
+      );
+    case "account":
       return (
         <FontAwesome
           name={isFocused ? "file-text" : "file-text-o"}
           size={24}
-          color={color}
-        />
-      );
-    case "donation":
-      return (
-        <Ionicons
-          name={isFocused ? "heart" : "heart-outline"}
-          size={size}
           color={color}
         />
       );
@@ -127,8 +130,8 @@ export default function UserLayout() {
       screenOptions={{ headerShown: false }}
     >
       <Tabs.Screen name="home" options={{ title: "Home" }} />
-      <Tabs.Screen name="darshan" options={{ title: "Event List" }} />
-      <Tabs.Screen name="donation" options={{ title: "Sewa" }} />
+      <Tabs.Screen name="event" options={{ title: "Events" }} />
+      <Tabs.Screen name="account" options={{ title: "Account" }} />
       <Tabs.Screen name="profile" options={{ title: "Profile" }} />
     </Tabs>
   );
