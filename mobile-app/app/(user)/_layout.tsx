@@ -7,7 +7,11 @@ import {
   Dimensions,
 } from "react-native";
 import { Tabs } from "expo-router";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import {
+  FontAwesome,
+  Ionicons,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Haptics from "expo-haptics";
 import Animated, {
@@ -103,7 +107,11 @@ const renderIcon = (name: string, isFocused: boolean) => {
       );
     case "darshan":
       return (
-        <MaterialCommunityIcons name="flower-tulip" size={26} color={color} />
+        <FontAwesome
+          name={isFocused ? "file-text" : "file-text-o"}
+          size={24}
+          color={color}
+        />
       );
     case "donation":
       return (
