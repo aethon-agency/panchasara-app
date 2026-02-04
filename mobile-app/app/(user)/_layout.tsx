@@ -26,13 +26,11 @@ const CustomTabBar = ({ state, descriptors, navigation }: any) => {
 
   return (
     <View style={[styles.outerContainer, { bottom: insets.bottom || 20 }]}>
-      {/* Matches Header Gradient: White to light cream */}
       <LinearGradient
         colors={["#FFFFFF", "#FFFBEB"]}
         style={StyleSheet.absoluteFill}
       />
 
-      {/* Premium Bottom/Top Border to match header style */}
       <View style={styles.topBorder} />
 
       <View style={styles.mainBox}>
@@ -137,9 +135,9 @@ export default function UserLayout() {
       screenOptions={{ headerShown: false }}
     >
       <Tabs.Screen name="home" options={{ title: "Home" }} />
-      <Tabs.Screen name="darshan" options={{ title: "Darshan" }} />
+      <Tabs.Screen name="darshan" options={{ title: "Event List" }} />
       <Tabs.Screen name="donation" options={{ title: "Sewa" }} />
-      <Tabs.Screen name="profile" options={{ title: "Me" }} />
+      <Tabs.Screen name="profile" options={{ title: "Profile" }} />
     </Tabs>
   );
 }
