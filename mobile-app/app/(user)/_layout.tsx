@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  View,
-  StyleSheet,
-  Platform,
-  TouchableOpacity,
-  Dimensions,
-} from "react-native";
+import { View, StyleSheet, Platform, TouchableOpacity } from "react-native";
 import { Tabs } from "expo-router";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
@@ -17,15 +11,13 @@ import Animated, {
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
-const BAR_MARGIN = 20;
-const TAB_BAR_WIDTH = SCREEN_WIDTH - BAR_MARGIN * 2;
-
 const CustomTabBar = ({ state, descriptors, navigation }: any) => {
   const insets = useSafeAreaInsets();
 
   return (
-    <View style={[styles.outerContainer, { bottom: insets.bottom || 20 }]}>
+    <View
+      style={[styles.outerContainer, { marginBottom: insets.bottom || 20 }]}
+    >
       <LinearGradient
         colors={["#FFFFFF", "#FFFBEB"]}
         style={StyleSheet.absoluteFill}
@@ -69,8 +61,8 @@ const CustomTabBar = ({ state, descriptors, navigation }: any) => {
                 {renderIcon(route.name, isFocused)}
                 {isFocused && (
                   <Animated.Text
-                    entering={FadeIn.delay(100)}
-                    exiting={FadeOut.duration(100)}
+                    entering={FadeIn.delay(50)}
+                    exiting={FadeOut.duration(50)}
                     style={styles.label}
                   >
                     {label}
@@ -144,13 +136,14 @@ export default function UserLayout() {
 
 const styles = StyleSheet.create({
   outerContainer: {
-    position: "absolute",
-    alignSelf: "center",
-    width: TAB_BAR_WIDTH,
+    width: "100%",
     height: 70,
-    borderRadius: 35,
-    backgroundColor: "white",
+    backgroundColor: "trasperant",
     overflow: "hidden",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    borderWidth: 0.1,
+    borderColor: "#FDE68A",
     ...Platform.select({
       ios: {
         shadowColor: "#EA580C",
@@ -159,7 +152,7 @@ const styles = StyleSheet.create({
         shadowRadius: 12,
       },
       android: {
-        elevation: 8,
+        elevation: 1,
       },
     }),
   },
