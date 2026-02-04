@@ -31,6 +31,19 @@ export default function EventDetailsScreen() {
 
   const isPoonam = event.type === "regular";
 
+  const getEventLabel = (type: string) => {
+    switch (type) {
+      case "regular":
+        return "Poonam";
+      case "havan":
+        return "Havan";
+      case "special":
+        return "Special Event";
+      default:
+        return "Event";
+    }
+  };
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
@@ -51,7 +64,7 @@ export default function EventDetailsScreen() {
           <View style={styles.badgesRow}>
             <View style={styles.typeBadge}>
               <Text style={styles.typeBadgeText}>
-                {event.type.toUpperCase()}
+                {getEventLabel(event.type).toUpperCase()}
               </Text>
             </View>
             <Text style={styles.dayLabel}>

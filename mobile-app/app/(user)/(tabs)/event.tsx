@@ -10,21 +10,32 @@ import { AppHeader } from "@/src/components/AppHeader";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import Animated, { FadeInUp, LinearTransition } from "react-native-reanimated";
 import { useRouter } from "expo-router";
-import {
-  HAVAN_EVENTS,
-  POONAM_REGULAR,
-  POONAM_SPECIAL,
-} from "@/src/constants/events";
-
-const TABS = [
-  { id: "regular", label: "Poonam " },
-  { id: "havan", label: "Havan" },
-  { id: "special", label: "Special Events" },
-];
+import { ALL_EVENTS } from "@/src/constants/events";
 
 export default function EventScreen() {
-  const [activeTab, setActiveTab] = useState("regular");
   const router = useRouter();
+
+  const parseDate = (dateStr: string) => {
+    const [d, m, y] = dateStr.split("-").map(Number);
+    return new Date(y, m - 1, d);
+  };
+
+  const sortedEvents = [...ALL_EVENTS].sort((a, b) => {
+    return parseDate(a.date).getTime() - parseDate(b.date).getTime();
+  });
+
+  const getEventBadgeStyle = (type: string) => {
+    switch (type) {
+      case "regular":
+        return { bg: "#FFF7ED", text: "#EA580C", label: "Poonam" };
+      case "havan":
+        return { bg: "#EEF2FF", text: "#4F46E5", label: "Havan" };
+      case "special":
+        return { bg: "#F0FDF4", text: "#16A34A", label: "Special" };
+      default:
+        return { bg: "#F8FAFC", text: "#64748B", label: "Event" };
+    }
+  };
 
   const renderEventCard = (item: any, index: number) => {
     const goToDetails = () => {
@@ -33,6 +44,8 @@ export default function EventScreen() {
         params: { id: item.id },
       });
     };
+
+    const badge = getEventBadgeStyle(item.type);
 
     return (
       <Animated.View
@@ -46,7 +59,14 @@ export default function EventScreen() {
           style={styles.cardContent}
         >
           <View style={styles.headerInfo}>
-            <Text style={styles.cardTitle}>{item.title}</Text>
+            <View style={styles.titleRow}>
+              <Text style={styles.cardTitle}>{item.title}</Text>
+              <View style={[styles.typeBadge, { backgroundColor: badge.bg }]}>
+                <Text style={[styles.typeBadgeText, { color: badge.text }]}>
+                  {badge.label}
+                </Text>
+              </View>
+            </View>
 
             <View style={styles.row}>
               <Ionicons name="calendar-outline" size={14} color="#EA580C" />
@@ -66,55 +86,17 @@ export default function EventScreen() {
     );
   };
 
-  const getEvents = () => {
-    switch (activeTab) {
-      case "regular":
-        return POONAM_REGULAR;
-      case "special":
-        return POONAM_SPECIAL;
-      case "havan":
-        return HAVAN_EVENTS;
-      default:
-        return [];
-    }
-  };
-
   return (
     <View style={styles.container}>
-      <AppHeader title="Events" subtitle="Poornima & Yagya Schedule" />
-
-      <View style={styles.tabContainer}>
-        {TABS.map((tab) => (
-          <TouchableOpacity
-            key={tab.id}
-            onPress={() => setActiveTab(tab.id)}
-            style={styles.tabItem}
-          >
-            <Text
-              style={[
-                styles.tabLabel,
-                activeTab === tab.id && styles.activeTabLabel,
-              ]}
-            >
-              {tab.label}
-            </Text>
-            {activeTab === tab.id && (
-              <Animated.View
-                layout={LinearTransition}
-                style={styles.activeIndicator}
-              />
-            )}
-          </TouchableOpacity>
-        ))}
-      </View>
+      <AppHeader title="Events" subtitle="Upcoming Mandir Schedule" />
 
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {getEvents().map((item, index) => renderEventCard(item, index))}
+        {sortedEvents.map((item, index) => renderEventCard(item, index))}
 
-        {getEvents().length === 0 && (
+        {sortedEvents.length === 0 && (
           <View style={styles.emptyState}>
             <MaterialCommunityIcons
               name="calendar-blank"
@@ -133,35 +115,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FCF9F1",
-  },
-  tabContainer: {
-    flexDirection: "row",
-    backgroundColor: "#FFF",
-    paddingTop: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#F1F5F9",
-  },
-  tabItem: {
-    flex: 1,
-    alignItems: "center",
-    paddingVertical: 12,
-  },
-  tabLabel: {
-    fontSize: 13,
-    fontWeight: "600",
-    color: "#94A3B8",
-  },
-  activeTabLabel: {
-    color: "#EA580C",
-    fontWeight: "800",
-  },
-  activeIndicator: {
-    position: "absolute",
-    bottom: 0,
-    width: "60%",
-    height: 3,
-    backgroundColor: "#EA580C",
-    borderRadius: 2,
   },
   scrollContent: {
     padding: 20,
@@ -206,11 +159,28 @@ const styles = StyleSheet.create({
   headerInfo: {
     flex: 1,
   },
+  titleRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 6,
+  },
   cardTitle: {
     fontSize: 18,
     fontWeight: "900",
     color: "#431407",
-    marginBottom: 6,
+    flex: 1,
+  },
+  typeBadge: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 8,
+    marginLeft: 10,
+  },
+  typeBadgeText: {
+    fontSize: 10,
+    fontWeight: "800",
+    textTransform: "uppercase",
   },
   row: {
     flexDirection: "row",
