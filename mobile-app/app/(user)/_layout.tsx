@@ -15,6 +15,11 @@ export default function UserLayout() {
           headerTintColor: "#EA580C",
         }}
       />
+      <Stack.Screen name="accounts" />
+      <Stack.Screen name="donations" />
+      <Stack.Screen name="mandir-details" />
+      <Stack.Screen name="contact" />
+      <Stack.Screen name="history" />
     </Stack>
   );
 }
