@@ -7,31 +7,115 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Image,
 } from "react-native";
 import { useAuthStore } from "../../../src/stores/authStore";
 import { AppHeader } from "@/src/components/AppHeader";
 import { LinearGradient } from "expo-linear-gradient";
 import Animated, { FadeInUp, FadeInRight } from "react-native-reanimated";
+import { useRouter } from "expo-router";
 
-const HomeScreen = () => {
-  const { user, logout } = useAuthStore();
+interface QuickActionProps {
+  icon:
+    | keyof typeof Ionicons.glyphMap
+    | keyof typeof MaterialCommunityIcons.glyphMap;
+  label: string;
+  mdi?: boolean;
+  delay?: number;
+  route?: string;
+}
 
-  const QuickAction = ({ icon, label, mdi = false, delay = 0 }: any) => (
+const QuickAction = ({
+  icon,
+  label,
+  mdi = false,
+  delay = 0,
+  route,
+}: QuickActionProps) => {
+  const router = useRouter();
+
+  const handlePress = () => {
+    if (route) {
+      // Cast to any to avoid strict route checking errors for placeholders
+      router.push(route as any);
+    }
+  };
+
+  return (
     <Animated.View entering={FadeInUp.delay(delay).duration(600)}>
-      <TouchableOpacity style={styles.actionCard} activeOpacity={0.7}>
+      <TouchableOpacity
+        style={styles.actionCard}
+        activeOpacity={0.7}
+        onPress={handlePress}
+      >
         <LinearGradient
           colors={["#FFFFFF", "#FFF7ED"]}
           style={styles.iconCircle}
         >
           {mdi ? (
-            <MaterialCommunityIcons name={icon} size={26} color="#EA580C" />
+            <MaterialCommunityIcons
+              name={icon as any}
+              size={26}
+              color="#EA580C"
+            />
           ) : (
-            <Ionicons name={icon} size={26} color="#EA580C" />
+            <Ionicons name={icon as any} size={26} color="#EA580C" />
           )}
         </LinearGradient>
         <Text style={styles.actionLabel}>{label}</Text>
       </TouchableOpacity>
     </Animated.View>
+  );
+};
+
+const GALLERY_DATA = [
+  {
+    id: "1",
+    title: "Janmashtami",
+    date: "August 2025",
+    image:
+      "https://images.unsplash.com/photo-1623345805780-8f6e85c18c26?q=80&w=600&auto=format&fit=crop",
+  },
+  {
+    id: "2",
+    title: "Navratri Garba",
+    date: "October 2025",
+    image:
+      "https://images.unsplash.com/photo-1561336313-0bd5518eb139?q=80&w=600&auto=format&fit=crop",
+  },
+  {
+    id: "3",
+    title: "Diwali Pujan",
+    date: "November 2024",
+    image:
+      "https://images.unsplash.com/photo-1606216794074-735e91aa7c5e?q=80&w=600&auto=format&fit=crop",
+  },
+];
+
+const HomeScreen = () => {
+  const { user } = useAuthStore();
+  const router = useRouter();
+
+  const GalleryCard = ({ item }: { item: any }) => (
+    <TouchableOpacity
+      style={styles.galleryCard}
+      activeOpacity={0.8}
+      onPress={() =>
+        router.push({
+          pathname: "/(user)/gallery-details",
+          params: { id: item.id, title: item.title, date: item.date },
+        } as any)
+      }
+    >
+      <Image source={{ uri: item.image }} style={styles.galleryImage} />
+      <LinearGradient
+        colors={["transparent", "rgba(0,0,0,0.8)"]}
+        style={styles.galleryOverlay}
+      >
+        <Text style={styles.galleryTitle}>{item.title}</Text>
+        <Text style={styles.galleryDate}>{item.date}</Text>
+      </LinearGradient>
+    </TouchableOpacity>
   );
 
   return (
@@ -55,7 +139,11 @@ const HomeScreen = () => {
       >
         {/* HERO SECTION: LIVE DARSHAN */}
         <Animated.View entering={FadeInUp.duration(800)}>
-          <TouchableOpacity style={styles.banner} activeOpacity={0.9}>
+          <TouchableOpacity
+            style={styles.banner}
+            activeOpacity={0.9}
+            onPress={() => router.push("/(user)/mandir-details" as any)}
+          >
             <LinearGradient
               colors={["#9A3412", "#EA580C", "#F59E0B"]}
               start={{ x: 0, y: 0 }}
@@ -74,10 +162,10 @@ const HomeScreen = () => {
                     Experience the divine Mangala Darshan from the Main Temple.
                   </Text>
 
-                  <TouchableOpacity style={styles.glassButton}>
+                  <View style={styles.glassButton}>
                     <Text style={styles.viewButtonText}>View Blessings</Text>
                     <Ionicons name="play-circle" size={18} color="#EA580C" />
-                  </TouchableOpacity>
+                  </View>
                 </View>
 
                 {/* Symbolic Watermark */}
@@ -101,27 +189,68 @@ const HomeScreen = () => {
         </View>
 
         <View style={styles.actionsGrid}>
-          <QuickAction icon="calendar-outline" label="Panchang" delay={100} />
-          <QuickAction icon="heart-outline" label="Donation" delay={200} />
+          <QuickAction
+            icon="calendar-outline"
+            label="Panchang"
+            delay={100}
+            route="/(user)/mandir-details" // Placeholder for Panchang
+          />
+          <QuickAction
+            icon="heart-outline"
+            label="Donation"
+            delay={200}
+            route="/(user)/donations"
+          />
           <QuickAction
             icon="book-open-variant"
             label="Literature"
             mdi
             delay={300}
+            route="/(user)/history" // Using history for literature as placeholder
           />
-          <QuickAction icon="hands-pray" label="Seva" mdi delay={400} />
+          <QuickAction
+            icon="hands-pray"
+            label="Seva"
+            mdi
+            delay={400}
+            route="/(user)/contact" // Using contact for Seva/Volunteering
+          />
         </View>
+
+        {/* GALLERY SECTION */}
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>Event Gallery</Text>
+          <TouchableOpacity onPress={() => {}}>
+            <Text style={styles.seeAll}>See All</Text>
+          </TouchableOpacity>
+        </View>
+
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.galleryScroll}
+          style={styles.galleryContainer}
+        >
+          {GALLERY_DATA.map((item) => (
+            <GalleryCard key={item.id} item={item} />
+          ))}
+        </ScrollView>
 
         {/* ANNOUNCEMENTS SECTION */}
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>What's New</Text>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => router.push("/(user)/mandir-details" as any)}
+          >
             <Text style={styles.seeAll}>See All</Text>
           </TouchableOpacity>
         </View>
 
         <Animated.View entering={FadeInRight.delay(500)}>
-          <TouchableOpacity style={styles.announcementCard}>
+          <TouchableOpacity
+            style={styles.announcementCard}
+            onPress={() => router.push("/(user)/mandir-details" as any)}
+          >
             <View style={styles.announcementIcon}>
               <LinearGradient
                 colors={["#FFEDD5", "#FED7AA"]}
@@ -257,6 +386,10 @@ const styles = StyleSheet.create({
   /* GRID STYLES */
   sectionHeader: {
     marginBottom: 16,
+    marginTop: 8, // Added margin top for spacing
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-end",
   },
   sectionTitle: {
     fontSize: 20,
@@ -298,39 +431,51 @@ const styles = StyleSheet.create({
     color: "#7C2D12",
     textAlign: "center",
   },
-  /* TIMING CARD */
-  timingCard: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: 20,
-    borderRadius: 24,
-    marginBottom: 30,
+  /* GALLERY STYLES */
+  galleryContainer: {
+    marginBottom: 30, // Spacing after gallery
+    marginHorizontal: -20, // Negative margin to allow full-width scroll
   },
-  timingLabel: {
-    color: "rgba(255,255,255,0.6)",
-    fontSize: 12,
+  galleryScroll: {
+    paddingHorizontal: 20, // Restore padding inside scroll content
+    gap: 16,
+  },
+  galleryCard: {
+    width: 200,
+    height: 140,
+    borderRadius: 20,
+    overflow: "hidden",
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    backgroundColor: "#F1F5F9",
+  },
+  galleryImage: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover",
+  },
+  galleryOverlay: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    padding: 12,
+    justifyContent: "flex-end",
+    height: "100%",
+  },
+  galleryTitle: {
+    color: "#FFF",
+    fontSize: 14,
     fontWeight: "700",
-    textTransform: "uppercase",
   },
-  timingTitle: {
-    color: "#FFF",
-    fontSize: 18,
-    fontWeight: "800",
+  galleryDate: {
+    color: "rgba(255,255,255,0.8)",
+    fontSize: 11,
+    fontWeight: "500",
     marginTop: 2,
-  },
-  timeBadge: {
-    backgroundColor: "rgba(255,255,255,0.2)",
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.3)",
-  },
-  timeText: {
-    color: "#FFF",
-    fontWeight: "900",
-    fontSize: 15,
   },
   /* ANNOUNCEMENT */
   announcementCard: {
@@ -371,8 +516,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "700",
     color: "#EA580C",
-    position: "absolute",
-    right: 0,
-    bottom: 5,
+    marginBottom: 2,
   },
 });
