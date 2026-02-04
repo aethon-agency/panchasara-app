@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { AppHeader } from "@/src/components/AppHeader";
-import { useAuthStore } from "../../src/stores/authStore";
+import { useAuthStore } from "../../../src/stores/authStore";
 
 export default function ProfileScreen() {
   const { user, logout } = useAuthStore();

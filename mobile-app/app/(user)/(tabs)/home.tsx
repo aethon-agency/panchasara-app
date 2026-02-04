@@ -7,12 +7,8 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Platform,
-  ImageBackground,
 } from "react-native";
-import { COLORS } from "../../src/constants/colors";
-import { FONTS } from "../../src/constants/fonts";
-import { useAuthStore } from "../../src/stores/authStore";
+import { useAuthStore } from "../../../src/stores/authStore";
 import { AppHeader } from "@/src/components/AppHeader";
 import { LinearGradient } from "expo-linear-gradient";
 import Animated, { FadeInUp, FadeInRight } from "react-native-reanimated";
