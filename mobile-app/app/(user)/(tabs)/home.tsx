@@ -1,5 +1,5 @@
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   ScrollView,
   StatusBar,
@@ -8,12 +8,16 @@ import {
   TouchableOpacity,
   View,
   Image,
+  Dimensions,
+  FlatList,
 } from "react-native";
 import { useAuthStore } from "../../../src/stores/authStore";
 import { AppHeader } from "@/src/components/AppHeader";
 import { LinearGradient } from "expo-linear-gradient";
 import Animated, { FadeInUp, FadeInRight } from "react-native-reanimated";
 import { useRouter } from "expo-router";
+
+const { width } = Dimensions.get("window");
 
 interface QuickActionProps {
   icon:
@@ -92,9 +96,16 @@ const GALLERY_DATA = [
   },
 ];
 
+const HERO_IMAGES = [
+  "https://images.unsplash.com/photo-1604514032483-a75d2786720f?q=80&w=800&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1574515598584-633041910d54?q=80&w=800&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1542382156-97216664e43e?q=80&w=800&auto=format&fit=crop",
+];
+
 const HomeScreen = () => {
   const { user } = useAuthStore();
   const router = useRouter();
+  const flatListRef = useRef(null);
 
   const GalleryCard = ({ item }: { item: any }) => (
     <TouchableOpacity
@@ -144,6 +155,25 @@ const HomeScreen = () => {
             activeOpacity={0.9}
             onPress={() => router.push("/(user)/mandir-details" as any)}
           >
+            <View style={StyleSheet.absoluteFill}>
+              <FlatList
+                ref={flatListRef}
+                data={HERO_IMAGES}
+                horizontal
+                pagingEnabled
+                showsHorizontalScrollIndicator={false}
+                scrollEnabled={false}
+                keyExtractor={(_, index) => index.toString()}
+                renderItem={({ item }) => (
+                  <Image
+                    source={{ uri: item }}
+                    style={{ width: width - 40, height: 200 }}
+                    resizeMode="cover"
+                  />
+                )}
+              />
+            </View>
+
             <LinearGradient
               colors={["#9A3412", "#EA580C", "#F59E0B"]}
               start={{ x: 0, y: 0 }}
@@ -180,47 +210,12 @@ const HomeScreen = () => {
           </TouchableOpacity>
         </Animated.View>
 
-        {/* SERVICES SECTION */}
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Mandir Services</Text>
-          <Text style={styles.sectionSubtitle}>
-            Everything you need for your Sadhana
-          </Text>
-        </View>
-
-        <View style={styles.actionsGrid}>
-          <QuickAction
-            icon="calendar-outline"
-            label="Panchang"
-            delay={100}
-            route="/(user)/mandir-details" // Placeholder for Panchang
-          />
-          <QuickAction
-            icon="heart-outline"
-            label="Donation"
-            delay={200}
-            route="/(user)/donations"
-          />
-          <QuickAction
-            icon="book-open-variant"
-            label="Literature"
-            mdi
-            delay={300}
-            route="/(user)/history" // Using history for literature as placeholder
-          />
-          <QuickAction
-            icon="hands-pray"
-            label="Seva"
-            mdi
-            delay={400}
-            route="/(user)/contact" // Using contact for Seva/Volunteering
-          />
-        </View>
-
         {/* GALLERY SECTION */}
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Event Gallery</Text>
-          <TouchableOpacity onPress={() => {}}>
+          <TouchableOpacity
+            onPress={() => router.push("/(user)/galleries" as any)}
+          >
             <Text style={styles.seeAll}>See All</Text>
           </TouchableOpacity>
         </View>
@@ -240,7 +235,7 @@ const HomeScreen = () => {
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>What's New</Text>
           <TouchableOpacity
-            onPress={() => router.push("/(user)/mandir-details" as any)}
+            onPress={() => router.push("/(user)/announcements" as any)}
           >
             <Text style={styles.seeAll}>See All</Text>
           </TouchableOpacity>
@@ -249,7 +244,18 @@ const HomeScreen = () => {
         <Animated.View entering={FadeInRight.delay(500)}>
           <TouchableOpacity
             style={styles.announcementCard}
-            onPress={() => router.push("/(user)/mandir-details" as any)}
+            onPress={() =>
+              router.push({
+                pathname: "/(user)/announcement-details",
+                params: {
+                  title: "Paryushan Mahaparva 2026",
+                  date: "15 Aug 2026",
+                  author: "Admin",
+                  description:
+                    "Join us for the 8 days of spiritual purification. Daily Pravacahns, Pratikraman, and Bhakti Sangeet will be organized. \n\nDetailed Schedule:\n- 6:00 AM: Snatra Puja\n- 9:30 AM: Pravachan\n- 8:00 PM: Bhakti Bhavna\n\nPlease register your name at the office for Ekasana and Upvas.",
+                },
+              } as any)
+            }
           >
             <View style={styles.announcementIcon}>
               <LinearGradient
