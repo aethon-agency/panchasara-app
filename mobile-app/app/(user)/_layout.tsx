@@ -1,5 +1,4 @@
-import { Tabs } from "expo-router";
-import React, { useEffect } from "react";
+import React from "react";
 import {
   View,
   StyleSheet,
@@ -7,105 +6,90 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
+import { Tabs } from "expo-router";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { BlurView } from "expo-blur";
+import { LinearGradient } from "expo-linear-gradient";
 import * as Haptics from "expo-haptics";
 import Animated, {
-  useAnimatedStyle,
-  withSpring,
-  useSharedValue,
+  FadeIn,
+  FadeOut,
+  LinearTransition,
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-const { width } = Dimensions.get("window");
-
+const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const BAR_MARGIN = 20;
-const TAB_BAR_WIDTH = width - BAR_MARGIN * 2;
-
-const SPRING_CONFIG = {
-  damping: 18,
-  stiffness: 150,
-  mass: 0.8,
-};
+const TAB_BAR_WIDTH = SCREEN_WIDTH - BAR_MARGIN * 2;
 
 const CustomTabBar = ({ state, descriptors, navigation }: any) => {
   const insets = useSafeAreaInsets();
-  const numTabs = state.routes.length;
-  const TAB_WIDTH = TAB_BAR_WIDTH / numTabs;
-
-  const translateX = useSharedValue(state.index * TAB_WIDTH);
-
-  useEffect(() => {
-    translateX.value = withSpring(state.index * TAB_WIDTH, SPRING_CONFIG);
-  }, [state.index]);
-
-  const indicatorStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: translateX.value }],
-  }));
 
   return (
     <View style={[styles.outerContainer, { bottom: insets.bottom || 20 }]}>
-      <BlurView intensity={80} tint="light" style={styles.blurWrapper}>
-        {/* The Animated Background Pill */}
-        <Animated.View
-          style={[
-            styles.slidingIndicator,
-            indicatorStyle,
-            { width: TAB_WIDTH },
-          ]}
-        >
-          <View style={styles.indicatorPill} />
-        </Animated.View>
+      {/* Matches Header Gradient: White to light cream */}
+      <LinearGradient
+        colors={["#FFFFFF", "#FFFBEB"]}
+        style={StyleSheet.absoluteFill}
+      />
 
-        <View style={styles.mainBox}>
-          {state.routes.map((route: any, index: number) => {
-            const isFocused = state.index === index;
-            const options = descriptors[route.key].options;
-            const label = options.title ?? route.name;
+      {/* Premium Bottom/Top Border to match header style */}
+      <View style={styles.topBorder} />
 
-            const onPress = () => {
-              const event = navigation.emit({
-                type: "tabPress",
-                target: route.key,
-                canPreventDefault: true,
-              });
+      <View style={styles.mainBox}>
+        {state.routes.map((route: any, index: number) => {
+          const isFocused = state.index === index;
+          const label = descriptors[route.key].options.title ?? route.name;
 
-              if (!isFocused && !event.defaultPrevented) {
-                if (Platform.OS !== "web")
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                navigation.navigate(route.name);
-              }
-            };
+          const onPress = () => {
+            const event = navigation.emit({
+              type: "tabPress",
+              target: route.key,
+              canPreventDefault: true,
+            });
 
-            return (
-              <TouchableOpacity
-                key={index}
-                onPress={onPress}
-                style={styles.tabItem}
-                activeOpacity={1}
+            if (!isFocused && !event.defaultPrevented) {
+              if (Platform.OS !== "web")
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              navigation.navigate(route.name);
+            }
+          };
+
+          return (
+            <TouchableOpacity
+              key={route.key}
+              onPress={onPress}
+              style={styles.tabItem}
+              activeOpacity={1}
+            >
+              <Animated.View
+                layout={LinearTransition.springify().damping(20).stiffness(150)}
+                style={[
+                  styles.contentContainer,
+                  isFocused && styles.activeContentContainer,
+                ]}
               >
-                <View style={styles.contentContainer}>
-                  {renderIcon(route.name, isFocused)}
-                  {isFocused && (
-                    <Animated.Text
-                      entering={undefined} // Add layout animations here if desired
-                      style={styles.label}
-                    >
-                      {label}
-                    </Animated.Text>
-                  )}
-                </View>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-      </BlurView>
+                {renderIcon(route.name, isFocused)}
+                {isFocused && (
+                  <Animated.Text
+                    entering={FadeIn.delay(100)}
+                    exiting={FadeOut.duration(100)}
+                    style={styles.label}
+                  >
+                    {label}
+                  </Animated.Text>
+                )}
+              </Animated.View>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
     </View>
   );
 };
 
 const renderIcon = (name: string, isFocused: boolean) => {
-  const color = isFocused ? "#EA580C" : "#94a3b8";
+  // Deep Brown for active, Saffron-tinted grey for inactive
+  const color = isFocused ? "#431407" : "#9A3412";
   const size = 22;
 
   switch (name) {
@@ -161,53 +145,60 @@ const styles = StyleSheet.create({
     position: "absolute",
     alignSelf: "center",
     width: TAB_BAR_WIDTH,
-    borderRadius: 35,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.1,
-    shadowRadius: 20,
-    elevation: 5,
-    backgroundColor: "rgba(255,255,255,0.7)",
-    overflow: "hidden",
-  },
-  blurWrapper: {
     height: 70,
-    flexDirection: "row",
+    borderRadius: 35,
+    backgroundColor: "white",
+    overflow: "hidden",
+    ...Platform.select({
+      ios: {
+        shadowColor: "#EA580C",
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.15,
+        shadowRadius: 12,
+      },
+      android: {
+        elevation: 8,
+      },
+    }),
+  },
+  topBorder: {
+    height: 1,
+    width: "100%",
+    backgroundColor: "#FDE68A", // Golden tint matching header
+    position: "absolute",
+    top: 0,
+    opacity: 0.5,
   },
   mainBox: {
     flex: 1,
     flexDirection: "row",
-    zIndex: 2,
+    alignItems: "center",
+    justifyContent: "space-around",
+    paddingHorizontal: 10,
   },
   tabItem: {
-    flex: 1,
     alignItems: "center",
     justifyContent: "center",
   },
   contentContainer: {
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+    height: 48,
+    minWidth: 48,
+    borderRadius: 24,
   },
-  slidingIndicator: {
-    position: "absolute",
-    height: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-    zIndex: 1,
-  },
-  indicatorPill: {
-    width: "85%", // Controls how wide the white pill looks relative to the tab
-    height: 55,
-    borderRadius: 28,
-    backgroundColor: "white", // To match your white pill reference
-    // Inner shadow or border
+  activeContentContainer: {
+    backgroundColor: "#FFF7ED", // Very light saffron "Halo" matching header iconHalo
+    paddingHorizontal: 16,
     borderWidth: 1,
-    borderColor: "rgba(0,0,0,0.02)",
+    borderColor: "#FFEDD5", // Saffron border
   },
   label: {
-    fontSize: 11,
-    fontWeight: "700",
-    color: "#EA580C",
-    marginTop: 2,
+    fontSize: 13,
+    fontWeight: "900", // Heavy weight to match Header title
+    color: "#431407", // Deep brown
+    marginLeft: 8,
+    letterSpacing: 0.2,
   },
 });

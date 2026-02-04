@@ -48,8 +48,8 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
       )}
 
       <View style={styles.content}>
-        {/* Left Section: Back Button */}
-        <View style={styles.sideSection}>
+        {/* Left Group: Combines Back Button + Title/Subtitle */}
+        <View style={styles.leftGroup}>
           {showBack && (
             <TouchableOpacity
               onPress={onBack}
@@ -59,26 +59,23 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
               <Ionicons name="arrow-back" size={24} color="#7C2D12" />
             </TouchableOpacity>
           )}
-        </View>
 
-        {/* Center Section: Title & Subtitle */}
-        <View style={styles.centerSection}>
-          {title && (
-            <Text numberOfLines={1} style={styles.title}>
-              {title}
-            </Text>
-          )}
-          {subtitle && (
-            <Text numberOfLines={1} style={styles.subtitle}>
-              {subtitle}
-            </Text>
-          )}
+          <View style={[styles.textSection, showBack && { marginLeft: 14 }]}>
+            {title && (
+              <Text numberOfLines={1} style={styles.title}>
+                {title}
+              </Text>
+            )}
+            {subtitle && (
+              <Text numberOfLines={1} style={styles.subtitle}>
+                {subtitle}
+              </Text>
+            )}
+          </View>
         </View>
 
         {/* Right Section: Actions */}
-        <View style={[styles.sideSection, styles.rightSide]}>
-          {rightAction}
-        </View>
+        <View style={styles.rightSide}>{rightAction}</View>
       </View>
 
       {/* Premium Bottom Border */}
@@ -110,31 +107,32 @@ const styles = StyleSheet.create({
     shadowOpacity: 0,
   },
   content: {
-    height: 56,
+    height: 64, // Slightly taller for better alignment
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: 20,
   },
-  sideSection: {
+  leftGroup: {
+    flex: 1, // Occupies remaining space to keep rightAction on the far right
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  textSection: {
+    justifyContent: "center",
+    alignItems: "flex-start", // Anchors text to the left
+  },
+  rightSide: {
     minWidth: 44,
     height: "100%",
     justifyContent: "center",
-  },
-  rightSide: {
     alignItems: "flex-end",
-  },
-  centerSection: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 8,
   },
   iconHalo: {
     width: 42,
     height: 42,
     borderRadius: 21,
-    backgroundColor: "#FFF7ED", // Very light saffron
+    backgroundColor: "#FFF7ED",
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 1.5,
@@ -152,24 +150,25 @@ const styles = StyleSheet.create({
     }),
   },
   title: {
-    fontSize: 19,
+    fontSize: 20, // Increased size for left-aligned branding
     fontWeight: "900",
-    color: "#431407", // Deep Brown
-    letterSpacing: 0.3,
+    color: "#431407",
+    letterSpacing: -0.3,
+    lineHeight: 24,
   },
   subtitle: {
     fontSize: 10,
-    fontWeight: "700",
-    color: "#9A3412", // Rich Saffron
+    fontWeight: "800",
+    color: "#9A3412",
     textTransform: "uppercase",
-    letterSpacing: 1.2,
-    marginTop: 1,
-    opacity: 0.9,
+    letterSpacing: 1,
+    marginTop: 0,
+    opacity: 0.8,
   },
   bottomBorder: {
     height: 1,
     width: "100%",
-    backgroundColor: "#FDE68A", // Golden tint
-    opacity: 0.5,
+    backgroundColor: "#FDE68A",
+    opacity: 0.4,
   },
 });
