@@ -12,12 +12,14 @@ interface Props extends KeyboardAvoidingViewProps {
   children: React.ReactNode;
   style?: ViewStyle;
   iosOffset?: number;
+  androidOffset?: number;
 }
 
 export const KeyboardAvoidingContainer: React.FC<Props> = ({
   children,
   style,
   iosOffset = 0,
+  androidOffset = 0,
   ...props
 }) => {
   const isKeyboardVisible = useKeyboardVisible();
@@ -29,10 +31,10 @@ export const KeyboardAvoidingContainer: React.FC<Props> = ({
         Platform.OS === "ios"
           ? "padding"
           : isKeyboardVisible
-          ? "padding"
-          : undefined
+            ? "padding"
+            : undefined
       }
-      keyboardVerticalOffset={Platform.OS === "ios" ? iosOffset : 0}
+      keyboardVerticalOffset={Platform.OS === "ios" ? iosOffset : androidOffset}
       {...props}
     >
       {children}

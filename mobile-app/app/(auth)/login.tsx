@@ -10,9 +10,9 @@ import {
   View,
   Image,
   Dimensions,
+  Keyboard,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -26,15 +26,19 @@ import { CustomInput } from "@/src/components/CustomInput";
 import { SwipeButton } from "@/src/components/SwipeButton";
 import { KeyboardAvoidingContainer } from "@/src/components/KeyboardAvoidingContainer";
 import { useLanguage } from "@/src/hooks/useLanguage";
+import { useCommon } from "@/src/hooks/useCommon";
+import { useKeyboardVisible } from "@/src/hooks/useKeyboardVisible";
 
 const { width, height } = Dimensions.get("window");
 
 const LoginScreen = () => {
   const { t } = useLanguage();
-  const insets = useSafeAreaInsets();
+  const { insets } = useCommon();
+  const isKeyboardVisible = useKeyboardVisible();
   const [activeTab, setActiveTab] = useState<"login" | "register">("login");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [firstName, setFirstName] = useState("");
+  const [middleName, setMiddleName] = useState("");
   const [lastName, setLastName] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -52,8 +56,12 @@ const LoginScreen = () => {
     if (activeTab === "login") {
       if (phoneNumber.length < 10) return;
     } else {
-      if (!firstName || !lastName || phoneNumber.length < 10) return;
+      if (!firstName || !middleName || !lastName || phoneNumber.length < 10)
+        return;
     }
+
+    // Dismiss keyboard before navigation
+    Keyboard.dismiss();
 
     setLoading(true);
     // Simulate API Call
@@ -67,6 +75,7 @@ const LoginScreen = () => {
     activeTab === "login"
       ? phoneNumber.length === 10
       : firstName.trim() !== "" &&
+        middleName.trim() !== "" &&
         lastName.trim() !== "" &&
         phoneNumber.length === 10;
 
@@ -219,9 +228,10 @@ const LoginScreen = () => {
             </View>
 
             <ScrollView
-              showsVerticalScrollIndicator={false}
+              style={{ flex: 1 }}
+              contentContainerStyle={{ flexGrow: 1 }}
+              showsVerticalScrollIndicator={true}
               keyboardShouldPersistTaps="handled"
-              contentContainerStyle={[styles.scrollForm, { flexGrow: 1 }]}
             >
               {activeTab === "register" && (
                 <>
@@ -233,6 +243,16 @@ const LoginScreen = () => {
                     }
                     value={firstName}
                     onChangeText={setFirstName}
+                  />
+
+                  <CustomInput
+                    label={t("login.middleNameLabel") ?? "Middle Name"}
+                    icon="account-outline"
+                    placeholder={
+                      t("login.middleNameLabel") ?? "Enter middle name"
+                    }
+                    value={middleName}
+                    onChangeText={setMiddleName}
                   />
 
                   <CustomInput
@@ -260,7 +280,9 @@ const LoginScreen = () => {
             <View
               style={{
                 paddingTop: 10,
-                paddingBottom: Platform.OS === "ios" ? insets.bottom + 10 : 10,
+                paddingBottom: isKeyboardVisible
+                  ? 10
+                  : Math.max(insets.bottom, 10) + 10,
               }}
             >
               <SwipeButton
@@ -399,6 +421,10 @@ const styles = StyleSheet.create({
     color: "#EA580C",
   },
   scrollForm: {},
+  formInputs: {
+    flex: 1,
+    justifyContent: "flex-start",
+  },
   footer: {
     marginTop: 12,
     alignItems: "center",

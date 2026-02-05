@@ -1,8 +1,7 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import {
-  KeyboardAvoidingView,
   Platform,
   ScrollView,
   StatusBar,
@@ -19,17 +18,28 @@ import { useAuthStore } from "@/src/stores/authStore";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { LanguageSelector } from "@/src/components/LanguageSelector";
 import { SwipeButton } from "@/src/components/SwipeButton";
+import { KeyboardAvoidingContainer } from "@/src/components/KeyboardAvoidingContainer";
 import { useLanguage } from "@/src/hooks/useLanguage";
+import { useKeyboardVisible } from "@/src/hooks/useKeyboardVisible";
 
 const { width, height } = Dimensions.get("window");
 
 const OTPScreen = () => {
   const { t } = useLanguage();
   const insets = useSafeAreaInsets();
+  const isKeyboardVisible = useKeyboardVisible();
   const [otp, setOtp] = useState(["", "", "", ""]);
   const [loading, setLoading] = useState(false);
   const inputs: any = useRef([]);
   const login = useAuthStore((state) => state.login);
+
+  // Auto-focus first input on mount
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      inputs.current[0]?.focus();
+    }, 300);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleOtpChange = (value: any, index: any) => {
     if (value && !/^\d+$/.test(value)) return;
@@ -59,7 +69,7 @@ const OTPScreen = () => {
       const mockToken = "mock-jwt-token";
       const mockUser: any = { id: "1" };
       login(mockToken, mockUser);
-      router.replace("/(user)/home");
+      router.replace("/(user)/(tabs)/home");
     }, 1500);
   };
 
@@ -94,12 +104,7 @@ const OTPScreen = () => {
         </View>
       </View>
 
-      {/* FORM SECTION (WHITE SHEET STYLE) */}
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-        style={{ flex: 1 }}
-        keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
-      >
+      <KeyboardAvoidingContainer style={{ flex: 1 }} iosOffset={0}>
         <View style={styles.formSheet}>
           <View style={styles.sheetHandle} />
 
@@ -107,19 +112,8 @@ const OTPScreen = () => {
             <Text style={styles.sheetTitle}>
               {t("login.otpTitle") ?? "Verify OTP"}
             </Text>
-            <Text style={styles.sheetSubtitle}>
-              {t("login.otpSubtitle") ??
-                "Enter the 4-digit code sent to your mobile"}
-            </Text>
 
-            <ScrollView
-              showsVerticalScrollIndicator={false}
-              keyboardShouldPersistTaps="handled"
-              contentContainerStyle={[
-                styles.scrollForm,
-                { paddingBottom: insets.bottom + 60 },
-              ]}
-            >
+            <View style={styles.formInputs}>
               <View style={styles.otpSection}>
                 <Text style={styles.inputLabel}>
                   {t("login.otpLabel") ?? "Verification Code"}
@@ -147,7 +141,16 @@ const OTPScreen = () => {
                   ))}
                 </View>
               </View>
+            </View>
 
+            <View
+              style={{
+                paddingTop: 10,
+                paddingBottom: isKeyboardVisible
+                  ? 10
+                  : Math.max(insets.bottom, 10) + 10,
+              }}
+            >
               <SwipeButton
                 label={t("login.verifyCta") ?? "Slide to Verify"}
                 onSwipeComplete={handleVerify}
@@ -163,10 +166,10 @@ const OTPScreen = () => {
                     "Secure portal for Panchasara Parivar members 🪔"}
                 </Text>
               </View>
-            </ScrollView>
+            </View>
           </View>
         </View>
-      </KeyboardAvoidingView>
+      </KeyboardAvoidingContainer>
     </View>
   );
 };
@@ -258,16 +261,12 @@ const styles = StyleSheet.create({
     color: "#431407",
     textAlign: "center",
     marginTop: 10,
+    marginBottom: 16,
   },
-  sheetSubtitle: {
-    fontSize: 14,
-    color: "#92400E",
-    textAlign: "center",
-    marginTop: 6,
-    opacity: 0.8,
-    marginBottom: 48,
+  formInputs: {
+    flex: 1,
+    justifyContent: "flex-start",
   },
-  scrollForm: {},
   otpSection: {
     width: "100%",
     marginBottom: 40,
@@ -278,8 +277,8 @@ const styles = StyleSheet.create({
     color: "#431407",
     textTransform: "uppercase",
     letterSpacing: 1,
-    marginBottom: 12,
     opacity: 0.8,
+    marginBlock: 8,
   },
   otpContainer: {
     flexDirection: "row",
@@ -297,11 +296,11 @@ const styles = StyleSheet.create({
   },
   activeOtpCard: {
     borderBottomColor: "#EA580C", // Same saffron color on focus/filled
-    borderBottomWidth: 2.5,
+    borderBottomWidth: 2,
   },
   otpInput: {
     fontSize: 28,
-    fontWeight: "900",
+    fontWeight: "700",
     color: "#431407",
     textAlign: "center",
     width: "100%",
