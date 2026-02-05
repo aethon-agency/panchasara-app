@@ -72,7 +72,6 @@ const LoginScreen = () => {
 
   // ANIMATED STYLES
   const animatedTopSectionStyle = useAnimatedStyle(() => {
-    // Total space at top when collapsed
     const collapsedHeight = insets.top + 40;
 
     const sectionHeight = interpolate(
@@ -81,15 +80,45 @@ const LoginScreen = () => {
       [height * 0.35, collapsedHeight],
       Extrapolation.CLAMP,
     );
+    return {
+      height: sectionHeight,
+    };
+  });
+
+  const animatedLogoStyle = useAnimatedStyle(() => {
     const opacity = interpolate(
       transition.value,
-      [0, 0.4],
+      [0, 0.8],
       [1, 0],
+      Extrapolation.CLAMP,
+    );
+    const scale = interpolate(
+      transition.value,
+      [0, 1],
+      [1, 0.7],
+      Extrapolation.CLAMP,
+    );
+    const translateY = interpolate(
+      transition.value,
+      [0, 1],
+      [0, -20],
       Extrapolation.CLAMP,
     );
 
     return {
-      height: sectionHeight,
+      opacity,
+      transform: [{ scale }, { translateY }],
+    };
+  });
+
+  const animatedLanguageStyle = useAnimatedStyle(() => {
+    const opacity = interpolate(
+      transition.value,
+      [0, 0.6],
+      [1, 0],
+      Extrapolation.CLAMP,
+    );
+    return {
       opacity,
     };
   });
@@ -114,7 +143,6 @@ const LoginScreen = () => {
       marginTop,
       borderTopLeftRadius: borderRadius,
       borderTopRightRadius: borderRadius,
-      // Bottom radius only in register mode for full "floating" card effect
       borderBottomLeftRadius: interpolate(transition.value, [0, 1], [0, 32]),
       borderBottomRightRadius: interpolate(transition.value, [0, 1], [0, 32]),
     };
@@ -133,11 +161,17 @@ const LoginScreen = () => {
       <View style={[styles.topHalo, { top: -width * 0.3 }]} />
 
       <Animated.View style={[styles.topSection, animatedTopSectionStyle]}>
-        <View style={[styles.languageRow, { top: Math.max(insets.top, 10) }]}>
+        <Animated.View
+          style={[
+            styles.languageRow,
+            { top: Math.max(insets.top, 10) },
+            animatedLanguageStyle,
+          ]}
+        >
           <LanguageSelector />
-        </View>
+        </Animated.View>
 
-        <View style={styles.logoWrapper}>
+        <Animated.View style={[styles.logoWrapper, animatedLogoStyle]}>
           <View style={styles.logoHalo}>
             <Image
               source={require("../../assets/images/screen-logo.png")}
@@ -145,7 +179,7 @@ const LoginScreen = () => {
               resizeMode="contain"
             />
           </View>
-        </View>
+        </Animated.View>
       </Animated.View>
 
       <KeyboardAvoidingView

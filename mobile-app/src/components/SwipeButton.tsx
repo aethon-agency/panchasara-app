@@ -142,26 +142,6 @@ export const SwipeButton: React.FC<SwipeButtonProps> = ({
     opacity: 1,
   }));
 
-  const animatedIconStyle = useAnimatedStyle(() => {
-    const isStationary = translateX.value === 0;
-    const shouldAnimate = isStationary && !disabled;
-
-    // Subtle nudge animation tied to shimmer or independent
-    const nudge = interpolate(
-      shimmerValue.value,
-      [0, 0.8, 1],
-      [0, 6, 0],
-      Extrapolation.CLAMP,
-    );
-
-    return {
-      transform: [
-        { translateX: shouldAnimate ? nudge : 0 },
-        { scale: shouldAnimate ? 1.05 : 1 },
-      ],
-    };
-  });
-
   const animatedLoadingStyle = useAnimatedStyle(() => ({
     transform: [{ rotate: `${loadingRotation.value}deg` }],
   }));
@@ -248,7 +228,7 @@ export const SwipeButton: React.FC<SwipeButtonProps> = ({
               color={"#FFF"}
             ></ActivityIndicator>
           ) : (
-            <Animated.View style={[styles.iconContainer, animatedIconStyle]}>
+            <Animated.View style={[styles.iconContainer]}>
               <MaterialCommunityIcons
                 name={"chevron-right"}
                 size={28}
