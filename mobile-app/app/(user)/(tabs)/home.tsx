@@ -53,6 +53,33 @@ const GALLERY_DATA = [
   },
 ];
 
+const ANNOUNCEMENT_DATA = [
+  {
+    id: "1",
+    title: "Paryushan Mahaparva 2026",
+    date: "15 Aug 2026",
+    author: "Admin",
+    description:
+      "8 days of spiritual purification starts Aug 15. Join us for daily pratikraman and pravachans.",
+  },
+  {
+    id: "2",
+    title: "General Assembly Meeting",
+    date: "10 Oct 2026",
+    author: "Committee",
+    description:
+      "Annual general meeting for all members to discuss upcoming events and budget.",
+  },
+  {
+    id: "3",
+    title: "Medical Camp",
+    date: "05 Nov 2026",
+    author: "Health Team",
+    description:
+      "Free medical checkup camp for all devotees. Eye checkup and general physician available.",
+  },
+];
+
 const HomeScreen = () => {
   const { user } = useAuthStore();
   const router = useRouter();
@@ -168,6 +195,59 @@ const HomeScreen = () => {
           />
         </View>
 
+        {/* ANNOUNCEMENTS SECTION */}
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>What's New</Text>
+          <TouchableOpacity
+            onPress={() => router.push("/(user)/announcements" as any)}
+          >
+            <Text style={styles.seeAll}>See All</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={{ gap: 12 }}>
+          {ANNOUNCEMENT_DATA.map((item, index) => (
+            <Animated.View
+              key={item.id}
+              entering={FadeInRight.delay(500 + index * 100)}
+            >
+              <TouchableOpacity
+                style={styles.announcementCard}
+                onPress={() =>
+                  router.push({
+                    pathname: "/(user)/announcement-details",
+                    params: {
+                      title: item.title,
+                      date: item.date,
+                      author: item.author,
+                      description: item.description,
+                    },
+                  } as any)
+                }
+              >
+                <View style={styles.announcementIcon}>
+                  <LinearGradient
+                    colors={["#FFEDD5", "#FED7AA"]}
+                    style={styles.iconInnerGradient}
+                  >
+                    <Ionicons name="megaphone" size={22} color="#EA580C" />
+                  </LinearGradient>
+                </View>
+
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.announcementTitle} numberOfLines={1}>
+                    {item.title}
+                  </Text>
+                  <Text style={styles.announcementDesc} numberOfLines={2}>
+                    {item.description}
+                  </Text>
+                </View>
+                <Ionicons name="chevron-forward" size={18} color="#CBD5E1" />
+              </TouchableOpacity>
+            </Animated.View>
+          ))}
+        </View>
+
         {/* GALLERY */}
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Event Gallery</Text>
@@ -179,38 +259,6 @@ const HomeScreen = () => {
             <GalleryCard key={item.id} item={item} />
           ))}
         </ScrollView>
-
-        {/* ANNOUNCEMENTS SECTION */}
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>What's New</Text>
-          <TouchableOpacity
-            onPress={() => router.push("/(user)/announcements" as any)}
-          >
-            <Text style={styles.seeAll}>See All</Text>
-          </TouchableOpacity>
-        </View>
-
-        <Animated.View entering={FadeInRight.delay(500)}>
-          <TouchableOpacity style={styles.announcementCard}>
-            <View style={styles.announcementIcon}>
-              <LinearGradient
-                colors={["#FFEDD5", "#FED7AA"]}
-                style={styles.iconInnerGradient}
-              >
-                <Ionicons name="megaphone" size={22} color="#EA580C" />
-              </LinearGradient>
-            </View>
-
-            <View style={{ flex: 1 }}>
-              <Text style={styles.announcementTitle}>
-                Paryushan Mahaparva 2026
-              </Text>
-              <Text style={styles.announcementDesc}>
-                8 days of spiritual purification starts Aug 15.
-              </Text>
-            </View>
-          </TouchableOpacity>
-        </Animated.View>
       </ScrollView>
     </View>
   );
