@@ -1,4 +1,4 @@
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import React, { useState, useEffect, useRef } from "react";
 import {
   ScrollView,
@@ -14,21 +14,20 @@ import {
 import { useAuthStore } from "../../../src/stores/authStore";
 import { AppHeader } from "@/src/components/AppHeader";
 import { LinearGradient } from "expo-linear-gradient";
-import Animated, { FadeInUp, FadeInRight } from "react-native-reanimated";
+import Animated, { FadeInRight } from "react-native-reanimated";
 import { useRouter } from "expo-router";
 
 const { width } = Dimensions.get("window");
-const BANNER_WIDTH = width - 40;
 
-interface QuickActionProps {
-  icon:
-    | keyof typeof Ionicons.glyphMap
-    | keyof typeof MaterialCommunityIcons.glyphMap;
-  label: string;
-  mdi?: boolean;
-  delay?: number;
-  route?: string;
-}
+const ITEM_MARGIN = 20;
+const CARD_WIDTH = width - ITEM_MARGIN * 2;
+const PAGE_WIDTH = width;
+
+const HERO_IMAGES = [
+  "https://eijolqvtchrmhuvuytbl.supabase.co/storage/v1/object/public/BANNER/Banner.jpeg",
+  "https://eijolqvtchrmhuvuytbl.supabase.co/storage/v1/object/public/BANNER/Banner.jpeg",
+  "https://eijolqvtchrmhuvuytbl.supabase.co/storage/v1/object/public/BANNER/Banner.jpeg",
+];
 
 const GALLERY_DATA = [
   {
@@ -54,46 +53,41 @@ const GALLERY_DATA = [
   },
 ];
 
-const HERO_IMAGES = [
-  "https://eijolqvtchrmhuvuytbl.supabase.co/storage/v1/object/public/BANNER/Banner.jpeg",
-  "https://eijolqvtchrmhuvuytbl.supabase.co/storage/v1/object/public/BANNER/Banner.jpeg",
-  "https://eijolqvtchrmhuvuytbl.supabase.co/storage/v1/object/public/BANNER/Banner.jpeg",
-];
-
 const HomeScreen = () => {
   const { user } = useAuthStore();
   const router = useRouter();
 
-  // --- AUTO SWIPE LOGIC ---
   const flatListRef = useRef<FlatList>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const autoScroll = useRef(true);
 
+  // AUTO SLIDE
   useEffect(() => {
     const interval = setInterval(() => {
-      let nextIndex = currentIndex + 1;
-      if (nextIndex >= HERO_IMAGES.length) {
-        nextIndex = 0;
-      }
+      if (!autoScroll.current) return;
+
+      let next = currentIndex + 1;
+      if (next >= HERO_IMAGES.length) next = 0;
 
       flatListRef.current?.scrollToIndex({
-        index: nextIndex,
+        index: next,
         animated: true,
       });
 
-      setCurrentIndex(nextIndex);
-    }, 4000); // Swaps every 4 seconds
+      setCurrentIndex(next);
+    }, 4000);
 
     return () => clearInterval(interval);
   }, [currentIndex]);
 
-  const GalleryCard = ({ item }: { item: any }) => (
+  const GalleryCard = ({ item }: any) => (
     <TouchableOpacity
       style={styles.galleryCard}
       activeOpacity={0.8}
       onPress={() =>
         router.push({
           pathname: "/(user)/gallery-details",
-          params: { id: item.id, title: item.title, date: item.date },
+          params: { id: item.id },
         } as any)
       }
     >
@@ -116,7 +110,7 @@ const HomeScreen = () => {
         title="Jai Mataji"
         subtitle={user?.firstname || "Devotee"}
         rightAction={
-          <TouchableOpacity style={styles.notiButton} onPress={() => {}}>
+          <TouchableOpacity style={styles.notiButton}>
             <Ionicons name="notifications-outline" size={22} color="#431407" />
             <View style={styles.badge} />
           </TouchableOpacity>
@@ -127,67 +121,60 @@ const HomeScreen = () => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
-        {/* Add hero section on this to swipable images on this banner */}
+        {/* HERO CAROUSEL */}
         <View style={styles.banner}>
           <FlatList
             ref={flatListRef}
             data={HERO_IMAGES}
             horizontal
             pagingEnabled
+            snapToInterval={PAGE_WIDTH}
+            decelerationRate="fast"
             showsHorizontalScrollIndicator={false}
             keyExtractor={(_, i) => i.toString()}
+            onScrollBeginDrag={() => (autoScroll.current = false)}
             onMomentumScrollEnd={(e) => {
               const index = Math.round(
-                e.nativeEvent.contentOffset.x / BANNER_WIDTH,
+                e.nativeEvent.contentOffset.x / PAGE_WIDTH,
               );
               setCurrentIndex(index);
-            }}
-            renderItem={({ item, index }) => (
-              <View style={{ width: BANNER_WIDTH }}>
-                <Image
-                  source={{ uri: item }}
-                  style={StyleSheet.absoluteFillObject}
-                />
 
-                <LinearGradient
-                  colors={[
-                    "rgba(0,0,0,0.1)",
-                    "rgba(0,0,0,0.4)",
-                    "rgba(0,0,0,0.7)",
-                  ]}
-                  style={styles.bannerOverlay}
-                ></LinearGradient>
+              setTimeout(() => {
+                autoScroll.current = true;
+              }, 3000);
+            }}
+            renderItem={({ item }) => (
+              <View
+                style={{
+                  width: PAGE_WIDTH,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <View style={styles.heroCard}>
+                  <Image source={{ uri: item }} style={styles.bannerImage} />
+
+                  <LinearGradient
+                    colors={[
+                      "rgba(0,0,0,0.15)",
+                      "rgba(0,0,0,0.45)",
+                      "rgba(0,0,0,0.75)",
+                    ]}
+                    style={styles.bannerOverlay}
+                  />
+                </View>
               </View>
             )}
           />
-
-          {/* Pagination Dots */}
-          <View style={styles.pagination}>
-            {HERO_IMAGES.map((_, i) => (
-              <View
-                key={i}
-                style={[styles.dot, currentIndex === i && styles.activeDot]}
-              />
-            ))}
-          </View>
         </View>
 
-        {/* GALLERY SECTION */}
+        {/* GALLERY */}
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Event Gallery</Text>
-          <TouchableOpacity
-            onPress={() => router.push("/(user)/galleries" as any)}
-          >
-            <Text style={styles.seeAll}>See All</Text>
-          </TouchableOpacity>
+          <Text style={styles.seeAll}>See All</Text>
         </View>
 
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.galleryScroll}
-          style={styles.galleryContainer}
-        >
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {GALLERY_DATA.map((item) => (
             <GalleryCard key={item.id} item={item} />
           ))}
@@ -204,20 +191,7 @@ const HomeScreen = () => {
         </View>
 
         <Animated.View entering={FadeInRight.delay(500)}>
-          <TouchableOpacity
-            style={styles.announcementCard}
-            onPress={() =>
-              router.push({
-                pathname: "/(user)/announcement-details",
-                params: {
-                  title: "Paryushan Mahaparva 2026",
-                  date: "15 Aug 2026",
-                  author: "Admin",
-                  description: "Join us for spiritual purification...",
-                },
-              } as any)
-            }
-          >
+          <TouchableOpacity style={styles.announcementCard}>
             <View style={styles.announcementIcon}>
               <LinearGradient
                 colors={["#FFEDD5", "#FED7AA"]}
@@ -226,7 +200,8 @@ const HomeScreen = () => {
                 <Ionicons name="megaphone" size={22} color="#EA580C" />
               </LinearGradient>
             </View>
-            <View style={styles.announcementInfo}>
+
+            <View style={{ flex: 1 }}>
               <Text style={styles.announcementTitle}>
                 Paryushan Mahaparva 2026
               </Text>
@@ -234,7 +209,6 @@ const HomeScreen = () => {
                 8 days of spiritual purification starts Aug 15.
               </Text>
             </View>
-            <Ionicons name="chevron-forward" size={18} color="#CBD5E1" />
           </TouchableOpacity>
         </Animated.View>
       </ScrollView>
@@ -249,6 +223,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#FCF9F1",
   },
+
+  scrollContent: {
+    paddingBottom: 40,
+    paddingTop: 20,
+  },
+
   notiButton: {
     width: 40,
     height: 40,
@@ -256,9 +236,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF",
     justifyContent: "center",
     alignItems: "center",
-    borderWidth: 1,
-    borderColor: "#F1F5F9",
   },
+
   badge: {
     position: "absolute",
     top: 10,
@@ -267,170 +246,85 @@ const styles = StyleSheet.create({
     height: 8,
     borderRadius: 4,
     backgroundColor: "#EA580C",
-    borderWidth: 1.5,
-    borderColor: "#FFF",
   },
-  scrollContent: {
-    paddingHorizontal: 20,
-    paddingTop: 20,
-    paddingBottom: 40,
-  },
+
   banner: {
-    height: 200,
-    borderRadius: 28,
-    overflow: "hidden",
-    marginBottom: 30,
-    elevation: 8,
-    shadowColor: "#EA580C",
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.2,
-    shadowRadius: 12,
+    height: 220,
   },
-  bannerGradient: {
-    flex: 1,
-  },
-  bannerOverlay: {
-    flex: 1,
-    padding: 24,
-    justifyContent: "center",
-  },
-  liveContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "rgba(0,0,0,0.3)",
-    alignSelf: "flex-start",
-    paddingHorizontal: 10,
-    paddingVertical: 4,
+
+  heroCard: {
+    width: CARD_WIDTH,
+    height: "100%",
     borderRadius: 20,
-    marginBottom: 12,
+    overflow: "hidden",
   },
-  liveDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: "#4ADE80",
-    marginRight: 6,
+
+  bannerImage: {
+    width: "100%",
+    height: "100%",
   },
-  liveText: {
-    color: "#FFF",
-    fontSize: 10,
-    fontWeight: "900",
-    letterSpacing: 1,
+
+  bannerOverlay: {
+    ...StyleSheet.absoluteFillObject,
   },
-  bannerTitle: {
-    fontSize: 28,
-    fontWeight: "900",
-    color: "#FFFFFF",
-  },
-  bannerSubtitle: {
-    fontSize: 14,
-    color: "rgba(255,255,255,1)",
-    marginTop: 4,
-    marginBottom: 20,
-    width: "75%",
-    textShadowColor: "rgba(0, 0, 0, 0.75)",
-    textShadowOffset: { width: -1, height: 1 },
-    textShadowRadius: 10,
-  },
-  glassButton: {
-    backgroundColor: "#FFF",
-    paddingVertical: 10,
-    paddingHorizontal: 18,
-    borderRadius: 14,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-    alignSelf: "flex-start",
-  },
-  viewButtonText: {
-    color: "#EA580C",
-    fontWeight: "800",
-    fontSize: 13,
-  },
-  watermarkIcon: {
-    position: "absolute",
-    right: -20,
-    bottom: -30,
-  },
+
   sectionHeader: {
-    marginBottom: 16,
-    marginTop: 8,
+    paddingHorizontal: 20,
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "flex-end",
+    marginBottom: 10,
+    marginTop: 32,
   },
+
   sectionTitle: {
     fontSize: 20,
     fontWeight: "900",
     color: "#431407",
   },
-  actionCard: {
-    alignItems: "center",
-    width: 75,
-  },
-  iconCircle: {
-    width: 64,
-    height: 64,
-    borderRadius: 22,
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 8,
-    borderWidth: 1,
-    borderColor: "#FED7AA",
-  },
-  actionLabel: {
-    fontSize: 11,
+
+  seeAll: {
+    color: "#EA580C",
     fontWeight: "700",
-    color: "#7C2D12",
-    textAlign: "center",
   },
-  galleryContainer: {
-    marginBottom: 30,
-    marginHorizontal: -20,
-  },
-  galleryScroll: {
-    paddingHorizontal: 20,
-    gap: 16,
-  },
+
   galleryCard: {
     width: 200,
     height: 140,
     borderRadius: 20,
     overflow: "hidden",
-    backgroundColor: "#F1F5F9",
+    marginLeft: 20,
   },
+
   galleryImage: {
     width: "100%",
     height: "100%",
   },
+
   galleryOverlay: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    padding: 12,
+    ...StyleSheet.absoluteFillObject,
     justifyContent: "flex-end",
-    height: "100%",
+    padding: 12,
   },
+
   galleryTitle: {
     color: "#FFF",
-    fontSize: 14,
     fontWeight: "700",
   },
+
   galleryDate: {
-    color: "rgba(255,255,255,0.8)",
-    fontSize: 11,
-    marginTop: 2,
+    color: "#DDD",
+    fontSize: 12,
   },
+
   announcementCard: {
     flexDirection: "row",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#FFF",
     padding: 16,
-    borderRadius: 22,
+    marginHorizontal: 20,
+    borderRadius: 20,
     alignItems: "center",
-    borderWidth: 1,
-    borderColor: "#F1F5F9",
   },
+
   announcementIcon: {
     width: 48,
     height: 48,
@@ -438,48 +332,20 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     marginRight: 16,
   },
+
   iconInnerGradient: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
-  announcementInfo: {
-    flex: 1,
-  },
+
   announcementTitle: {
-    fontSize: 15,
     fontWeight: "800",
     color: "#431407",
   },
+
   announcementDesc: {
     fontSize: 12,
     color: "#64748B",
-    marginTop: 2,
-  },
-  seeAll: {
-    fontSize: 14,
-    fontWeight: "700",
-    color: "#EA580C",
-    marginBottom: 2,
-  },
-
-  pagination: {
-    position: "absolute",
-    bottom: 12,
-    flexDirection: "row",
-    alignSelf: "center",
-    gap: 6,
-  },
-
-  dot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: "rgba(255,255,255,0.5)",
-  },
-
-  activeDot: {
-    width: 16,
-    backgroundColor: "#FFF",
   },
 });
