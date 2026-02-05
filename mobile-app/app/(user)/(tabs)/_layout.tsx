@@ -15,154 +15,156 @@ import Animated, {
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-const CustomTabBar = ({ state, descriptors, navigation }: any) => {
-  const insets = useSafeAreaInsets();
+const renderIcon = (routeName: string, focused: boolean) => {
+  const color = focused ? "#431407" : "#9CA3AF";
 
-  return (
-    <View
-      style={[styles.outerContainer, { marginBottom: insets.bottom || 20 }]}
-    >
-      <LinearGradient
-        colors={["#FFFFFF", "#FFFBEB"]}
-        style={StyleSheet.absoluteFill}
-      />
-
-      <View style={styles.topBorder} />
-
-      <View style={styles.mainBox}>
-        {state.routes.map((route: any, index: number) => {
-          const isFocused = state.index === index;
-          const label = descriptors[route.key].options.title ?? route.name;
-
-          const onPress = () => {
-            const event = navigation.emit({
-              type: "tabPress",
-              target: route.key,
-              canPreventDefault: true,
-            });
-
-            if (!isFocused && !event.defaultPrevented) {
-              if (Platform.OS !== "web")
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              navigation.navigate(route.name);
-            }
-          };
-
-          return (
-            <TouchableOpacity
-              key={route.key}
-              onPress={onPress}
-              style={styles.tabItem}
-              activeOpacity={1}
-            >
-              <Animated.View
-                layout={LinearTransition.springify().damping(20).stiffness(150)}
-                style={[
-                  styles.contentContainer,
-                  isFocused && styles.activeContentContainer,
-                ]}
-              >
-                {renderIcon(route.name, isFocused)}
-                {isFocused && (
-                  <Animated.Text
-                    entering={FadeIn.delay(50)}
-                    exiting={FadeOut.duration(50)}
-                    style={styles.label}
-                  >
-                    {label}
-                  </Animated.Text>
-                )}
-              </Animated.View>
-            </TouchableOpacity>
-          );
-        })}
-      </View>
-    </View>
-  );
-};
-
-const renderIcon = (name: string, isFocused: boolean) => {
-  const color = isFocused ? "#431407" : "#9A3412";
-  const size = 22;
-
-  switch (name) {
+  switch (routeName) {
     case "home":
       return (
         <Ionicons
-          name={isFocused ? "home" : "home-outline"}
-          size={size}
-          color={color}
-        />
-      );
-    case "event":
-      return (
-        <MaterialCommunityIcons
-          name={isFocused ? "account-group" : "account-group-outline"}
-          size={size}
+          name={focused ? "home" : "home-outline"}
+          size={24}
           color={color}
         />
       );
     case "explore":
       return (
         <Ionicons
-          name={isFocused ? "compass" : "compass-outline"}
+          name={focused ? "compass" : "compass-outline"}
+          size={24}
+          color={color}
+        />
+      );
+    case "event":
+      return (
+        <MaterialCommunityIcons
+          name={focused ? "calendar" : "calendar-blank"}
           size={24}
           color={color}
         />
       );
     case "profile":
       return (
-        <Ionicons
-          name={isFocused ? "person" : "person-outline"}
-          size={size}
+        <FontAwesome
+          name={focused ? "user" : "user-o"}
+          size={24}
           color={color}
         />
       );
     default:
-      return null;
+      return <Ionicons name="help-circle-outline" size={24} color={color} />;
   }
+};
+
+const CustomTabBar = ({ state, descriptors, navigation }: any) => {
+  const insets = useSafeAreaInsets();
+
+  return (
+    <View style={[styles.tabBarWrapper]}>
+      <View
+        style={[styles.innerContainer, { paddingBottom: insets?.bottom || 20 }]}
+      >
+        <LinearGradient
+          colors={["#FFFFFF", "#FFFBEB"]}
+          style={StyleSheet.absoluteFill}
+        />
+
+        <View style={styles.topBorder} />
+
+        <View style={styles.mainBox}>
+          {state.routes.map((route: any, index: number) => {
+            const isFocused = state.index === index;
+            const label = descriptors[route.key].options.title ?? route.name;
+
+            const onPress = () => {
+              const event = navigation.emit({
+                type: "tabPress",
+                target: route.key,
+                canPreventDefault: true,
+              });
+
+              if (!isFocused && !event.defaultPrevented) {
+                if (Platform.OS !== "web")
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                navigation.navigate(route.name);
+              }
+            };
+
+            return (
+              <TouchableOpacity
+                key={route.key}
+                onPress={onPress}
+                style={styles.tabItem}
+                activeOpacity={1}
+              >
+                <Animated.View
+                  layout={LinearTransition.springify()
+                    .damping(20)
+                    .stiffness(150)}
+                  style={[
+                    styles.contentContainer,
+                    isFocused && styles.activeContentContainer,
+                  ]}
+                >
+                  {renderIcon(route.name, isFocused)}
+                  {isFocused && (
+                    <Animated.Text
+                      entering={FadeIn.delay(50)}
+                      exiting={FadeOut.duration(50)}
+                      style={styles.label}
+                    >
+                      {label}
+                    </Animated.Text>
+                  )}
+                </Animated.View>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      </View>
+    </View>
+  );
 };
 
 export default function TabsLayout() {
   return (
     <Tabs
       tabBar={(props) => <CustomTabBar {...props} />}
-      screenOptions={{ headerShown: false }}
+      screenOptions={{
+        headerShown: false,
+      }}
     >
       <Tabs.Screen name="home" options={{ title: "Home" }} />
-      <Tabs.Screen name="event" options={{ title: "Events" }} />
       <Tabs.Screen name="explore" options={{ title: "Explore" }} />
+      <Tabs.Screen name="event" options={{ title: "Events" }} />
       <Tabs.Screen name="profile" options={{ title: "Profile" }} />
     </Tabs>
   );
 }
 
 const styles = StyleSheet.create({
-  outerContainer: {
+  tabBarWrapper: {
+    position: "absolute",
+    bottom: 0,
     width: "100%",
-    height: 70,
-    backgroundColor: "trasperant",
-    overflow: "hidden",
+    alignItems: "center",
+    backgroundColor: "transparent",
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    borderWidth: 0.1,
-    borderColor: "#FDE68A",
-    ...Platform.select({
-      ios: {
-        shadowColor: "#EA580C",
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.15,
-        shadowRadius: 12,
-      },
-      android: {
-        elevation: 1,
-      },
-    }),
+  },
+  innerContainer: {
+    width: "100%",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    overflow: "hidden",
+    paddingTop: 10,
+    borderWidth: 0.5,
+    borderColor: "rgba(253, 230, 138, 0.5)", // FDE68A with opacity
   },
   topBorder: {
     height: 1,
     width: "100%",
-    backgroundColor: "#FDE68A", // Golden tint matching header
+    backgroundColor: "#FDE68A",
     position: "absolute",
     top: 0,
     opacity: 0.5,
@@ -187,15 +189,15 @@ const styles = StyleSheet.create({
     borderRadius: 24,
   },
   activeContentContainer: {
-    backgroundColor: "#FFF7ED", // Very light saffron "Halo" matching header iconHalo
+    backgroundColor: "#FFF7ED",
     paddingHorizontal: 16,
     borderWidth: 1,
-    borderColor: "#FFEDD5", // Saffron border
+    borderColor: "#FFEDD5",
   },
   label: {
     fontSize: 13,
-    fontWeight: "900", // Heavy weight to match Header title
-    color: "#431407", // Deep brown
+    fontWeight: "900",
+    color: "#431407",
     marginLeft: 8,
     letterSpacing: 0.2,
   },

@@ -24,7 +24,7 @@ export default function RootLayout() {
       router.replace("/(auth)/login");
     } else if (token && inAuthGroup) {
       // Redirect to home if authenticated and in auth group
-      router.replace("/(user)/home");
+      router.replace("/(user)/(tabs)/home");
     }
   }, [token, isLoading, segments, fontsLoaded]);
 
