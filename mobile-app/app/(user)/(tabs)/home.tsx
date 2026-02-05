@@ -17,6 +17,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import Animated, { FadeInRight } from "react-native-reanimated";
 import { useRouter } from "expo-router";
 import { LanguageSelector } from "@/src/components/LanguageSelector";
+import { useLanguage } from "@/src/hooks/useLanguage";
 
 const { width } = Dimensions.get("window");
 
@@ -84,6 +85,7 @@ const ANNOUNCEMENT_DATA = [
 const HomeScreen = () => {
   const { user } = useAuthStore();
   const router = useRouter();
+  const { t } = useLanguage();
 
   const flatListRef = useRef<FlatList>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -135,8 +137,8 @@ const HomeScreen = () => {
       <StatusBar barStyle="dark-content" />
 
       <AppHeader
-        title="Jai Mataji"
-        subtitle={user?.firstname || "Devotee"}
+        title={t("home.title")}
+        subtitle={user?.firstname || t("home.defaultUser")}
         rightAction={<LanguageSelector />}
       />
 
@@ -193,11 +195,11 @@ const HomeScreen = () => {
 
         {/* ANNOUNCEMENTS SECTION */}
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>What's New</Text>
+          <Text style={styles.sectionTitle}>{t("home.whatsNew")}</Text>
           <TouchableOpacity
             onPress={() => router.push("/(user)/announcements" as any)}
           >
-            <Text style={styles.seeAll}>See All</Text>
+            <Text style={styles.seeAll}>{t("home.seeAll")}</Text>
           </TouchableOpacity>
         </View>
 
@@ -246,8 +248,8 @@ const HomeScreen = () => {
 
         {/* GALLERY */}
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Event Gallery</Text>
-          <Text style={styles.seeAll}>See All</Text>
+          <Text style={styles.sectionTitle}>{t("home.eventGallery")}</Text>
+          <Text style={styles.seeAll}>{t("home.seeAll")}</Text>
         </View>
 
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>

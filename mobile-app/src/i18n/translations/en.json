@@ -37,5 +37,12 @@
     "otpResendText": "Didn't receive code?",
     "resendAction": "Resend OTP",
     "verifyCta": "Verify & Continue"
+  },
+  "home": {
+    "title": "Jai Mataji",
+    "defaultUser": "Devotee",
+    "whatsNew": "What's New",
+    "seeAll": "See All",
+    "eventGallery": "Event Gallery"
   }
 }

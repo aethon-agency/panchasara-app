@@ -37,5 +37,12 @@
     "otpResendText": "કોડ નથી મળ્યો?",
     "resendAction": "ફરીથી OTP મોકલો",
     "verifyCta": "ચકાસો અને આગળ વધો"
+  },
+  "home": {
+    "title": "જય માતાજી",
+    "defaultUser": "ભક્ત",
+    "whatsNew": "નવું શું છે",
+    "seeAll": "બધા જુઓ",
+    "eventGallery": "ઇવેન્ટ ગેલેરી"
   }
 }
