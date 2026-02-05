@@ -18,6 +18,7 @@ import Animated, { FadeInUp, FadeInRight } from "react-native-reanimated";
 import { useRouter } from "expo-router";
 
 const { width } = Dimensions.get("window");
+const BANNER_WIDTH = width - 40;
 
 interface QuickActionProps {
   icon:
@@ -28,49 +29,6 @@ interface QuickActionProps {
   delay?: number;
   route?: string;
 }
-
-const QuickAction = ({
-  icon,
-  label,
-  mdi = false,
-  delay = 0,
-  route,
-}: QuickActionProps) => {
-  const router = useRouter();
-
-  const handlePress = () => {
-    if (route) {
-      // Cast to any to avoid strict route checking errors for placeholders
-      router.push(route as any);
-    }
-  };
-
-  return (
-    <Animated.View entering={FadeInUp.delay(delay).duration(600)}>
-      <TouchableOpacity
-        style={styles.actionCard}
-        activeOpacity={0.7}
-        onPress={handlePress}
-      >
-        <LinearGradient
-          colors={["#FFFFFF", "#FFF7ED"]}
-          style={styles.iconCircle}
-        >
-          {mdi ? (
-            <MaterialCommunityIcons
-              name={icon as any}
-              size={26}
-              color="#EA580C"
-            />
-          ) : (
-            <Ionicons name={icon as any} size={26} color="#EA580C" />
-          )}
-        </LinearGradient>
-        <Text style={styles.actionLabel}>{label}</Text>
-      </TouchableOpacity>
-    </Animated.View>
-  );
-};
 
 const GALLERY_DATA = [
   {
@@ -97,15 +55,36 @@ const GALLERY_DATA = [
 ];
 
 const HERO_IMAGES = [
-  "https://images.unsplash.com/photo-1604514032483-a75d2786720f?q=80&w=800&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1574515598584-633041910d54?q=80&w=800&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1542382156-97216664e43e?q=80&w=800&auto=format&fit=crop",
+  "https://eijolqvtchrmhuvuytbl.supabase.co/storage/v1/object/public/BANNER/Banner.jpeg",
+  "https://eijolqvtchrmhuvuytbl.supabase.co/storage/v1/object/public/BANNER/Banner.jpeg",
+  "https://eijolqvtchrmhuvuytbl.supabase.co/storage/v1/object/public/BANNER/Banner.jpeg",
 ];
 
 const HomeScreen = () => {
   const { user } = useAuthStore();
   const router = useRouter();
-  const flatListRef = useRef(null);
+
+  // --- AUTO SWIPE LOGIC ---
+  const flatListRef = useRef<FlatList>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      let nextIndex = currentIndex + 1;
+      if (nextIndex >= HERO_IMAGES.length) {
+        nextIndex = 0;
+      }
+
+      flatListRef.current?.scrollToIndex({
+        index: nextIndex,
+        animated: true,
+      });
+
+      setCurrentIndex(nextIndex);
+    }, 4000); // Swaps every 4 seconds
+
+    return () => clearInterval(interval);
+  }, [currentIndex]);
 
   const GalleryCard = ({ item }: { item: any }) => (
     <TouchableOpacity
@@ -148,67 +127,50 @@ const HomeScreen = () => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
-        {/* HERO SECTION: LIVE DARSHAN */}
-        <Animated.View entering={FadeInUp.duration(800)}>
-          <TouchableOpacity
-            style={styles.banner}
-            activeOpacity={0.9}
-            onPress={() => router.push("/(user)/mandir-details" as any)}
-          >
-            <View style={StyleSheet.absoluteFill}>
-              <FlatList
-                ref={flatListRef}
-                data={HERO_IMAGES}
-                horizontal
-                pagingEnabled
-                showsHorizontalScrollIndicator={false}
-                scrollEnabled={false}
-                keyExtractor={(_, index) => index.toString()}
-                renderItem={({ item }) => (
-                  <Image
-                    source={{ uri: item }}
-                    style={{ width: width - 40, height: 200 }}
-                    resizeMode="cover"
-                  />
-                )}
-              />
-            </View>
-
-            <LinearGradient
-              colors={["#9A3412", "#EA580C", "#F59E0B"]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.bannerGradient}
-            >
-              <View style={styles.bannerOverlay}>
-                <View style={{}}>
-                  <View style={styles.liveContainer}>
-                    <View style={styles.liveDot} />
-                    <Text style={styles.liveText}>LIVE NOW</Text>
-                  </View>
-
-                  <Text style={styles.bannerTitle}>Daily Darshan</Text>
-                  <Text style={styles.bannerSubtitle}>
-                    Experience the divine Mangala Darshan from the Main Temple.
-                  </Text>
-
-                  <View style={styles.glassButton}>
-                    <Text style={styles.viewButtonText}>View Blessings</Text>
-                    <Ionicons name="play-circle" size={18} color="#EA580C" />
-                  </View>
-                </View>
-
-                {/* Symbolic Watermark */}
-                <MaterialCommunityIcons
-                  name="flower-tulip-outline"
-                  size={140}
-                  color="rgba(255,255,255,0.15)"
-                  style={styles.watermarkIcon}
+        {/* Add hero section on this to swipable images on this banner */}
+        <View style={styles.banner}>
+          <FlatList
+            ref={flatListRef}
+            data={HERO_IMAGES}
+            horizontal
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
+            keyExtractor={(_, i) => i.toString()}
+            onMomentumScrollEnd={(e) => {
+              const index = Math.round(
+                e.nativeEvent.contentOffset.x / BANNER_WIDTH,
+              );
+              setCurrentIndex(index);
+            }}
+            renderItem={({ item, index }) => (
+              <View style={{ width: BANNER_WIDTH }}>
+                <Image
+                  source={{ uri: item }}
+                  style={StyleSheet.absoluteFillObject}
                 />
+
+                <LinearGradient
+                  colors={[
+                    "rgba(0,0,0,0.1)",
+                    "rgba(0,0,0,0.4)",
+                    "rgba(0,0,0,0.7)",
+                  ]}
+                  style={styles.bannerOverlay}
+                ></LinearGradient>
               </View>
-            </LinearGradient>
-          </TouchableOpacity>
-        </Animated.View>
+            )}
+          />
+
+          {/* Pagination Dots */}
+          <View style={styles.pagination}>
+            {HERO_IMAGES.map((_, i) => (
+              <View
+                key={i}
+                style={[styles.dot, currentIndex === i && styles.activeDot]}
+              />
+            ))}
+          </View>
+        </View>
 
         {/* GALLERY SECTION */}
         <View style={styles.sectionHeader}>
@@ -251,8 +213,7 @@ const HomeScreen = () => {
                   title: "Paryushan Mahaparva 2026",
                   date: "15 Aug 2026",
                   author: "Admin",
-                  description:
-                    "Join us for the 8 days of spiritual purification. Daily Pravacahns, Pratikraman, and Bhakti Sangeet will be organized. \n\nDetailed Schedule:\n- 6:00 AM: Snatra Puja\n- 9:30 AM: Pravachan\n- 8:00 PM: Bhakti Bhavna\n\nPlease register your name at the office for Ekasana and Upvas.",
+                  description: "Join us for spiritual purification...",
                 },
               } as any)
             }
@@ -286,7 +247,7 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FCF9F1", // More subtle cream
+    backgroundColor: "#FCF9F1",
   },
   notiButton: {
     width: 40,
@@ -314,7 +275,6 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 40,
   },
-  /* BANNER STYLES */
   banner: {
     height: 200,
     borderRadius: 28,
@@ -337,7 +297,7 @@ const styles = StyleSheet.create({
   liveContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "rgba(0,0,0,0.2)",
+    backgroundColor: "rgba(0,0,0,0.3)",
     alignSelf: "flex-start",
     paddingHorizontal: 10,
     paddingVertical: 4,
@@ -364,10 +324,13 @@ const styles = StyleSheet.create({
   },
   bannerSubtitle: {
     fontSize: 14,
-    color: "rgba(255,255,255,0.9)",
+    color: "rgba(255,255,255,1)",
     marginTop: 4,
     marginBottom: 20,
     width: "75%",
+    textShadowColor: "rgba(0, 0, 0, 0.75)",
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 10,
   },
   glassButton: {
     backgroundColor: "#FFF",
@@ -389,10 +352,9 @@ const styles = StyleSheet.create({
     right: -20,
     bottom: -30,
   },
-  /* GRID STYLES */
   sectionHeader: {
     marginBottom: 16,
-    marginTop: 8, // Added margin top for spacing
+    marginTop: 8,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-end",
@@ -401,16 +363,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "900",
     color: "#431407",
-  },
-  sectionSubtitle: {
-    fontSize: 13,
-    color: "#94A3B8",
-    marginTop: 2,
-  },
-  actionsGrid: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 24,
   },
   actionCard: {
     alignItems: "center",
@@ -425,11 +377,6 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     borderWidth: 1,
     borderColor: "#FED7AA",
-    elevation: 3,
-    shadowColor: "#92400E",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
   },
   actionLabel: {
     fontSize: 11,
@@ -437,13 +384,12 @@ const styles = StyleSheet.create({
     color: "#7C2D12",
     textAlign: "center",
   },
-  /* GALLERY STYLES */
   galleryContainer: {
-    marginBottom: 30, // Spacing after gallery
-    marginHorizontal: -20, // Negative margin to allow full-width scroll
+    marginBottom: 30,
+    marginHorizontal: -20,
   },
   galleryScroll: {
-    paddingHorizontal: 20, // Restore padding inside scroll content
+    paddingHorizontal: 20,
     gap: 16,
   },
   galleryCard: {
@@ -451,17 +397,11 @@ const styles = StyleSheet.create({
     height: 140,
     borderRadius: 20,
     overflow: "hidden",
-    elevation: 3,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
     backgroundColor: "#F1F5F9",
   },
   galleryImage: {
     width: "100%",
     height: "100%",
-    resizeMode: "cover",
   },
   galleryOverlay: {
     position: "absolute",
@@ -480,10 +420,8 @@ const styles = StyleSheet.create({
   galleryDate: {
     color: "rgba(255,255,255,0.8)",
     fontSize: 11,
-    fontWeight: "500",
     marginTop: 2,
   },
-  /* ANNOUNCEMENT */
   announcementCard: {
     flexDirection: "row",
     backgroundColor: "#FFFFFF",
@@ -523,5 +461,25 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: "#EA580C",
     marginBottom: 2,
+  },
+
+  pagination: {
+    position: "absolute",
+    bottom: 12,
+    flexDirection: "row",
+    alignSelf: "center",
+    gap: 6,
+  },
+
+  dot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: "rgba(255,255,255,0.5)",
+  },
+
+  activeDot: {
+    width: 16,
+    backgroundColor: "#FFF",
   },
 });
