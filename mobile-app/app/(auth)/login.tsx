@@ -1,7 +1,6 @@
 import { router } from "expo-router";
 import React, { useState, useEffect } from "react";
 import {
-  KeyboardAvoidingView,
   Platform,
   ScrollView,
   StatusBar,
@@ -25,6 +24,7 @@ import Animated, {
 import { LanguageSelector } from "@/src/components/LanguageSelector";
 import { CustomInput } from "@/src/components/CustomInput";
 import { SwipeButton } from "@/src/components/SwipeButton";
+import { KeyboardAvoidingContainer } from "@/src/components/KeyboardAvoidingContainer";
 import { useLanguage } from "@/src/hooks/useLanguage";
 
 const { width, height } = Dimensions.get("window");
@@ -143,8 +143,6 @@ const LoginScreen = () => {
       marginTop,
       borderTopLeftRadius: borderRadius,
       borderTopRightRadius: borderRadius,
-      borderBottomLeftRadius: interpolate(transition.value, [0, 1], [0, 32]),
-      borderBottomRightRadius: interpolate(transition.value, [0, 1], [0, 32]),
     };
   });
 
@@ -182,11 +180,7 @@ const LoginScreen = () => {
         </Animated.View>
       </Animated.View>
 
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-        style={{ flex: 1 }}
-        keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
-      >
+      <KeyboardAvoidingContainer style={{ flex: 1 }} iosOffset={0}>
         <Animated.View style={[styles.formSheet, animatedFormSheetStyle]}>
           <View style={styles.sheetHandle} />
 
@@ -227,10 +221,7 @@ const LoginScreen = () => {
             <ScrollView
               showsVerticalScrollIndicator={false}
               keyboardShouldPersistTaps="handled"
-              contentContainerStyle={[
-                styles.scrollForm,
-                { paddingBottom: insets.bottom + 60 },
-              ]}
+              contentContainerStyle={[styles.scrollForm, { flexGrow: 1 }]}
             >
               {activeTab === "register" && (
                 <>
@@ -264,7 +255,14 @@ const LoginScreen = () => {
                 onChangeText={setPhoneNumber}
                 style={{ letterSpacing: 1.5 }}
               />
+            </ScrollView>
 
+            <View
+              style={{
+                paddingTop: 10,
+                paddingBottom: Platform.OS === "ios" ? insets.bottom + 10 : 10,
+              }}
+            >
               <SwipeButton
                 label={t("login.cta") ?? "Slide to get OTP"}
                 onSwipeComplete={handleSendOTP}
@@ -280,10 +278,10 @@ const LoginScreen = () => {
                     "Secure portal for Panchasara Parivar members 🪔"}
                 </Text>
               </View>
-            </ScrollView>
+            </View>
           </View>
         </Animated.View>
-      </KeyboardAvoidingView>
+      </KeyboardAvoidingContainer>
     </View>
   );
 };
