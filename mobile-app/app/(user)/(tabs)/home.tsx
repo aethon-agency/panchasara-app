@@ -16,6 +16,7 @@ import { AppHeader } from "@/src/components/AppHeader";
 import { LinearGradient } from "expo-linear-gradient";
 import Animated, { FadeInRight } from "react-native-reanimated";
 import { useRouter } from "expo-router";
+import { LanguageSelector } from "@/src/components/LanguageSelector";
 
 const { width } = Dimensions.get("window");
 
@@ -136,12 +137,7 @@ const HomeScreen = () => {
       <AppHeader
         title="Jai Mataji"
         subtitle={user?.firstname || "Devotee"}
-        rightAction={
-          <TouchableOpacity style={styles.notiButton}>
-            <Ionicons name="notifications-outline" size={22} color="#431407" />
-            <View style={styles.badge} />
-          </TouchableOpacity>
-        }
+        rightAction={<LanguageSelector />}
       />
 
       <ScrollView
@@ -275,25 +271,6 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingBottom: 40,
     paddingTop: 20,
-  },
-
-  notiButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
-    backgroundColor: "#FFF",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  badge: {
-    position: "absolute",
-    top: 10,
-    right: 10,
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: "#EA580C",
   },
 
   banner: {

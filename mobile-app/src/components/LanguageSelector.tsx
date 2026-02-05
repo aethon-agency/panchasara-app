@@ -5,7 +5,6 @@ import {
   TouchableOpacity,
   StyleSheet,
   Animated,
-  Easing,
   Platform,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
@@ -100,7 +99,6 @@ export const LanguageSelector = () => {
 const styles = StyleSheet.create({
   outerContainer: {
     alignItems: "flex-end",
-    marginVertical: 10,
   },
   touchWrapper: {
     borderRadius: 25,
