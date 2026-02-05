@@ -27,18 +27,18 @@ const renderIcon = (routeName: string, focused: boolean) => {
           color={color}
         />
       );
-    case "explore":
-      return (
-        <Ionicons
-          name={focused ? "compass" : "compass-outline"}
-          size={24}
-          color={color}
-        />
-      );
     case "event":
       return (
         <MaterialCommunityIcons
           name={focused ? "calendar" : "calendar-blank"}
+          size={24}
+          color={color}
+        />
+      );
+    case "explore":
+      return (
+        <Ionicons
+          name={focused ? "compass" : "compass-outline"}
           size={24}
           color={color}
         />
@@ -135,8 +135,8 @@ export default function TabsLayout() {
       }}
     >
       <Tabs.Screen name="home" options={{ title: "Home" }} />
-      <Tabs.Screen name="explore" options={{ title: "Explore" }} />
       <Tabs.Screen name="event" options={{ title: "Events" }} />
+      <Tabs.Screen name="explore" options={{ title: "Explore" }} />
       <Tabs.Screen name="profile" options={{ title: "Profile" }} />
     </Tabs>
   );
