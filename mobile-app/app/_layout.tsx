@@ -9,13 +9,13 @@ import { useAuthStore } from "../src/stores/authStore";
 import "../src/i18n";
 
 export default function RootLayout() {
-  const { token, isLoading } = useAuthStore();
+  const { token, authLoading } = useAuthStore();
   const segments = useSegments();
   const router = useRouter();
   const { fontsLoaded } = useAppFonts();
 
   useEffect(() => {
-    if (isLoading || !fontsLoaded) return;
+    if (authLoading || !fontsLoaded) return;
 
     const inAuthGroup = segments[0] === "(auth)";
 
@@ -26,9 +26,9 @@ export default function RootLayout() {
       // Redirect to home if authenticated and in auth group
       router.replace("/(user)/(tabs)/home");
     }
-  }, [token, isLoading, segments, fontsLoaded]);
+  }, [token, authLoading, segments, fontsLoaded]);
 
-  if (isLoading || !fontsLoaded) {
+  if (authLoading || !fontsLoaded) {
     return (
       <View
         style={{

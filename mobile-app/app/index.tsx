@@ -1,37 +1,32 @@
 import { View, Text, ActivityIndicator } from "react-native";
 import React, { useEffect } from "react";
-import { SplashScreen, useRouter, useSegments } from "expo-router";
+import { SplashScreen, useRouter } from "expo-router";
 import { useAuthStore } from "@/src/stores/authStore";
 import { useAppFonts } from "@/src/constants/fonts";
 import { COLORS } from "@/src/constants/colors";
 
 const index = () => {
-  const { token, isLoading } = useAuthStore();
-  const segments = useSegments();
+  const { token, authLoading } = useAuthStore();
   const router = useRouter();
   const { fontsLoaded } = useAppFonts();
 
   useEffect(() => {
-    if (fontsLoaded && !isLoading) {
+    if (fontsLoaded && !authLoading) {
       SplashScreen.hideAsync();
     }
-  }, [fontsLoaded, isLoading]);
+  }, [fontsLoaded, authLoading]);
 
   useEffect(() => {
-    if (isLoading || !fontsLoaded) return;
+    if (authLoading || !fontsLoaded) return;
 
-    const inAuthGroup = segments[0] === "(auth)";
-
-    if (!token && !inAuthGroup) {
-      // Redirect to login if not authenticated and not in auth group
-      router.replace("/(auth)/login");
-    } else if (token && inAuthGroup) {
-      // Redirect to home if authenticated and in auth group
+    if (token) {
       router.replace("/(user)/(tabs)/home");
+    } else {
+      router.replace("/(auth)/login");
     }
-  }, [token, isLoading, segments, fontsLoaded]);
+  }, [token, authLoading, fontsLoaded]);
 
-  if (isLoading || !fontsLoaded) {
+  if (authLoading || !fontsLoaded) {
     return (
       <View
         style={{
