@@ -11,6 +11,12 @@
   ],
   "scripts": {
     "dev": "turbo run dev",
-    "build": "turbo run build"
+    "build": "turbo run build",
+    "clean:modules": "rm -rf node_modules mobile-app/node_modules server/node_modules",
+    "clean:cache": "rm -rf .turbo mobile-app/.expo mobile-app/.turbo server/.turbo",
+    "clean:lock": "rm -f yarn.lock",
+    "clean:all": "yarn clean:modules && yarn clean:cache && yarn clean:lock",
+    "clean:install": "yarn clean:all && yarn install",
+    "postinstall": "cd mobile-app && npx expo install --fix"
   }
 }

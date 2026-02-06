@@ -54,7 +54,10 @@ export const useAuthStore = create<AuthState>()(
         user: state.user,
         pushToken: state.pushToken,
       }),
-      onRehydrateStorage: () => (state) => {
+      onRehydrateStorage: () => (state, error) => {
+        if (error) {
+          console.error("[AuthStore] Rehydration error:", error);
+        }
         if (state) {
           state.isLoading = false;
         }
