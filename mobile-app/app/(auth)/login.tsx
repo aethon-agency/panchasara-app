@@ -191,10 +191,7 @@ const LoginScreen = () => {
 
       <KeyboardAvoidingContainer style={{ flex: 1 }} iosOffset={0}>
         <Animated.View style={[styles.formSheet, animatedFormSheetStyle]}>
-          <View style={styles.sheetHandle} />
-
           <View style={styles.sheetContent}>
-            {/* MODERN TAB SWITCHER */}
             <View style={styles.tabBar}>
               <TouchableOpacity
                 onPress={() => setActiveTab("login")}
@@ -372,14 +369,6 @@ const styles = StyleSheet.create({
         elevation: 20,
       },
     }),
-  },
-  sheetHandle: {
-    width: 44,
-    height: 5,
-    backgroundColor: "#E2E8F0",
-    borderRadius: 3,
-    alignSelf: "center",
-    marginBottom: 8,
   },
   sheetContent: {
     flex: 1,
