@@ -14,6 +14,7 @@ import Animated, {
   LinearTransition,
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useLanguage } from "@/src/hooks/useLanguage";
 
 const renderIcon = (routeName: string, focused: boolean) => {
   const color = focused ? "#431407" : "#9CA3AF";
@@ -127,6 +128,8 @@ const CustomTabBar = ({ state, descriptors, navigation }: any) => {
 };
 
 export default function TabsLayout() {
+  const { t } = useLanguage();
+
   return (
     <Tabs
       tabBar={(props) => <CustomTabBar {...props} />}
@@ -134,10 +137,10 @@ export default function TabsLayout() {
         headerShown: false,
       }}
     >
-      <Tabs.Screen name="home" options={{ title: "Home" }} />
-      <Tabs.Screen name="event" options={{ title: "Events" }} />
-      <Tabs.Screen name="explore" options={{ title: "Explore" }} />
-      <Tabs.Screen name="profile" options={{ title: "Profile" }} />
+      <Tabs.Screen name="home" options={{ title: t("tabs.home") }} />
+      <Tabs.Screen name="event" options={{ title: t("tabs.events") }} />
+      <Tabs.Screen name="explore" options={{ title: t("tabs.explore") }} />
+      <Tabs.Screen name="profile" options={{ title: t("tabs.profile") }} />
     </Tabs>
   );
 }

@@ -13,54 +13,56 @@ import { useAuthStore } from "../../../src/stores/authStore";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
+import { useLanguage } from "@/src/hooks/useLanguage";
 
 export default function ProfileScreen() {
   const { user, logout } = useAuthStore();
   const router = useRouter();
+  const { t } = useLanguage();
 
   const handleLogout = () => {
-    Alert.alert("Logout", "Are you sure you want to logout?", [
-      { text: "Cancel", style: "cancel" },
-      { text: "Logout", style: "destructive", onPress: logout },
+    Alert.alert(t("common.logout"), t("common.logoutConfirm"), [
+      { text: t("common.cancel"), style: "cancel" },
+      { text: t("common.logout"), style: "destructive", onPress: logout },
     ]);
   };
 
   const menuItems = [
     {
-      title: "Personal Information",
+      title: t("profile.sections.personalInfo"),
       items: [
         {
           icon: "person-outline",
-          label: "My Details",
-          subtitle: "Name, Gotra, Village",
+          label: t("profile.menu.myDetails.label"),
+          subtitle: t("profile.menu.myDetails.subtitle"),
           route: "/(user)/profile/details", // Placeholder
         },
       ],
     },
     {
-      title: "Seva & Dharma",
+      title: t("profile.sections.seva"),
       items: [
         {
           icon: "heart-outline",
-          label: "My Donations",
-          subtitle: "History of contributions",
+          label: t("profile.menu.myDonations.label"),
+          subtitle: t("profile.menu.myDonations.subtitle"),
           route: "/(user)/donations",
         },
       ],
     },
     {
-      title: "App Settings",
+      title: t("profile.sections.appSettings"),
       items: [
         {
           icon: "language-outline",
-          label: "Language / ભાષા",
-          subtitle: "English",
+          label: t("profile.menu.language.label"),
+          subtitle: t("profile.menu.language.subtitle"),
           type: "value",
         },
         {
           icon: "notifications-outline",
-          label: "Notifications",
-          subtitle: "On",
+          label: t("profile.menu.notifications.label"),
+          subtitle: t("profile.menu.notifications.subtitle"),
           type: "toggle",
         },
       ],
@@ -100,7 +102,9 @@ export default function ProfileScreen() {
             <Text style={styles.profilePhone}>+91 {user?.mobilenumber}</Text>
             <View style={styles.membershipTag}>
               <MaterialCommunityIcons name="crown" size={14} color="#B45309" />
-              <Text style={styles.membershipText}>Life Member</Text>
+              <Text style={styles.membershipText}>
+                {t("profile.lifeMember")}
+              </Text>
             </View>
           </View>
         </View>
@@ -110,7 +114,7 @@ export default function ProfileScreen() {
 
   return (
     <View style={styles.container}>
-      <AppHeader title="My Profile" subtitle="Manage your account" />
+      <AppHeader title={t("profile.title")} subtitle={t("profile.subtitle")} />
 
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -154,10 +158,10 @@ export default function ProfileScreen() {
           activeOpacity={0.8}
         >
           <Ionicons name="log-out-outline" size={20} color="#EF4444" />
-          <Text style={styles.logoutText}>Logout from App</Text>
+          <Text style={styles.logoutText}>{t("common.logoutButton")}</Text>
         </TouchableOpacity>
 
-        <Text style={styles.versionText}>Version 1.0.0 • Panchasara Samaj</Text>
+        <Text style={styles.versionText}>{t("profile.version")}</Text>
       </ScrollView>
     </View>
   );

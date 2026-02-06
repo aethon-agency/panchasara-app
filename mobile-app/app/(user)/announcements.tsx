@@ -12,48 +12,50 @@ import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import Animated, { FadeInUp } from "react-native-reanimated";
+import { useLanguage } from "@/src/hooks/useLanguage";
 
-// Mock Data
-const ANNOUNCEMENTS = [
+const getAnnouncements = (t: any) => [
   {
     id: "1",
-    title: "Paryushan Mahaparva 2026",
-    date: "15 Aug 2026",
-    author: "Admin",
-    desc: "8 days of spiritual purification starts Aug 15. Join us for daily Snatra Puja and Pravachans.",
+    title: t("announcements.list.paryushan.title"),
+    date: t("announcements.list.paryushan.date"),
+    author: t("announcements.list.paryushan.author"),
+    desc: t("announcements.list.paryushan.desc"),
   },
   {
     id: "2",
-    title: "Annual General Meeting",
-    date: "10 Sep 2026",
-    author: "Secretary",
-    desc: "All members are requested to attend the AGM at 10 AM in the community hall. Agenda includes yearly accounts.",
+    title: t("announcements.list.agm.title"),
+    date: t("announcements.list.agm.date"),
+    author: t("announcements.list.agm.author"),
+    desc: t("announcements.list.agm.desc"),
   },
   {
     id: "3",
-    title: "Medical Camp Registration",
-    date: "05 Oct 2026",
-    author: "Health Committee",
-    desc: "Free eye checkup camp organized for senior citizens. Registrations open at the office.",
+    title: t("announcements.list.medicalCamp.title"),
+    date: t("announcements.list.medicalCamp.date"),
+    author: t("announcements.list.medicalCamp.author"),
+    desc: t("announcements.list.medicalCamp.desc"),
   },
   {
     id: "4",
-    title: "Diwali Celebration Plans",
-    date: "01 Nov 2026",
-    author: "Event Team",
-    desc: "Suggest your ideas for this year's Diwali decorations and cultural programs.",
+    title: t("announcements.list.diwali.title"),
+    date: t("announcements.list.diwali.date"),
+    author: t("announcements.list.diwali.author"),
+    desc: t("announcements.list.diwali.desc"),
   },
 ];
 
 export default function AnnouncementsListScreen() {
   const router = useRouter();
+  const { t } = useLanguage();
+  const ANNOUNCEMENTS = getAnnouncements(t);
 
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
       <AppHeader
-        title="Announcements"
-        subtitle="News & Updates"
+        title={t("announcements.title")}
+        subtitle={t("announcements.subtitle")}
         showBack={true}
         onBack={() => router.back()}
       />

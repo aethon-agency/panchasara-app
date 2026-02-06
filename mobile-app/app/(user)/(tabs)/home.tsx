@@ -31,54 +31,51 @@ const HERO_IMAGES = [
   "https://eijolqvtchrmhuvuytbl.supabase.co/storage/v1/object/public/BANNER/Banner.jpeg",
 ];
 
-const GALLERY_DATA = [
+const getGalleryData = (t: any) => [
   {
     id: "1",
-    title: "Janmashtami",
-    date: "August 2025",
+    title: t("home.events.janmashtami.title"),
+    date: t("home.events.janmashtami.date"),
     image:
       "https://images.unsplash.com/photo-1623345805780-8f6e85c18c26?q=80&w=600&auto=format&fit=crop",
   },
   {
     id: "2",
-    title: "Navratri Garba",
-    date: "October 2025",
+    title: t("home.events.navratri.title"),
+    date: t("home.events.navratri.date"),
     image:
       "https://images.unsplash.com/photo-1561336313-0bd5518eb139?q=80&w=600&auto=format&fit=crop",
   },
   {
     id: "3",
-    title: "Diwali Pujan",
-    date: "November 2024",
+    title: t("home.events.diwali.title"),
+    date: t("home.events.diwali.date"),
     image:
       "https://images.unsplash.com/photo-1606216794074-735e91aa7c5e?q=80&w=600&auto=format&fit=crop",
   },
 ];
 
-const ANNOUNCEMENT_DATA = [
+const getAnnouncementData = (t: any) => [
   {
     id: "1",
-    title: "Paryushan Mahaparva 2026",
-    date: "15 Aug 2026",
-    author: "Admin",
-    description:
-      "8 days of spiritual purification starts Aug 15. Join us for daily pratikraman and pravachans.",
+    title: t("home.announcements.paryushan.title"),
+    date: t("home.announcements.paryushan.date"),
+    author: t("home.announcements.paryushan.author"),
+    description: t("home.announcements.paryushan.description"),
   },
   {
     id: "2",
-    title: "General Assembly Meeting",
-    date: "10 Oct 2026",
-    author: "Committee",
-    description:
-      "Annual general meeting for all members to discuss upcoming events and budget.",
+    title: t("home.announcements.assembly.title"),
+    date: t("home.announcements.assembly.date"),
+    author: t("home.announcements.assembly.author"),
+    description: t("home.announcements.assembly.description"),
   },
   {
     id: "3",
-    title: "Medical Camp",
-    date: "05 Nov 2026",
-    author: "Health Team",
-    description:
-      "Free medical checkup camp for all devotees. Eye checkup and general physician available.",
+    title: t("home.announcements.medicalCamp.title"),
+    date: t("home.announcements.medicalCamp.date"),
+    author: t("home.announcements.medicalCamp.author"),
+    description: t("home.announcements.medicalCamp.description"),
   },
 ];
 
@@ -86,6 +83,10 @@ const HomeScreen = () => {
   const { user } = useAuthStore();
   const router = useRouter();
   const { t } = useLanguage();
+
+  // Get translated data
+  const GALLERY_DATA = getGalleryData(t);
+  const ANNOUNCEMENT_DATA = getAnnouncementData(t);
 
   const flatListRef = useRef<FlatList>(null);
   const [currentIndex, setCurrentIndex] = useState(0);

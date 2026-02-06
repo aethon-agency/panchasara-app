@@ -12,15 +12,16 @@ import { useRouter } from "expo-router";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import Animated, { FadeInUp } from "react-native-reanimated";
+import { useLanguage } from "@/src/hooks/useLanguage";
 
 const { width } = Dimensions.get("window");
 const CARD_WIDTH = (width - 48) / 2;
 
-const EXPLORE_ITEMS = [
+const getExploreItems = (t: any) => [
   {
     id: "accounts",
-    title: "Bank Accounts",
-    subtitle: "Donation Details",
+    title: t("explore.accounts.title"),
+    subtitle: t("explore.accounts.subtitle"),
     icon: (color: string) => (
       <Ionicons name="card-outline" size={28} color={color} />
     ),
@@ -28,8 +29,8 @@ const EXPLORE_ITEMS = [
   },
   {
     id: "donations",
-    title: "Donations List",
-    subtitle: "View History",
+    title: t("explore.donations.title"),
+    subtitle: t("explore.donations.subtitle"),
     icon: (color: string) => (
       <Ionicons name="heart-outline" size={28} color={color} />
     ),
@@ -37,8 +38,8 @@ const EXPLORE_ITEMS = [
   },
   {
     id: "mandir",
-    title: "Mandir Details",
-    subtitle: "About Temple",
+    title: t("explore.mandir.title"),
+    subtitle: t("explore.mandir.subtitle"),
     icon: (color: string) => (
       <MaterialCommunityIcons name="temple-buddhist" size={28} color={color} />
     ),
@@ -46,8 +47,8 @@ const EXPLORE_ITEMS = [
   },
   {
     id: "contact",
-    title: "Contact Details",
-    subtitle: "Get in Touch",
+    title: t("explore.contact.title"),
+    subtitle: t("explore.contact.subtitle"),
     icon: (color: string) => (
       <Ionicons name="call-outline" size={28} color={color} />
     ),
@@ -55,8 +56,8 @@ const EXPLORE_ITEMS = [
   },
   {
     id: "history",
-    title: "Family History",
-    subtitle: "Panchasara Lineage",
+    title: t("explore.history.title"),
+    subtitle: t("explore.history.subtitle"),
     icon: (color: string) => (
       <MaterialCommunityIcons
         name="book-open-variant"
@@ -70,6 +71,8 @@ const EXPLORE_ITEMS = [
 
 export default function ExploreScreen() {
   const router = useRouter();
+  const { t } = useLanguage();
+  const EXPLORE_ITEMS = getExploreItems(t);
 
   const handlePress = (item: any) => {
     // Navigate to the respective screen
@@ -78,7 +81,7 @@ export default function ExploreScreen() {
 
   return (
     <View style={styles.container}>
-      <AppHeader title="Explore" subtitle="Discover Activities" />
+      <AppHeader title={t("explore.title")} subtitle={t("explore.subtitle")} />
 
       <ScrollView
         contentContainerStyle={styles.scrollContent}
@@ -112,7 +115,7 @@ export default function ExploreScreen() {
         </View>
 
         <View style={styles.footer}>
-          <Text style={styles.footerText}>More features coming soon...</Text>
+          <Text style={styles.footerText}>{t("common.comingSoon")}</Text>
         </View>
       </ScrollView>
     </View>

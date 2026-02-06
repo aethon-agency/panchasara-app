@@ -11,9 +11,11 @@ import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import Animated, { FadeInUp, LinearTransition } from "react-native-reanimated";
 import { useRouter } from "expo-router";
 import { ALL_EVENTS, MandirEvent } from "@/src/constants/events";
+import { useLanguage } from "@/src/hooks/useLanguage";
 
 export default function EventScreen() {
   const router = useRouter();
+  const { t } = useLanguage();
 
   const parseDate = (dateStr: string) => {
     const [d, m, y] = dateStr.split("-").map(Number);
@@ -27,13 +29,29 @@ export default function EventScreen() {
   const getEventBadgeStyle = (type: string) => {
     switch (type) {
       case "poonam":
-        return { bg: "#FFF7ED", text: "#EA580C", label: "Poonam" };
+        return {
+          bg: "#FFF7ED",
+          text: "#EA580C",
+          label: t("events.badges.poonam"),
+        };
       case "havan":
-        return { bg: "#EEF2FF", text: "#4F46E5", label: "Havan" };
+        return {
+          bg: "#EEF2FF",
+          text: "#4F46E5",
+          label: t("events.badges.havan"),
+        };
       case "special":
-        return { bg: "#F0FDF4", text: "#16A34A", label: "Special" };
+        return {
+          bg: "#F0FDF4",
+          text: "#16A34A",
+          label: t("events.badges.special"),
+        };
       default:
-        return { bg: "#F8FAFC", text: "#64748B", label: "Event" };
+        return {
+          bg: "#F8FAFC",
+          text: "#64748B",
+          label: t("events.badges.event"),
+        };
     }
   };
 
@@ -88,7 +106,7 @@ export default function EventScreen() {
 
   return (
     <View style={styles.container}>
-      <AppHeader title="Events" subtitle="Upcoming Mandir Schedule" />
+      <AppHeader title={t("events.title")} subtitle={t("events.subtitle")} />
 
       <ScrollView
         contentContainerStyle={styles.scrollContent}
@@ -103,7 +121,7 @@ export default function EventScreen() {
               size={64}
               color="#CBD5E1"
             />
-            <Text style={styles.emptyText}>No upcoming events scheduled</Text>
+            <Text style={styles.emptyText}>{t("events.emptyState")}</Text>
           </View>
         )}
       </ScrollView>
