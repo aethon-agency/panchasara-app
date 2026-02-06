@@ -30,7 +30,7 @@ export const useAuthStore = create<AuthState>()(
       user: null,
       token: null,
       pushToken: null,
-      authLoading: true,
+      authLoading: false,
       login: async (token, user) => {
         set({ token, user });
       },
