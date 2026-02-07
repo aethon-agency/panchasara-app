@@ -24,6 +24,8 @@ import {
   GALLERY_DATA,
 } from "@/src/constants/data";
 
+import { AnnouncementCard } from "@/src/components/AnnouncementCard";
+
 const { width } = Dimensions.get("window");
 
 const ITEM_MARGIN = 20;
@@ -157,36 +159,12 @@ const HomeScreen = () => {
               key={item.id}
               entering={FadeInRight.delay(500 + index * 100)}
             >
-              <TouchableOpacity
-                style={styles.announcementCard}
-                onPress={() =>
-                  router.push({
-                    pathname: "/(user)/announcement-details",
-                    params: {
-                      id: item.id,
-                    },
-                  } as any)
-                }
-              >
-                <View style={styles.announcementIcon}>
-                  <LinearGradient
-                    colors={["#FFEDD5", "#FED7AA"]}
-                    style={styles.iconInnerGradient}
-                  >
-                    <Ionicons name="megaphone" size={22} color="#EA580C" />
-                  </LinearGradient>
-                </View>
-
-                <View style={{ flex: 1 }}>
-                  <Text style={styles.announcementTitle} numberOfLines={1}>
-                    {item.title}
-                  </Text>
-                  <Text style={styles.announcementDesc} numberOfLines={2}>
-                    {item.description}
-                  </Text>
-                </View>
-                <Ionicons name="chevron-forward" size={18} color="#CBD5E1" />
-              </TouchableOpacity>
+              <AnnouncementCard
+                id={item.id}
+                title={item.title}
+                description={item.description}
+                containerStyle={styles.announcementCard}
+              />
             </Animated.View>
           ))}
         </View>
@@ -293,35 +271,6 @@ const styles = StyleSheet.create({
   },
 
   announcementCard: {
-    flexDirection: "row",
-    backgroundColor: "#FFF",
-    padding: 16,
     marginHorizontal: 20,
-    borderRadius: 20,
-    alignItems: "center",
-  },
-
-  announcementIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 14,
-    overflow: "hidden",
-    marginRight: 16,
-  },
-
-  iconInnerGradient: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  announcementTitle: {
-    fontWeight: "800",
-    color: "#431407",
-  },
-
-  announcementDesc: {
-    fontSize: 12,
-    color: "#64748B",
   },
 });
