@@ -49,7 +49,7 @@ const HomeScreen = () => {
   };
 
   const now = new Date();
-  const upcomingEvents = ALL_EVENTS.filter(
+  const upcomingEvents = ALL_EVENTS?.filter(
     (e) => parseDate(e.date) >= now,
   ).sort((a, b) => parseDate(a.date).getTime() - parseDate(b.date).getTime());
 
