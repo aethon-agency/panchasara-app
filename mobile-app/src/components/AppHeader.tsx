@@ -153,8 +153,6 @@ const styles = StyleSheet.create({
     fontSize: 20, // Increased size for left-aligned branding
     fontWeight: "900",
     color: "#431407",
-    letterSpacing: -0.3,
-    lineHeight: 24,
   },
   subtitle: {
     fontSize: 10,

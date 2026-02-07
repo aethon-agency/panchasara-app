@@ -98,6 +98,10 @@
     "title": "Announcements",
     "subtitle": "News & Updates"
   },
+  "announcementDetails": {
+    "title": "Announcement",
+    "subtitle": "Important Update"
+  },
   "login": {
     "title": "Jai Mataji",
     "subtitle": "Your gateway to divine blessings",

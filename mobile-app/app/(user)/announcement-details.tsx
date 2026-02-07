@@ -16,6 +16,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useLanguage } from "@/src/hooks/useLanguage";
 
 import { ALL_ANNOUNCEMENTS } from "@/src/constants/data";
+import { callPhoneNumber } from "@/src/utils/functions";
 
 // 1. Define types for better dev experience
 interface AnnouncementParams {
@@ -40,20 +41,7 @@ export default function AnnouncementDetailsScreen() {
 
   const handleCall = async () => {
     if (contactNumber) {
-      // Remove any non-numeric characters for the URL
-      const sanitizedNumber = contactNumber.replace(/\D/g, "");
-      const url = `tel:${sanitizedNumber}`;
-
-      try {
-        const supported = await Linking.canOpenURL(url);
-        if (supported) {
-          await Linking.openURL(url);
-        } else {
-          console.warn("Phone dialer not supported on this device/simulator");
-        }
-      } catch (error) {
-        console.error("Error opening dialer:", error);
-      }
+      callPhoneNumber(contactNumber);
     }
   };
 
@@ -72,8 +60,8 @@ export default function AnnouncementDetailsScreen() {
       <StatusBar barStyle="dark-content" />
 
       <AppHeader
-        title="Announcement"
-        subtitle="Important Update"
+        title={t("announcementDetails.title")}
+        subtitle={t("announcementDetails.subtitle")}
         showBack={true}
         onBack={() => router.back()}
         rightAction={
@@ -100,7 +88,9 @@ export default function AnnouncementDetailsScreen() {
                 color="#EA580C"
               />
             </View>
-            <Text style={styles.title}>{title}</Text>
+            <Text style={styles.title} numberOfLines={1}>
+              {title}
+            </Text>
           </LinearGradient>
 
           <View style={styles.divider} />
@@ -155,11 +145,10 @@ const styles = StyleSheet.create({
     borderColor: "#F1F5F9",
   },
   headerGradient: {
-    paddingVertical: 20,
-    paddingHorizontal: 20,
+    padding: 20,
     alignItems: "center",
     flexDirection: "row",
-    columnGap: 20,
+    columnGap: 10,
   },
   iconContainer: {
     width: 50,
@@ -190,7 +179,7 @@ const styles = StyleSheet.create({
     color: "#431407",
     textAlign: "center",
     lineHeight: 32,
-    letterSpacing: -0.5,
+    flexShrink: 1,
   },
   divider: {
     height: 1,
