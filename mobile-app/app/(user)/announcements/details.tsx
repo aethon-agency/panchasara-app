@@ -18,7 +18,6 @@ import { useLanguage } from "@/src/hooks/useLanguage";
 import { ALL_ANNOUNCEMENTS } from "@/src/constants/data";
 import { callPhoneNumber } from "@/src/utils/functions";
 
-// 1. Define types for better dev experience
 interface AnnouncementParams {
   id?: string;
 }
@@ -29,7 +28,6 @@ export default function AnnouncementDetailsScreen() {
   const params = useLocalSearchParams() as unknown as AnnouncementParams;
   const { id } = params;
 
-  // Fetch data from central source
   const announcement = ALL_ANNOUNCEMENTS.find((a) => a.id === id);
 
   const {
@@ -216,7 +214,7 @@ const styles = StyleSheet.create({
   },
   footerText: {
     fontSize: 14,
-    color: "#CBD5E1",
+    color: "#9A3412",
     fontWeight: "600",
   },
 });

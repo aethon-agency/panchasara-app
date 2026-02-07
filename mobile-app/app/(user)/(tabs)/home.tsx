@@ -24,6 +24,7 @@ import {
   GALLERY_DATA,
 } from "@/src/constants/data";
 
+import { Section } from "@/src/components/Section";
 import { AnnouncementCard } from "@/src/components/AnnouncementCard";
 
 const { width } = Dimensions.get("window");
@@ -144,46 +145,37 @@ const HomeScreen = () => {
         </View>
 
         {/* ANNOUNCEMENTS SECTION */}
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>{t("home.whatsNew")}</Text>
-          <TouchableOpacity
-            onPress={() => router.push("/(user)/announcements" as any)}
-          >
-            <Text style={styles.seeAll}>{t("home.seeAll")}</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={{ gap: 12 }}>
-          {ALL_ANNOUNCEMENTS?.slice(0, 3).map((item, index) => (
-            <Animated.View
+        <Section
+          title={t("home.whatsNew")}
+          onSeeAll={() => router.push("/(user)/announcements" as any)}
+          contentStyle={{ gap: 12 }}
+        >
+          {ALL_ANNOUNCEMENTS?.slice(0, 3).map((item) => (
+            <AnnouncementCard
               key={item.id}
-              entering={FadeInRight.delay(500 + index * 100)}
-            >
-              <AnnouncementCard
-                id={item.id}
-                title={item.title}
-                description={item.description}
-                containerStyle={styles.announcementCard}
-              />
-            </Animated.View>
+              id={item.id}
+              title={item.title}
+              description={item.description}
+              containerStyle={styles.announcementCard}
+            />
           ))}
-        </View>
+        </Section>
 
         {/* GALLERY */}
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>{t("home.eventGallery")}</Text>
-          <Text style={styles.seeAll}>{t("home.seeAll")}</Text>
-        </View>
-
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ paddingRight: 20 }}
+        <Section
+          title={t("home.eventGallery")}
+          onSeeAll={() => router.push("/(user)/galleries" as any)}
         >
-          {GALLERY_DATA.map((item) => (
-            <GalleryCard key={item.id} item={item} />
-          ))}
-        </ScrollView>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ paddingRight: 20 }}
+          >
+            {GALLERY_DATA.map((item) => (
+              <GalleryCard key={item.id} item={item} />
+            ))}
+          </ScrollView>
+        </Section>
       </ScrollView>
     </View>
   );
@@ -220,25 +212,6 @@ const styles = StyleSheet.create({
 
   bannerOverlay: {
     ...StyleSheet.absoluteFillObject,
-  },
-
-  sectionHeader: {
-    paddingHorizontal: 20,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 10,
-    marginTop: 32,
-  },
-
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: "900",
-    color: "#431407",
-  },
-
-  seeAll: {
-    color: "#EA580C",
-    fontWeight: "700",
   },
 
   galleryCard: {

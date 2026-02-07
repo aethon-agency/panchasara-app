@@ -24,8 +24,6 @@ export const AnnouncementCard: React.FC<AnnouncementCardProps> = ({
   id,
   title,
   description,
-  date,
-  author,
   showDetails = false,
   containerStyle,
 }) => {
