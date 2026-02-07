@@ -1,8 +1,6 @@
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
 
-// --- TYPES & INTERFACES ---
-
 export type EventType = "poonam" | "special" | "havan" | "meeting";
 
 export interface MandirEvent {
@@ -20,8 +18,6 @@ export interface MandirEvent {
   organizerName?: string;
 }
 
-// --- STATIC CONSTANTS ---
-
 export const HERO_IMAGES = [
   "https://eijolqvtchrmhuvuytbl.supabase.co/storage/v1/object/public/BANNER/Banner.jpeg",
   "https://eijolqvtchrmhuvuytbl.supabase.co/storage/v1/object/public/BANNER/Banner.jpeg",
@@ -33,116 +29,97 @@ export const GALLERY_DATA = [
     id: "1",
     title: "જન્માષ્ટમી",
     date: "ઓગસ્ટ ૨૦૨૫",
-    image:
-      "https://images.unsplash.com/photo-1623345805780-8f6e85c18c26?q=80&w=600&auto=format&fit=crop",
     images: [
-      "https://images.unsplash.com/photo-1623345805780-8f6e85c18c26?q=80&w=600&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1561336313-0bd5518eb139?q=80&w=600&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1606216794074-735e91aa7c5e?q=80&w=600&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1544434255-a0f2C55db236?q=80&w=600&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1510672981848-a1c4f1cb5ccf?q=80&w=600&auto=format&fit=crop",
+      "https://images.pexels.com/photos/20793879/pexels-photo-20793879.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/32058915/pexels-photo-32058915.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/18362038/pexels-photo-18362038.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/8818658/pexels-photo-8818658.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/14834183/pexels-photo-14834183.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/16397388/pexels-photo-16397388.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/32962421/pexels-photo-32962421.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/19576757/pexels-photo-19576757.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/5971975/pexels-photo-5971975.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
     ],
   },
   {
     id: "2",
     title: "નવરાત્રી ગરબા",
     date: "ઓક્ટોબર ૨૦૨૫",
-    image:
-      "https://images.unsplash.com/photo-1561336313-0bd5518eb139?q=80&w=600&auto=format&fit=crop",
     images: [
-      "https://images.unsplash.com/photo-1561336313-0bd5518eb139?q=80&w=600&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1606216794074-735e91aa7c5e?q=80&w=600&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1544434255-a0f2C55db236?q=80&w=600&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1510672981848-a1c4f1cb5ccf?q=80&w=600&auto=format&fit=crop",
+      "https://images.pexels.com/photos/20793879/pexels-photo-20793879.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/32058915/pexels-photo-32058915.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/18362038/pexels-photo-18362038.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/8818658/pexels-photo-8818658.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/14834183/pexels-photo-14834183.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/16397388/pexels-photo-16397388.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/32962421/pexels-photo-32962421.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/19576757/pexels-photo-19576757.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/5971975/pexels-photo-5971975.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
     ],
   },
   {
     id: "3",
     title: "દિવાળી પૂજન",
     date: "નવેમ્બર ૨૦૨૪",
-    image:
-      "https://images.unsplash.com/photo-1606216794074-735e91aa7c5e?q=80&w=600&auto=format&fit=crop",
     images: [
-      "https://images.unsplash.com/photo-1606216794074-735e91aa7c5e?q=80&w=600&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1544434255-a0f2C55db236?q=80&w=600&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1510672981848-a1c4f1cb5ccf?q=80&w=600&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1542382156-97216664e43e?q=80&w=600&auto=format&fit=crop",
+      "https://images.pexels.com/photos/20793879/pexels-photo-20793879.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/32058915/pexels-photo-32058915.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/18362038/pexels-photo-18362038.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/8818658/pexels-photo-8818658.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/14834183/pexels-photo-14834183.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/16397388/pexels-photo-16397388.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/32962421/pexels-photo-32962421.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/19576757/pexels-photo-19576757.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/5971975/pexels-photo-5971975.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
     ],
   },
   {
     id: "4",
     title: "વસંત પંચમી",
     date: "ફેબ્રુઆરી ૨૦૨૪",
-    image:
-      "https://images.unsplash.com/photo-1544434255-a0f2C55db236?q=80&w=600&auto=format&fit=crop",
     images: [
-      "https://images.unsplash.com/photo-1544434255-a0f2C55db236?q=80&w=600&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1510672981848-a1c4f1cb5ccf?q=80&w=600&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1542382156-97216664e43e?q=80&w=600&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1623345805780-8f6e85c18c26?q=80&w=600&auto=format&fit=crop",
+      "https://images.pexels.com/photos/20793879/pexels-photo-20793879.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/32058915/pexels-photo-32058915.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/18362038/pexels-photo-18362038.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/8818658/pexels-photo-8818658.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/14834183/pexels-photo-14834183.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/16397388/pexels-photo-16397388.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/32962421/pexels-photo-32962421.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/19576757/pexels-photo-19576757.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/5971975/pexels-photo-5971975.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
     ],
   },
   {
     id: "5",
     title: "સામુદાયિક પિકનિક",
     date: "ડિસેમ્બર ૨૦૨૩",
-    image:
-      "https://images.unsplash.com/photo-1510672981848-a1c4f1cb5ccf?q=80&w=600&auto=format&fit=crop",
     images: [
-      "https://images.unsplash.com/photo-1510672981848-a1c4f1cb5ccf?q=80&w=600&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1542382156-97216664e43e?q=80&w=600&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1623345805780-8f6e85c18c26?q=80&w=600&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1561336313-0bd5518eb139?q=80&w=600&auto=format&fit=crop",
+      "https://images.pexels.com/photos/20793879/pexels-photo-20793879.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/32058915/pexels-photo-32058915.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/18362038/pexels-photo-18362038.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/8818658/pexels-photo-8818658.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/14834183/pexels-photo-14834183.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/16397388/pexels-photo-16397388.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/32962421/pexels-photo-32962421.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/19576757/pexels-photo-19576757.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/5971975/pexels-photo-5971975.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
     ],
   },
   {
     id: "6",
     title: "આરોગ્ય શિબિર",
     date: "નવેમ્બર ૨૦૨૩",
-    image:
-      "https://images.unsplash.com/photo-1542382156-97216664e43e?q=80&w=600&auto=format&fit=crop",
     images: [
-      "https://images.unsplash.com/photo-1542382156-97216664e43e?q=80&w=600&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1623345805780-8f6e85c18c26?q=80&w=600&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1561336313-0bd5518eb139?q=80&w=600&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1606216794074-735e91aa7c5e?q=80&w=600&auto=format&fit=crop",
+      "https://images.pexels.com/photos/20793879/pexels-photo-20793879.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/32058915/pexels-photo-32058915.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/18362038/pexels-photo-18362038.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/8818658/pexels-photo-8818658.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/14834183/pexels-photo-14834183.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/16397388/pexels-photo-16397388.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/32962421/pexels-photo-32962421.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/19576757/pexels-photo-19576757.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      "https://images.pexels.com/photos/5971975/pexels-photo-5971975.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
     ],
-  },
-];
-
-export const GALLERY_PHOTOS = [
-  "https://images.unsplash.com/photo-1623345805780-8f6e85c18c26?q=80&w=600&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1561336313-0bd5518eb139?q=80&w=600&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1606216794074-735e91aa7c5e?q=80&w=600&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1544434255-a0f2C55db236?q=80&w=600&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1510672981848-a1c4f1cb5ccf?q=80&w=600&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1542382156-97216664e43e?q=80&w=600&auto=format&fit=crop",
-];
-
-export const ANNOUNCEMENT_SUMMARY = [
-  {
-    id: "1",
-    title: "પર્યુષણ મહાપર્વ ૨૦૨૬",
-    date: "૧૫ ઓગસ્ટ ૨૦૨૬",
-    author: "એડમિન",
-    description:
-      "૮ દિવસની આધ્યાત્મિક શુદ્ધિકરણ ૧૫ ઓગસ્ટથી શરૂ થાય છે. દરરોજ પ્રતિક્રમણ અને પ્રવચન માટે અમારી સાથે જોડાઓ.",
-  },
-  {
-    id: "2",
-    title: "સામાન્ય સભા બેઠક",
-    date: "૧૦ ઓક્ટોબર ૨૦૨૬",
-    author: "સમિતિ",
-    description:
-      "આગામી કાર્યક્રમો અને બજેટની ચર્ચા કરવા માટે તમામ સભ્યો માટે વાર્ષિક સામાન્ય સભા.",
-  },
-  {
-    id: "3",
-    title: "તબીબી શિબિર",
-    date: "૦૫ નવેમ્બર ૨૦૨૬",
-    author: "આરોગ્ય ટીમ",
-    description:
-      "તમામ ભક્તો માટે મફત તબીબી તપાસ શિબિર. આંખની તપાસ અને સામાન્ય ચિકિત્સક ઉપલબ્ધ.",
   },
 ];
 

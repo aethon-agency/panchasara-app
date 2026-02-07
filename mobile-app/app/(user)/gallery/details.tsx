@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { AppHeader } from "@/src/components/AppHeader";
-import { GALLERY_PHOTOS } from "@/src/constants/data";
+import { GALLERY_DATA } from "@/src/constants/data";
 
 const { width } = Dimensions.get("window");
 const IMAGE_SIZE = (width - 48) / 2;
@@ -19,8 +19,24 @@ const IMAGE_SIZE = (width - 48) / 2;
 export default function GalleryDetailsScreen() {
   const router = useRouter();
   const params = useLocalSearchParams();
-  const title = (params.title as string) || "Event Gallery";
-  const date = (params.date as string) || "Recent";
+  const id = params.id as string;
+
+  // Find the gallery item to get its specific images
+  const item = GALLERY_DATA.find((g) => g.id === id);
+  const title = (params.title as string) || item?.title || "Event Gallery";
+  const date = (params.date as string) || item?.date || "Recent";
+  const images = item?.images.filter(Boolean) as string[];
+
+  if (!item && !params.title) {
+    return (
+      <View style={styles.container}>
+        <AppHeader title="Not Found" showBack onBack={() => router.back()} />
+        <View style={styles.emptyContainer}>
+          <Text style={styles.emptyText}>Gallery not found</Text>
+        </View>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -34,7 +50,7 @@ export default function GalleryDetailsScreen() {
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.grid}>
-          {GALLERY_PHOTOS.map((img, index) => (
+          {images.map((img, index) => (
             <TouchableOpacity
               key={index}
               activeOpacity={0.9}
@@ -47,7 +63,7 @@ export default function GalleryDetailsScreen() {
 
         <View style={styles.footer}>
           <Text style={styles.footerText}>
-            {GALLERY_PHOTOS.length} Photos • All Rights Reserved
+            {images.length} Photos • All Rights Reserved
           </Text>
         </View>
       </ScrollView>
@@ -93,6 +109,17 @@ const styles = StyleSheet.create({
   footerText: {
     color: "#94A3B8",
     fontSize: 12,
+    fontWeight: "500",
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 32,
+  },
+  emptyText: {
+    color: "#94A3B8",
+    fontSize: 16,
     fontWeight: "500",
   },
 });
