@@ -11,43 +11,10 @@ import {
 } from "react-native";
 import { AppHeader } from "@/src/components/AppHeader";
 import { useRouter } from "expo-router";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import Animated, { FadeInUp } from "react-native-reanimated";
-
-// Mock Data
-const DONATIONS = [
-  {
-    id: "1",
-    amount: "₹5,001",
-    date: "12 Mar 2026",
-    purpose: "Poonam Bhojan Prasad",
-    receiptNo: "RCP-2026-045",
-    type: "Online",
-    transactionId: "UPI-8979328472",
-    donorName: "Gajjar Family",
-  },
-  {
-    id: "2",
-    amount: "₹1,100",
-    date: "20 Feb 2026",
-    purpose: "General Donation",
-    receiptNo: "RCP-2026-012",
-    type: "Cash",
-    transactionId: "-",
-    donorName: "Gajjar Family",
-  },
-  {
-    id: "3",
-    amount: "₹501",
-    date: "01 Jan 2026",
-    purpose: "Aarti Seva",
-    receiptNo: "RCP-2026-003",
-    type: "Online",
-    transactionId: "UPI-2384723984",
-    donorName: "Gajjar Family",
-  },
-];
+import { DONATIONS } from "@/src/constants/data";
 
 export default function DonationsScreen() {
   const router = useRouter();

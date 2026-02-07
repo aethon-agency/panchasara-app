@@ -264,3 +264,36 @@ export const getExploreItems = (t: any) => [
     route: "/history",
   },
 ];
+
+export const DONATIONS = [
+  {
+    id: "1",
+    amount: "₹5,001",
+    date: "12 Mar 2026",
+    purpose: "Poonam Bhojan Prasad",
+    receiptNo: "RCP-2026-045",
+    type: "Online",
+    transactionId: "UPI-8979328472",
+    donorName: "Gajjar Family",
+  },
+  {
+    id: "2",
+    amount: "₹1,100",
+    date: "20 Feb 2026",
+    purpose: "General Donation",
+    receiptNo: "RCP-2026-012",
+    type: "Cash",
+    transactionId: "-",
+    donorName: "Gajjar Family",
+  },
+  {
+    id: "3",
+    amount: "₹501",
+    date: "01 Jan 2026",
+    purpose: "Aarti Seva",
+    receiptNo: "RCP-2026-003",
+    type: "Online",
+    transactionId: "UPI-2384723984",
+    donorName: "Gajjar Family",
+  },
+];
