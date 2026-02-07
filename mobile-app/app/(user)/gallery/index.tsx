@@ -16,6 +16,8 @@ import Animated, { FadeInUp } from "react-native-reanimated";
 import { useLanguage } from "@/src/hooks/useLanguage";
 import { GALLERY_DATA } from "@/src/constants/data";
 
+import { GalleryCollageCard } from "@/src/components/GalleryCollageCard";
+
 const { width } = Dimensions.get("window");
 
 export default function GalleryListScreen() {
@@ -38,31 +40,13 @@ export default function GalleryListScreen() {
       >
         <View style={styles.grid}>
           {GALLERY_DATA.map((item: any, index: number) => (
-            <Animated.View
-              key={item.id}
-              entering={FadeInUp.delay(index * 100).duration(500)}
-              style={styles.cardContainer}
-            >
-              <TouchableOpacity
-                style={styles.card}
-                activeOpacity={0.8}
-                onPress={() =>
-                  router.push({
-                    pathname: "/(user)/gallery-details",
-                    params: { id: item.id, title: item.title, date: item.date },
-                  } as any)
-                }
-              >
-                <Image source={{ uri: item.image }} style={styles.image} />
-                <LinearGradient
-                  colors={["transparent", "rgba(0,0,0,0.8)"]}
-                  style={styles.overlay}
-                >
-                  <Text style={styles.title}>{item.title}</Text>
-                  <Text style={styles.date}>{item.date}</Text>
-                </LinearGradient>
-              </TouchableOpacity>
-            </Animated.View>
+            <GalleryCollageCard
+              id={item.id}
+              title={item.title}
+              date={item.date}
+              images={item.images}
+              containerStyle={styles.cardContainer}
+            />
           ))}
         </View>
       </ScrollView>
@@ -87,31 +71,9 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     width: (width - 48) / 2,
-  },
-  card: {
     height: 180,
     borderRadius: 20,
     overflow: "hidden",
-    elevation: 3,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    backgroundColor: "#F1F5F9",
-  },
-  image: {
-    width: "100%",
-    height: "100%",
-    resizeMode: "cover",
-  },
-  overlay: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    padding: 12,
-    justifyContent: "flex-end",
-    height: "100%",
   },
   title: {
     color: "#FFF",

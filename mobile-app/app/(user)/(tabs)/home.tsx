@@ -1,4 +1,3 @@
-import { Ionicons } from "@expo/vector-icons";
 import React, { useState, useEffect, useRef } from "react";
 import {
   ScrollView,
@@ -14,7 +13,6 @@ import {
 import { useAuthStore } from "../../../src/stores/authStore";
 import { AppHeader } from "@/src/components/AppHeader";
 import { LinearGradient } from "expo-linear-gradient";
-import Animated, { FadeInRight } from "react-native-reanimated";
 import { useRouter } from "expo-router";
 import { LanguageSelector } from "@/src/components/LanguageSelector";
 import { useLanguage } from "@/src/hooks/useLanguage";
@@ -25,6 +23,7 @@ import {
 } from "@/src/constants/data";
 
 import { Section } from "@/src/components/Section";
+import { GalleryCollageCard } from "@/src/components/GalleryCollageCard";
 import { AnnouncementCard } from "@/src/components/AnnouncementCard";
 
 const { width } = Dimensions.get("window");
@@ -60,28 +59,6 @@ const HomeScreen = () => {
 
     return () => clearInterval(interval);
   }, [currentIndex]);
-
-  const GalleryCard = ({ item }: any) => (
-    <TouchableOpacity
-      style={styles.galleryCard}
-      activeOpacity={0.8}
-      onPress={() =>
-        router.push({
-          pathname: "/(user)/gallery-details",
-          params: { id: item.id },
-        } as any)
-      }
-    >
-      <Image source={{ uri: item.image }} style={styles.galleryImage} />
-      <LinearGradient
-        colors={["transparent", "rgba(0,0,0,0.8)"]}
-        style={styles.galleryOverlay}
-      >
-        <Text style={styles.galleryTitle}>{item.title}</Text>
-        <Text style={styles.galleryDate}>{item.date}</Text>
-      </LinearGradient>
-    </TouchableOpacity>
-  );
 
   return (
     <View style={styles.container}>
@@ -164,7 +141,7 @@ const HomeScreen = () => {
         {/* GALLERY */}
         <Section
           title={t("home.eventGallery")}
-          onSeeAll={() => router.push("/(user)/galleries" as any)}
+          onSeeAll={() => router.push("/(user)/gallery" as any)}
         >
           <ScrollView
             horizontal
@@ -172,7 +149,14 @@ const HomeScreen = () => {
             contentContainerStyle={{ paddingRight: 20 }}
           >
             {GALLERY_DATA.map((item) => (
-              <GalleryCard key={item.id} item={item} />
+              <GalleryCollageCard
+                key={item.id}
+                id={item.id}
+                title={item.title}
+                date={item.date}
+                images={item.images}
+                containerStyle={styles.galleryCard}
+              />
             ))}
           </ScrollView>
         </Section>

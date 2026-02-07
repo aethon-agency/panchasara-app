@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { AppHeader } from "@/src/components/AppHeader";
-import { Ionicons } from "@expo/vector-icons";
+import { GALLERY_PHOTOS } from "@/src/constants/data";
 
 const { width } = Dimensions.get("window");
 const IMAGE_SIZE = (width - 48) / 2;
@@ -21,16 +21,6 @@ export default function GalleryDetailsScreen() {
   const params = useLocalSearchParams();
   const title = (params.title as string) || "Event Gallery";
   const date = (params.date as string) || "Recent";
-
-  // Mock images based on the event (in a real app, fetch based on ID)
-  const GALLERY_IMAGES = [
-    "https://images.unsplash.com/photo-1623345805780-8f6e85c18c26?q=80&w=600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1561336313-0bd5518eb139?q=80&w=600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1606216794074-735e91aa7c5e?q=80&w=600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1544434255-a0f2C55db236?q=80&w=600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1510672981848-a1c4f1cb5ccf?q=80&w=600&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1542382156-97216664e43e?q=80&w=600&auto=format&fit=crop",
-  ];
 
   return (
     <View style={styles.container}>
@@ -44,7 +34,7 @@ export default function GalleryDetailsScreen() {
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.grid}>
-          {GALLERY_IMAGES.map((img, index) => (
+          {GALLERY_PHOTOS.map((img, index) => (
             <TouchableOpacity
               key={index}
               activeOpacity={0.9}
@@ -57,7 +47,7 @@ export default function GalleryDetailsScreen() {
 
         <View style={styles.footer}>
           <Text style={styles.footerText}>
-            {GALLERY_IMAGES.length} Photos • All Rights Reserved
+            {GALLERY_PHOTOS.length} Photos • All Rights Reserved
           </Text>
         </View>
       </ScrollView>
