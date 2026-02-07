@@ -144,14 +144,13 @@
   "eventDetails": {
     "title": "Event Invitation",
     "headerTitle": "Jay Bhavani Maa",
-    "headerSubtitle": "Cordially Invites You To",
-    "occasionLabel": "ON THE OCCASION OF",
+    "dateTimeLabel": "DATE AND TIME : ",
     "venueLabel": "VENUE",
     "messageTitle": "Bhojan Prasad Invitation",
     "messageTemplate": "We are pleased to inform all family members that the {{eventTitle}} program is scheduled on {{date}}, {{day}}, as per the schedule. The donor of the Bhojan Prasad will be \"{{organizerName}}\".",
     "welcomeNote": "— All are welcome to join —",
     "shareButton": "Share Invitation",
-    "footerText": "For more information or inquiries, please contact the Mandir Office.",
+    "footerText": "For more information or inquiries, please contact commity members.",
     "errorNotFound": "Event not found",
     "errorGoBack": "Go Back"
   }

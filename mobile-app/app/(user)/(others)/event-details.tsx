@@ -101,9 +101,6 @@ export default function EventDetailsScreen() {
           <Text style={styles.invitationHeaderTitle}>
             {t("eventDetails.headerTitle")}
           </Text>
-          <Text style={styles.invitationSubHeader}>
-            {t("eventDetails.headerSubtitle")}
-          </Text>
 
           {/* Event Title */}
           <View style={styles.titleSection}>
@@ -116,9 +113,8 @@ export default function EventDetailsScreen() {
           {/* Date & Time Section */}
           <View style={styles.dateTimeSection}>
             <Text style={styles.dateTimeLabel}>
-              {t("eventDetails.occasionLabel")}
+              {t("eventDetails.dateTimeLabel")}
             </Text>
-
             {/* Date */}
             <View style={styles.infoBlock}>
               <Ionicons name="calendar" size={22} color="#B45309" />
@@ -252,6 +248,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
     fontStyle: "italic",
     fontWeight: "600",
+    textAlign: "center",
   },
   titleSection: {
     alignItems: "center",

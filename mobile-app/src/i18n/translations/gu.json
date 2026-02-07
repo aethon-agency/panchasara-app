@@ -144,8 +144,7 @@
   "eventDetails": {
     "title": "કાર્યક્રમ આમંત્રણ",
     "headerTitle": "જય ભવાની માં",
-    "headerSubtitle": "તમને આમંત્રણ આપે છે",
-    "occasionLabel": "આ પ્રસંગે",
+    "dateTimeLabel": "તારીખ અને સમય",
     "venueLabel": "સ્થળ",
     "messageTitle": "ભોજન પ્રસાદ આમંત્રણ",
     "messageTemplate": "સહર્ષ પરિવારજનોને જણાવવાનું કે {{eventTitle}} નો કાર્યક્રમ તા. {{date}}, {{day}} ના રોજ રાબેતા મુજબ છે, જેના ભોજન પ્રસાદના દાતા \"{{organizerName}}\" રહેશે.",
