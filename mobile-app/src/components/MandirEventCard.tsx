@@ -87,7 +87,7 @@ export const MandirEventCard: React.FC<MandirEventCardProps> = ({
 
 const styles = StyleSheet.create({
   cardContainer: {
-    marginBottom: 16,
+    marginBottom: 0,
   },
   card: {
     borderRadius: 20,

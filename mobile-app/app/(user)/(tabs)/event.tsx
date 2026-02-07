@@ -2,13 +2,11 @@ import React from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { AppHeader } from "@/src/components/AppHeader";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
 import { ALL_EVENTS } from "@/src/constants/data";
 import { useLanguage } from "@/src/hooks/useLanguage";
 import { MandirEventCard } from "@/src/components/MandirEventCard";
 
 export default function EventScreen() {
-  const router = useRouter();
   const { t } = useLanguage();
 
   const parseDate = (dateStr: string) => {
@@ -29,7 +27,7 @@ export default function EventScreen() {
         showsVerticalScrollIndicator={false}
       >
         {sortedEvents.map((item, index) => (
-          <MandirEventCard key={item.id} event={item} />
+          <MandirEventCard key={item.id} event={item} index={index} />
         ))}
 
         {sortedEvents.length === 0 && (
@@ -53,6 +51,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FCF9F1",
   },
   scrollContent: {
+    rowGap: 16,
     padding: 20,
     paddingBottom: 100,
   },
