@@ -32,20 +32,14 @@ export default function EventDetailsScreen() {
     );
   }
 
-  const isPoonam = event.type === "poonam";
-
   const getEventLabel = (type: string) => {
     switch (type) {
       case "poonam":
         return "Poonam";
       case "havan":
         return "Havan";
-      case "special":
-        return "Special Event";
-      case "meeting":
-        return "Community Meeting";
       default:
-        return "Event";
+        return "Poonam";
     }
   };
 
@@ -117,59 +111,49 @@ export default function EventDetailsScreen() {
           {/* Save the Date Section */}
           <View style={styles.divider} />
 
+          {/* Date & Time Section */}
           <View style={styles.dateTimeSection}>
             <Text style={styles.dateTimeLabel}>ON THE OCCASION OF</Text>
-            <View style={styles.infoRow}>
-              <Ionicons name="calendar-clear" size={32} color="#EA580C" />
-              <View>
-                <Text style={styles.infoTextDate}>
-                  {isGujarati ? toGujarati(event.date) : event.date}
+
+            {/* Date */}
+            <View style={styles.infoBlock}>
+              <Ionicons name="calendar" size={22} color="#B45309" />
+              <View style={styles.dateContainer}>
+                <Text style={styles.infoText}>
+                  {isGujarati ? toGujarati(event.date) : event.date} -
                 </Text>
-                <Text style={styles.dayTextLarge}>
+                <Text style={styles.dayText}>
                   {t(`days.${event.day.toLowerCase()}`)}
                 </Text>
               </View>
             </View>
 
-            <View style={styles.timeRow}>
-              <Ionicons name="time-outline" size={16} color="#64748B" />
-              <Text style={styles.timeTextSmall}>
-                Time:{" "}
-                {isGujarati ? toGujarati(event.startTime) : event.startTime} -{" "}
-                {isGujarati ? toGujarati(event.endTime) : event.endTime}
+            {/* Time */}
+            <View style={styles.infoBlock}>
+              <Ionicons name="time" size={22} color="#B45309" />
+              <Text style={styles.timeText}>
+                {event.startTime} - {event.endTime}
               </Text>
             </View>
           </View>
 
           <View style={styles.divider} />
 
-          {/* Specific Message for Poonam or Description */}
-          {isPoonam ? (
-            <View style={styles.messageContainer}>
-              <Text style={styles.gujaratiTitle}>ભોજન પ્રસાદ આમંત્રણ</Text>
-              <Text style={styles.gujaratiMessage}>
-                સહર્ષ પરિવારજનોને જણાવવાનું કે {event.title} નો કાર્યક્રમ તા.{" "}
-                <Text style={styles.donorName}>
-                  {toGujarati(event.date)},{" "}
-                  {t(`days.${event.day.toLowerCase()}`)}
-                </Text>{" "}
-                ના રોજ રાબેતા મુજબ છે, જેના ભોજન પ્રસાદના દાતા{"\n"}
-                <Text style={styles.donorName}>
-                  “{event.organizerName}”
-                </Text>{" "}
-                રહેશે.
-              </Text>
-            </View>
-          ) : (
-            <View style={styles.descriptionContainer}>
-              <Text style={styles.descriptionLabel}>ABOUT EVENT</Text>
-              <Text style={styles.descriptionText}>{event.description}</Text>
-            </View>
-          )}
+          <View style={styles.messageContainer}>
+            <Text style={styles.gujaratiTitle}>ભોજન પ્રસાદ આમંત્રણ</Text>
+            <Text style={styles.gujaratiMessage}>
+              સહર્ષ પરિવારજનોને જણાવવાનું કે {event.title} નો કાર્યક્રમ તા.{" "}
+              <Text style={styles.donorName}>
+                {toGujarati(event.date)}, {t(`days.${event.day.toLowerCase()}`)}
+              </Text>{" "}
+              ના રોજ રાબેતા મુજબ છે, જેના ભોજન પ્રસાદના દાતા{"\n"}
+              <Text style={styles.donorName}>“{event.organizerName}”</Text>{" "}
+              રહેશે.
+            </Text>
+          </View>
 
           <View style={styles.divider} />
 
-          {/* Venue Section moved AFTER message */}
           <View style={styles.venueSection}>
             <Ionicons name="location" size={20} color="#EA580C" />
             <Text style={styles.venueLabel}>VENUE : </Text>
@@ -407,7 +391,7 @@ const styles = StyleSheet.create({
     color: "#64748B",
     fontWeight: "700",
     fontStyle: "italic",
-    paddingTop: 20,
+    paddingTop: 10,
   },
   actionSection: {
     marginTop: 25,
@@ -454,4 +438,30 @@ const styles = StyleSheet.create({
     color: "#EA580C",
     fontWeight: "700",
   },
+
+  infoBlock: {
+    alignItems: "center",
+    flexDirection: "row",
+    columnGap: 10,
+  },
+
+  dateContainer: {
+    flexDirection: "row",
+    columnGap: 10,
+    alignItems: "center",
+  },
+
+  infoText: {
+    fontSize: 24,
+    fontWeight: "900",
+    color: "#7C2D12",
+  },
+
+  dayText: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#B45309",
+  },
+
+  timeText: { fontWeight: "700", color: "#64748B" },
 });
