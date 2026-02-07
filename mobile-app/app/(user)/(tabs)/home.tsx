@@ -148,7 +148,7 @@ const HomeScreen = () => {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{ paddingRight: 20 }}
           >
-            {GALLERY_DATA.map((item) => (
+            {GALLERY_DATA?.slice(0, 3).map((item) => (
               <GalleryCollageCard
                 key={item.id}
                 id={item.id}
