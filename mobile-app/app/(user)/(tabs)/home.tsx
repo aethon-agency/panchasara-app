@@ -3,8 +3,6 @@ import {
   ScrollView,
   StatusBar,
   StyleSheet,
-  Text,
-  TouchableOpacity,
   View,
   Image,
   Dimensions,
@@ -16,14 +14,12 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { LanguageSelector } from "@/src/components/LanguageSelector";
 import { useLanguage } from "@/src/hooks/useLanguage";
-import { Ionicons } from "@expo/vector-icons";
 import {
   HERO_IMAGES,
   ALL_ANNOUNCEMENTS,
   GALLERY_DATA,
   ALL_EVENTS,
 } from "@/src/constants/data";
-
 import { Section } from "@/src/components/Section";
 import { GalleryCollageCard } from "@/src/components/GalleryCollageCard";
 import { AnnouncementCard } from "@/src/components/AnnouncementCard";

@@ -33,10 +33,8 @@ export const MandirEventCard: React.FC<MandirEventCardProps> = ({
         return t("events.badges.poonam");
       case "havan":
         return t("events.badges.havan");
-      case "special":
-        return t("events.badges.special");
       default:
-        return t("events.badges.event");
+        return t("events.badges.poonam");
     }
   };
 
@@ -74,9 +72,7 @@ export const MandirEventCard: React.FC<MandirEventCardProps> = ({
               <Ionicons name="calendar-outline" size={14} color="#EA580C" />
               <Text style={styles.dateText}>{event.date}</Text>
               <View style={styles.dot} />
-              <Text style={styles.dayText}>
-                {event.dayGujarati} | {event.dayEnglish}
-              </Text>
+              <Text style={styles.dayText}>{event.day}</Text>
             </View>
           </View>
 
@@ -98,7 +94,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     borderWidth: 1,
     borderColor: "#FDE68A",
-    elevation: 3,
+    elevation: 1,
     shadowColor: "#92400E",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,

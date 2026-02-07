@@ -120,16 +120,14 @@ export default function EventDetailsScreen() {
               <Ionicons name="calendar-clear" size={28} color="#EA580C" />
               <View>
                 <Text style={styles.infoTextDate}>{event.date}</Text>
-                <Text style={styles.dayTextLarge}>
-                  {event.dayGujarati} | {event.dayEnglish}
-                </Text>
+                <Text style={styles.dayTextLarge}>{event.day}</Text>
               </View>
             </View>
 
             <View style={styles.timeRow}>
               <Ionicons name="time-outline" size={16} color="#64748B" />
               <Text style={styles.timeTextSmall}>
-                Time: {isPoonam ? "10:00 AM - 01:00 PM" : event.time}
+                Time: {event.startTime} - {event.endTime}
               </Text>
             </View>
           </View>
@@ -148,10 +146,9 @@ export default function EventDetailsScreen() {
             <View style={styles.messageContainer}>
               <Text style={styles.gujaratiTitle}>ભોજન પ્રસાદ આમંત્રણ</Text>
               <Text style={styles.gujaratiMessage}>
-                સહર્ષ પરિવારજનોને જણાવવાનું કે {event.gujaratiMonth} માસની{" "}
-                {event.gujaratiPoonamName}નો કાર્યક્રમ તા. {event.date},{" "}
-                {event.dayGujarati}ના રોજ રાબેતા મુજબ છે, જેના ભોજન પ્રસાદના
-                દાતા{"\n"}
+                સહર્ષ પરિવારજનોને જણાવવાનું કે {event.title} નો કાર્યક્રમ તા.{" "}
+                {event.date}, {event.day}ના રોજ રાબેતા મુજબ છે, જેના ભોજન
+                પ્રસાદના દાતા{"\n"}
                 <Text style={styles.donorName}>
                   “{event.organizerName}”
                 </Text>{" "}
@@ -161,7 +158,7 @@ export default function EventDetailsScreen() {
           ) : (
             <View style={styles.descriptionContainer}>
               <Text style={styles.descriptionLabel}>ABOUT EVENT</Text>
-              <Text style={styles.descriptionText}>{event.desc}</Text>
+              <Text style={styles.descriptionText}>{event.description}</Text>
             </View>
           )}
 

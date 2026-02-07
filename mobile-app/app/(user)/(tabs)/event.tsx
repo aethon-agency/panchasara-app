@@ -29,7 +29,7 @@ export default function EventScreen() {
         showsVerticalScrollIndicator={false}
       >
         {sortedEvents.map((item, index) => (
-          <MandirEventCard key={item.id} event={item} index={index} />
+          <MandirEventCard key={item.id} event={item} />
         ))}
 
         {sortedEvents.length === 0 && (

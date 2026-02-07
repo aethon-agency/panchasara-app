@@ -70,3 +70,8 @@ export const getInitials = (name: string) => {
   }
   return name.substring(0, 2).toUpperCase();
 };
+
+// export const toGujarati = (text: string) => {
+//   const map = ["૦", "૧", "૨", "૩", "૪", "૫", "૬", "૭", "૮", "૯"];
+//   return text.replace(/[0-9]/g, (d: any) => map[d]);
+// };
