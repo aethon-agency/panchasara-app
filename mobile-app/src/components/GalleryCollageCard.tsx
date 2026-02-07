@@ -134,8 +134,8 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   date: {
-    color: "rgba(255,255,255,0.7)",
-    fontSize: 10,
+    color: "rgba(255,255,255,0.9)",
+    fontSize: 11,
     fontWeight: "500",
   },
 });
