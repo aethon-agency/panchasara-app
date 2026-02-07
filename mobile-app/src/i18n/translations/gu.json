@@ -140,5 +140,19 @@
     "friday": "શુક્રવાર",
     "saturday": "શનિવાર",
     "sunday": "રવિવાર"
+  },
+  "eventDetails": {
+    "title": "કાર્યક્રમ આમંત્રણ",
+    "headerTitle": "જય ભવાની માં",
+    "headerSubtitle": "તમને આમંત્રણ આપે છે",
+    "occasionLabel": "આ પ્રસંગે",
+    "venueLabel": "સ્થળ",
+    "messageTitle": "ભોજન પ્રસાદ આમંત્રણ",
+    "messageTemplate": "સહર્ષ પરિવારજનોને જણાવવાનું કે {{eventTitle}} નો કાર્યક્રમ તા. {{date}}, {{day}} ના રોજ રાબેતા મુજબ છે, જેના ભોજન પ્રસાદના દાતા \"{{organizerName}}\" રહેશે.",
+    "welcomeNote": "— બધા જોડાવા માટે સ્વાગત છે —",
+    "shareButton": "આમંત્રણ શેર કરો",
+    "footerText": "વધુ માહિતી અથવા પૂછપરછ માટે, કૃપા કરીને મંદિર કચેરીનો સંપર્ક કરો.",
+    "errorNotFound": "કાર્યક્રમ મળ્યો નથી",
+    "errorGoBack": "પાછા જાઓ"
   }
 }

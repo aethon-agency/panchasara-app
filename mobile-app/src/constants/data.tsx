@@ -149,7 +149,7 @@ export const ALL_EVENTS: MandirEvent[] = [
   {
     id: "1",
     type: "poonam",
-    title: "Maha Poonam",
+    title: "મહા પૂનમ",
     date: "12-2-2026",
     day: "thursday",
     startTime: "06:00 AM",
@@ -162,7 +162,7 @@ export const ALL_EVENTS: MandirEvent[] = [
   {
     id: "2",
     type: "poonam",
-    title: "Phalguna Poonam",
+    title: "ફાગણ પૂનમ",
     date: "14-3-2026",
     day: "saturday",
     startTime: "06:00 AM",
@@ -175,7 +175,7 @@ export const ALL_EVENTS: MandirEvent[] = [
   {
     id: "3",
     type: "poonam",
-    title: "Phalguna Poonam",
+    title: "ફાગણ પૂનમ",
     date: "14-3-2026",
     day: "saturday",
     startTime: "06:00 AM",
@@ -188,7 +188,7 @@ export const ALL_EVENTS: MandirEvent[] = [
   {
     id: "4",
     type: "havan",
-    title: "Phalguna Poonam",
+    title: "નવા વર્ષ હવન",
     date: "14-3-2026",
     day: "saturday",
     startTime: "06:00 AM",

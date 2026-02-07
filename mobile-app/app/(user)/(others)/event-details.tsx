@@ -24,9 +24,11 @@ export default function EventDetailsScreen() {
   if (!event) {
     return (
       <View style={styles.errorContainer}>
-        <Text>Event not found</Text>
+        <Text>{t("eventDetails.errorNotFound")}</Text>
         <TouchableOpacity onPress={() => router.back()}>
-          <Text style={styles.backButtonText}>Go Back</Text>
+          <Text style={styles.backButtonText}>
+            {t("eventDetails.errorGoBack")}
+          </Text>
         </TouchableOpacity>
       </View>
     );
@@ -35,11 +37,11 @@ export default function EventDetailsScreen() {
   const getEventLabel = (type: string) => {
     switch (type) {
       case "poonam":
-        return "Poonam";
+        return t("events.badges.poonam");
       case "havan":
-        return "Havan";
+        return t("events.badges.havan");
       default:
-        return "Poonam";
+        return t("events.badges.poonam");
     }
   };
 
@@ -47,8 +49,11 @@ export default function EventDetailsScreen() {
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
       <AppHeader
-        title="Event Invitation"
-        subtitle={event.title}
+        title={
+          getEventLabel(event.type).toUpperCase() +
+          " - " +
+          t("eventDetails.title")
+        }
         showBack={true}
         onBack={() => router.back()}
       />
@@ -93,19 +98,16 @@ export default function EventDetailsScreen() {
             <View style={styles.decorationLine} />
           </View>
 
-          <Text style={styles.invitationHeaderTitle}>Jay Bhavani Maa</Text>
+          <Text style={styles.invitationHeaderTitle}>
+            {t("eventDetails.headerTitle")}
+          </Text>
           <Text style={styles.invitationSubHeader}>
-            Cordially Invites You To
+            {t("eventDetails.headerSubtitle")}
           </Text>
 
           {/* Event Title */}
           <View style={styles.titleSection}>
             <Text style={styles.eventTitle}>{event.title}</Text>
-            <View style={styles.typeBadge}>
-              <Text style={styles.typeBadgeText}>
-                {getEventLabel(event.type).toUpperCase()}
-              </Text>
-            </View>
           </View>
 
           {/* Save the Date Section */}
@@ -113,7 +115,9 @@ export default function EventDetailsScreen() {
 
           {/* Date & Time Section */}
           <View style={styles.dateTimeSection}>
-            <Text style={styles.dateTimeLabel}>ON THE OCCASION OF</Text>
+            <Text style={styles.dateTimeLabel}>
+              {t("eventDetails.occasionLabel")}
+            </Text>
 
             {/* Date */}
             <View style={styles.infoBlock}>
@@ -156,27 +160,31 @@ export default function EventDetailsScreen() {
 
           <View style={styles.venueSection}>
             <Ionicons name="location" size={20} color="#EA580C" />
-            <Text style={styles.venueLabel}>VENUE : </Text>
+            <Text style={styles.venueLabel}>
+              {t("eventDetails.venueLabel")} :{" "}
+            </Text>
             <Text style={styles.venueValue}>{event.location}</Text>
           </View>
 
           <View style={styles.divider} />
 
-          <Text style={styles.welcomeNote}>— All are welcome to join —</Text>
+          <Text style={styles.welcomeNote}>
+            {t("eventDetails.welcomeNote")}
+          </Text>
         </LinearGradient>
 
         {/* Action Buttons */}
         <View style={styles.actionSection}>
           <TouchableOpacity style={styles.shareButton}>
             <Ionicons name="share-social-outline" size={20} color="#EA580C" />
-            <Text style={styles.shareButtonText}>Share Invitation</Text>
+            <Text style={styles.shareButtonText}>
+              {t("eventDetails.shareButton")}
+            </Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.footer}>
-          <Text style={styles.footerText}>
-            For more information or inquiries, please contact the Mandir Office.
-          </Text>
+          <Text style={styles.footerText}>{t("eventDetails.footerText")}</Text>
         </View>
       </ScrollView>
     </View>
@@ -247,9 +255,8 @@ const styles = StyleSheet.create({
   },
   titleSection: {
     alignItems: "center",
-    marginVertical: 20,
+    marginTop: 20,
     flexDirection: "row",
-    // alignItems: "center",
     columnGap: 10,
   },
   eventTitle: {

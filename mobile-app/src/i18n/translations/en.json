@@ -140,5 +140,19 @@
     "friday": "Friday",
     "saturday": "Saturday",
     "sunday": "Sunday"
+  },
+  "eventDetails": {
+    "title": "Event Invitation",
+    "headerTitle": "Jay Bhavani Maa",
+    "headerSubtitle": "Cordially Invites You To",
+    "occasionLabel": "ON THE OCCASION OF",
+    "venueLabel": "VENUE",
+    "messageTitle": "Bhojan Prasad Invitation",
+    "messageTemplate": "We are pleased to inform all family members that the {{eventTitle}} program is scheduled on {{date}}, {{day}}, as per the schedule. The donor of the Bhojan Prasad will be \"{{organizerName}}\".",
+    "welcomeNote": "— All are welcome to join —",
+    "shareButton": "Share Invitation",
+    "footerText": "For more information or inquiries, please contact the Mandir Office.",
+    "errorNotFound": "Event not found",
+    "errorGoBack": "Go Back"
   }
 }
