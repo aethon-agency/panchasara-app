@@ -58,7 +58,7 @@ export default function EventScreen() {
   const renderEventCard = (item: MandirEvent, index: number) => {
     const goToDetails = () => {
       router.push({
-        pathname: "/(user)/event-details",
+        pathname: "/(user)/(others)/event-details",
         params: { id: item.id },
       });
     };
