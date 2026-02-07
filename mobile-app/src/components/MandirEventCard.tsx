@@ -9,20 +9,18 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import Animated, { FadeInUp } from "react-native-reanimated";
+import Animated, { FadeIn } from "react-native-reanimated";
 import { useLanguage } from "@/src/hooks/useLanguage";
 import { toGujarati } from "@/src/utils/functions";
 import { MandirEvent } from "../constants/data";
 
 interface MandirEventCardProps {
   event: MandirEvent;
-  index?: number;
   containerStyle?: ViewStyle;
 }
 
 export const MandirEventCard: React.FC<MandirEventCardProps> = ({
   event,
-  index = 0,
   containerStyle,
 }) => {
   const router = useRouter();
@@ -48,8 +46,12 @@ export const MandirEventCard: React.FC<MandirEventCardProps> = ({
 
   return (
     <Animated.View
-      // entering={FadeInUp.delay(index * 100).duration(500)}
-      style={[styles.cardContainer, containerStyle]}
+      entering={FadeIn.duration(400)}
+      style={[
+        styles.cardContainer,
+        { backgroundColor: "transparent" },
+        containerStyle,
+      ]}
     >
       <TouchableOpacity
         activeOpacity={0.8}
@@ -124,6 +126,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "900",
     color: "#431407",
+    flexShrink: 1,
   },
   badge: {
     backgroundColor: "#EA580C",
