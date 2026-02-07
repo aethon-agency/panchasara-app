@@ -20,10 +20,6 @@ export default function UserLayout() {
       <Stack.Screen name="mandir-details" />
       <Stack.Screen name="contact" />
       <Stack.Screen name="history" />
-      <Stack.Screen name="gallery" />
-      <Stack.Screen name="gallery/details" />
-      <Stack.Screen name="announcements" />
-      <Stack.Screen name="announcements/details" />
     </Stack>
   );
 }
