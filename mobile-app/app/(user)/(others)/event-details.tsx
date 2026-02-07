@@ -67,7 +67,6 @@ export default function EventDetailsScreen() {
           colors={["#FFFBEB", "#FEF3C7", "#FFFBEB"]}
           style={styles.invitationCard}
         >
-          {/* Decorative Corner Icons */}
           <MaterialCommunityIcons
             name="flower-tulip"
             size={24}
@@ -119,8 +118,9 @@ export default function EventDetailsScreen() {
           <View style={styles.divider} />
 
           <View style={styles.dateTimeSection}>
+            <Text style={styles.dateTimeLabel}>ON THE OCCASION OF</Text>
             <View style={styles.infoRow}>
-              <Ionicons name="calendar-clear" size={28} color="#EA580C" />
+              <Ionicons name="calendar-clear" size={32} color="#EA580C" />
               <View>
                 <Text style={styles.infoTextDate}>
                   {isGujarati ? toGujarati(event.date) : event.date}
@@ -134,19 +134,14 @@ export default function EventDetailsScreen() {
             <View style={styles.timeRow}>
               <Ionicons name="time-outline" size={16} color="#64748B" />
               <Text style={styles.timeTextSmall}>
-                Time: {event.startTime} - {event.endTime}
+                Time:{" "}
+                {isGujarati ? toGujarati(event.startTime) : event.startTime} -{" "}
+                {isGujarati ? toGujarati(event.endTime) : event.endTime}
               </Text>
             </View>
           </View>
 
           <View style={styles.divider} />
-
-          {/* Venue Section */}
-          <View style={styles.venueSection}>
-            <Ionicons name="location" size={24} color="#EA580C" />
-            <Text style={styles.venueLabel}>VENUE</Text>
-            <Text style={styles.venueValue}>{event.location}</Text>
-          </View>
 
           {/* Specific Message for Poonam or Description */}
           {isPoonam ? (
@@ -154,7 +149,10 @@ export default function EventDetailsScreen() {
               <Text style={styles.gujaratiTitle}>ભોજન પ્રસાદ આમંત્રણ</Text>
               <Text style={styles.gujaratiMessage}>
                 સહર્ષ પરિવારજનોને જણાવવાનું કે {event.title} નો કાર્યક્રમ તા.{" "}
-                {toGujarati(event.date)}, {t(`days.${event.day.toLowerCase()}`)}
+                <Text style={styles.donorName}>
+                  {toGujarati(event.date)},{" "}
+                  {t(`days.${event.day.toLowerCase()}`)}
+                </Text>{" "}
                 ના રોજ રાબેતા મુજબ છે, જેના ભોજન પ્રસાદના દાતા{"\n"}
                 <Text style={styles.donorName}>
                   “{event.organizerName}”
@@ -169,9 +167,16 @@ export default function EventDetailsScreen() {
             </View>
           )}
 
-          <View style={styles.footerDecoration}>
-            <MaterialCommunityIcons name="flower" size={30} color="#EA580C" />
+          <View style={styles.divider} />
+
+          {/* Venue Section moved AFTER message */}
+          <View style={styles.venueSection}>
+            <Ionicons name="location" size={20} color="#EA580C" />
+            <Text style={styles.venueLabel}>VENUE : </Text>
+            <Text style={styles.venueValue}>{event.location}</Text>
           </View>
+
+          <View style={styles.divider} />
 
           <Text style={styles.welcomeNote}>— All are welcome to join —</Text>
         </LinearGradient>
@@ -207,8 +212,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF",
     borderRadius: 30,
     padding: 30,
-    paddingTop: 8,
+    paddingTop: 10,
     marginTop: 10,
+    paddingBottom: 20,
     borderWidth: 2,
     borderColor: "#FDE68A",
     elevation: 8,
@@ -258,13 +264,15 @@ const styles = StyleSheet.create({
   titleSection: {
     alignItems: "center",
     marginVertical: 20,
+    flexDirection: "row",
+    // alignItems: "center",
+    columnGap: 10,
   },
   eventTitle: {
     fontSize: 32,
     fontWeight: "900",
     color: "#431407",
     textAlign: "center",
-    marginBottom: 10,
   },
   typeBadge: {
     backgroundColor: "#EA580C",
@@ -286,8 +294,15 @@ const styles = StyleSheet.create({
   },
   dateTimeSection: {
     alignItems: "center",
-    gap: 12,
+    gap: 8,
     marginVertical: 5,
+  },
+  dateTimeLabel: {
+    fontSize: 11,
+    fontWeight: "800",
+    color: "#94A3B8",
+    letterSpacing: 2,
+    marginBottom: 8,
   },
   infoRow: {
     flexDirection: "row",
@@ -323,7 +338,9 @@ const styles = StyleSheet.create({
   },
   venueSection: {
     alignItems: "center",
-    marginVertical: 10,
+    marginVertical: 4,
+    flexDirection: "row",
+    columnGap: 10,
   },
   venueLabel: {
     fontSize: 11,
@@ -390,6 +407,7 @@ const styles = StyleSheet.create({
     color: "#64748B",
     fontWeight: "700",
     fontStyle: "italic",
+    paddingTop: 20,
   },
   actionSection: {
     marginTop: 25,
