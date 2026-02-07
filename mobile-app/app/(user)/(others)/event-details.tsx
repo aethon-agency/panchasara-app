@@ -12,10 +12,13 @@ import { AppHeader } from "@/src/components/AppHeader";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { ALL_EVENTS, MandirEvent } from "@/src/constants/data";
+import { useLanguage } from "@/src/hooks/useLanguage";
+import { toGujarati } from "@/src/utils/functions";
 
 export default function EventDetailsScreen() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
+  const { t, isGujarati } = useLanguage();
   const event = ALL_EVENTS.find((e) => e.id === id) as MandirEvent;
 
   if (!event) {
@@ -119,8 +122,12 @@ export default function EventDetailsScreen() {
             <View style={styles.infoRow}>
               <Ionicons name="calendar-clear" size={28} color="#EA580C" />
               <View>
-                <Text style={styles.infoTextDate}>{event.date}</Text>
-                <Text style={styles.dayTextLarge}>{event.day}</Text>
+                <Text style={styles.infoTextDate}>
+                  {isGujarati ? toGujarati(event.date) : event.date}
+                </Text>
+                <Text style={styles.dayTextLarge}>
+                  {t(`days.${event.day.toLowerCase()}`)}
+                </Text>
               </View>
             </View>
 
@@ -147,8 +154,8 @@ export default function EventDetailsScreen() {
               <Text style={styles.gujaratiTitle}>ભોજન પ્રસાદ આમંત્રણ</Text>
               <Text style={styles.gujaratiMessage}>
                 સહર્ષ પરિવારજનોને જણાવવાનું કે {event.title} નો કાર્યક્રમ તા.{" "}
-                {event.date}, {event.day}ના રોજ રાબેતા મુજબ છે, જેના ભોજન
-                પ્રસાદના દાતા{"\n"}
+                {toGujarati(event.date)}, {t(`days.${event.day.toLowerCase()}`)}
+                ના રોજ રાબેતા મુજબ છે, જેના ભોજન પ્રસાદના દાતા{"\n"}
                 <Text style={styles.donorName}>
                   “{event.organizerName}”
                 </Text>{" "}

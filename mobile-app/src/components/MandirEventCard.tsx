@@ -10,8 +10,9 @@ import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import Animated, { FadeInUp } from "react-native-reanimated";
-import { MandirEvent } from "@/src/constants/data";
 import { useLanguage } from "@/src/hooks/useLanguage";
+import { toGujarati } from "@/src/utils/functions";
+import { MandirEvent } from "../constants/data";
 
 interface MandirEventCardProps {
   event: MandirEvent;
@@ -25,7 +26,7 @@ export const MandirEventCard: React.FC<MandirEventCardProps> = ({
   containerStyle,
 }) => {
   const router = useRouter();
-  const { t } = useLanguage();
+  const { t, isGujarati } = useLanguage();
 
   const getEventBadgeLabel = (type: string) => {
     switch (type) {
@@ -47,7 +48,7 @@ export const MandirEventCard: React.FC<MandirEventCardProps> = ({
 
   return (
     <Animated.View
-      entering={FadeInUp.delay(index * 100).duration(500)}
+      // entering={FadeInUp.delay(index * 100).duration(500)}
       style={[styles.cardContainer, containerStyle]}
     >
       <TouchableOpacity
@@ -70,9 +71,13 @@ export const MandirEventCard: React.FC<MandirEventCardProps> = ({
 
             <View style={styles.detailsRow}>
               <Ionicons name="calendar-outline" size={14} color="#EA580C" />
-              <Text style={styles.dateText}>{event.date}</Text>
+              <Text style={styles.dateText}>
+                {isGujarati ? toGujarati(event.date) : event.date}
+              </Text>
               <View style={styles.dot} />
-              <Text style={styles.dayText}>{event.day}</Text>
+              <Text style={styles.dayText}>
+                {t(`days.${event.day.toLowerCase()}`)}
+              </Text>
             </View>
           </View>
 
