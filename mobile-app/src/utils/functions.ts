@@ -1,4 +1,4 @@
-import { Linking } from "react-native";
+import { Linking, Share } from "react-native";
 import moment from "moment";
 
 export const getJSONParam = <T>(
@@ -13,6 +13,18 @@ export const getJSONParam = <T>(
     return null;
   }
 };
+
+export const handleShare = async (title: string, message: string) => {
+  try {
+    await Share.share({
+      title: title,
+      message: message,
+    });
+  } catch (error) {
+    console.error("Error sharing:", error);
+  }
+};
+
 export const getImageSource = (
   source: string | number | null | undefined,
   defaultSource: any,

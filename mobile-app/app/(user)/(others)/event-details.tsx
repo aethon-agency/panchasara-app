@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   StatusBar,
+  Share,
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { AppHeader } from "@/src/components/AppHeader";
@@ -13,7 +14,7 @@ import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { ALL_EVENTS, MandirEvent } from "@/src/constants/data";
 import { useLanguage } from "@/src/hooks/useLanguage";
-import { toGujarati } from "@/src/utils/functions";
+import { handleShare, toGujarati } from "@/src/utils/functions";
 
 export default function EventDetailsScreen() {
   const { id } = useLocalSearchParams();
@@ -43,6 +44,12 @@ export default function EventDetailsScreen() {
       default:
         return t("events.badges.poonam");
     }
+  };
+
+  const handleShareClick = async () => {
+    const shareTitle = `${getEventLabel(event.type)} - ${t("eventDetails.title")}`;
+    const shareMessage = `જય ભવાની માં\n\nભોજન પ્રસાદ આમંત્રણ\n\nસહર્ષ પરિવારજનોને જણાવવાનું કે ${event.title} નો કાર્યક્રમ તા. ${isGujarati ? toGujarati(event.date) : event.date}, ${t(`days.${event.day.toLowerCase()}`)} ના રોજ રાબેતા મુજબ છે, જેના ભોજન પ્રસાદના દાતા "${event.organizerName}" રહેશે.\n\nસ્થળ: ${event.location}\nસમય: ${event.startTime} - ${event.endTime}\n\n— બધા જોડાવા માટે સ્વાગત છે`;
+    handleShare(shareTitle, shareMessage);
   };
 
   return (
@@ -142,7 +149,9 @@ export default function EventDetailsScreen() {
           <View style={styles.messageContainer}>
             <Text style={styles.gujaratiTitle}>ભોજન પ્રસાદ આમંત્રણ</Text>
             <Text style={styles.gujaratiMessage}>
-              સહર્ષ પરિવારજનોને જણાવવાનું કે {event.title} નો કાર્યક્રમ તા.{" "}
+              સહર્ષ પરિવારજનોને જણાવવાનું કે{" "}
+              <Text style={styles.donorName}>{event.title}</Text> નો કાર્યક્રમ
+              તા.{" "}
               <Text style={styles.donorName}>
                 {toGujarati(event.date)}, {t(`days.${event.day.toLowerCase()}`)}
               </Text>{" "}
@@ -171,7 +180,10 @@ export default function EventDetailsScreen() {
 
         {/* Action Buttons */}
         <View style={styles.actionSection}>
-          <TouchableOpacity style={styles.shareButton}>
+          <TouchableOpacity
+            style={styles.shareButton}
+            onPress={handleShareClick}
+          >
             <Ionicons name="share-social-outline" size={20} color="#EA580C" />
             <Text style={styles.shareButtonText}>
               {t("eventDetails.shareButton")}
@@ -242,17 +254,9 @@ const styles = StyleSheet.create({
     fontFamily: "System",
     letterSpacing: 0.5,
   },
-  invitationSubHeader: {
-    fontSize: 14,
-    color: "#64748B",
-    marginTop: 4,
-    fontStyle: "italic",
-    fontWeight: "600",
-    textAlign: "center",
-  },
   titleSection: {
     alignItems: "center",
-    marginTop: 20,
+    marginTop: 10,
     flexDirection: "row",
     columnGap: 10,
   },
