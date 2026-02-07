@@ -27,6 +27,7 @@ export default function AnnouncementsListScreen() {
       >
         {ALL_ANNOUNCEMENTS.map((item, index) => (
           <AnnouncementCard
+            key={item.id}
             id={item.id}
             title={item.title}
             description={item.description}
