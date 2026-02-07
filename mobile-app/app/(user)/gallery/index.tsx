@@ -41,6 +41,7 @@ export default function GalleryListScreen() {
         <View style={styles.grid}>
           {GALLERY_DATA.map((item: any, index: number) => (
             <GalleryCollageCard
+              key={item.id}
               id={item.id}
               title={item.title}
               date={item.date}
