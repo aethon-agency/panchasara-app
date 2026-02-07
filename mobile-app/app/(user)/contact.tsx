@@ -9,11 +9,7 @@ import {
 } from "react-native";
 import { AppHeader } from "@/src/components/AppHeader";
 import { useRouter } from "expo-router";
-import {
-  Ionicons,
-  FontAwesome5,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function ContactScreen() {
   const router = useRouter();
