@@ -13,12 +13,11 @@ import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import Animated, { FadeInUp } from "react-native-reanimated";
 import { useLanguage } from "@/src/hooks/useLanguage";
-import { getAnnouncements } from "@/src/constants/data";
+import { ALL_ANNOUNCEMENTS } from "@/src/constants/data";
 
 export default function AnnouncementsListScreen() {
   const router = useRouter();
   const { t } = useLanguage();
-  const ANNOUNCEMENTS = getAnnouncements(t);
 
   return (
     <View style={styles.container}>
@@ -34,7 +33,7 @@ export default function AnnouncementsListScreen() {
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
-        {ANNOUNCEMENTS.map((item, index) => (
+        {ALL_ANNOUNCEMENTS.map((item, index) => (
           <Animated.View
             key={item.id}
             entering={FadeInUp.delay(index * 100).duration(500)}
@@ -49,7 +48,7 @@ export default function AnnouncementsListScreen() {
                     title: item.title,
                     date: item.date,
                     author: item.author,
-                    description: item.desc, // In real app, might fetch full desc
+                    description: item.description,
                   },
                 } as any)
               }
@@ -73,7 +72,7 @@ export default function AnnouncementsListScreen() {
                   {item.date} • {item.author}
                 </Text>
                 <Text style={styles.desc} numberOfLines={2}>
-                  {item.desc}
+                  {item.description}
                 </Text>
               </View>
 

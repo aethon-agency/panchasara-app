@@ -20,8 +20,8 @@ import { LanguageSelector } from "@/src/components/LanguageSelector";
 import { useLanguage } from "@/src/hooks/useLanguage";
 import {
   HERO_IMAGES,
-  getGallerySummary,
-  getAnnouncementSummary,
+  ALL_ANNOUNCEMENTS,
+  GALLERY_DATA,
 } from "@/src/constants/data";
 
 const { width } = Dimensions.get("window");
@@ -34,10 +34,6 @@ const HomeScreen = () => {
   const { user } = useAuthStore();
   const router = useRouter();
   const { t } = useLanguage();
-
-  // Get translated data
-  const GALLERY_DATA = getGallerySummary(t);
-  const ANNOUNCEMENT_DATA = getAnnouncementSummary(t);
 
   const flatListRef = useRef<FlatList>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -156,7 +152,7 @@ const HomeScreen = () => {
         </View>
 
         <View style={{ gap: 12 }}>
-          {ANNOUNCEMENT_DATA.map((item, index) => (
+          {ALL_ANNOUNCEMENTS?.slice(0, 3).map((item, index) => (
             <Animated.View
               key={item.id}
               entering={FadeInRight.delay(500 + index * 100)}

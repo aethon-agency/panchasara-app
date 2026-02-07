@@ -31,45 +31,107 @@ export const HERO_IMAGES = [
 export const GALLERY_DATA = [
   {
     id: "1",
-    title: "Janmashtami 2025",
-    date: "August 2025",
+    title: "જન્માષ્ટમી",
+    date: "ઓગસ્ટ ૨૦૨૫",
     image:
       "https://images.unsplash.com/photo-1623345805780-8f6e85c18c26?q=80&w=600&auto=format&fit=crop",
   },
   {
     id: "2",
-    title: "Navratri Garba 2025",
-    date: "October 2025",
+    title: "નવરાત્રી ગરબા",
+    date: "ઓક્ટોબર ૨૦૨૫",
     image:
       "https://images.unsplash.com/photo-1561336313-0bd5518eb139?q=80&w=600&auto=format&fit=crop",
   },
   {
     id: "3",
-    title: "Diwali Pujan 2024",
-    date: "November 2024",
+    title: "દિવાળી પૂજન",
+    date: "નવેમ્બર ૨૦૨૪",
     image:
       "https://images.unsplash.com/photo-1606216794074-735e91aa7c5e?q=80&w=600&auto=format&fit=crop",
   },
   {
     id: "4",
-    title: "Vasant Panchami",
-    date: "February 2024",
+    title: "વસંત પંચમી",
+    date: "ફેબ્રુઆરી ૨૦૨૪",
     image:
       "https://images.unsplash.com/photo-1544434255-a0f2C55db236?q=80&w=600&auto=format&fit=crop",
   },
   {
     id: "5",
-    title: "Community Picnic",
-    date: "December 2023",
+    title: "સામુદાયિક પિકનિક",
+    date: "ડિસેમ્બર ૨૦૨૩",
     image:
       "https://images.unsplash.com/photo-1510672981848-a1c4f1cb5ccf?q=80&w=600&auto=format&fit=crop",
   },
   {
     id: "6",
-    title: "Health Camp",
-    date: "November 2023",
+    title: "આરોગ્ય શિબિર",
+    date: "નવેમ્બર ૨૦૨૩",
     image:
       "https://images.unsplash.com/photo-1542382156-97216664e43e?q=80&w=600&auto=format&fit=crop",
+  },
+];
+
+export const ANNOUNCEMENT_SUMMARY = [
+  {
+    id: "1",
+    title: "પર્યુષણ મહાપર્વ ૨૦૨૬",
+    date: "૧૫ ઓગસ્ટ ૨૦૨૬",
+    author: "એડમિન",
+    description:
+      "૮ દિવસની આધ્યાત્મિક શુદ્ધિકરણ ૧૫ ઓગસ્ટથી શરૂ થાય છે. દરરોજ પ્રતિક્રમણ અને પ્રવચન માટે અમારી સાથે જોડાઓ.",
+  },
+  {
+    id: "2",
+    title: "સામાન્ય સભા બેઠક",
+    date: "૧૦ ઓક્ટોબર ૨૦૨૬",
+    author: "સમિતિ",
+    description:
+      "આગામી કાર્યક્રમો અને બજેટની ચર્ચા કરવા માટે તમામ સભ્યો માટે વાર્ષિક સામાન્ય સભા.",
+  },
+  {
+    id: "3",
+    title: "તબીબી શિબિર",
+    date: "૦૫ નવેમ્બર ૨૦૨૬",
+    author: "આરોગ્ય ટીમ",
+    description:
+      "તમામ ભક્તો માટે મફત તબીબી તપાસ શિબિર. આંખની તપાસ અને સામાન્ય ચિકિત્સક ઉપલબ્ધ.",
+  },
+];
+
+export const ALL_ANNOUNCEMENTS = [
+  {
+    id: "1",
+    title: "પર્યુષણ મહાપર્વ ૨૦૨૬",
+    date: "૧૫ ઓગસ્ટ ૨૦૨૬",
+    author: "એડમિન",
+    description:
+      "૮ દિવસની આધ્યાત્મિક શુદ્ધિકરણ ૧૫ ઓગસ્ટથી શરૂ થાય છે. દરરોજ સ્નાત્ર પૂજા અને પ્રવચન માટે અમારી સાથે જોડાઓ.",
+  },
+  {
+    id: "2",
+    title: "વાર્ષિક સામાન્ય સભા",
+    date: "૧૦ સપ્ટેમ્બર ૨૦૨૬",
+    author: "સચિવ",
+    description:
+      "તમામ સભ્યોને સવારે ૧૦ વાગ્યે સમુદાય હોલમાં AGM માં હાજર રહેવા વિનંતી છે. એજન્ડામાં વાર્ષિક હિસાબોનો સમાવેશ થાય છે.",
+  },
+  {
+    id: "3",
+    title: "તબીબી શિબિર નોંધણી",
+    date: "૦૫ ઓક્ટોબર ૨૦૨૬",
+    author: "આરોગ્ય સમિતિ",
+    description:
+      "વરિષ્ઠ નાગરિકો માટે મફત આંખની તપાસ શિબિર આયોજિત. કાર્યાલયમાં નોંધણી ખુલ્લી છે.",
+  },
+  {
+    id: "4",
+    title: "દિવાળી ઉજવણી યોજનાઓ",
+    date: "૦૧ નવેમ્બર ૨૦૨૬",
+    author: "ઇવેન્ટ ટીમ",
+    description:
+      "આ વર્ષની દિવાળી સજાવટ અને સાંસ્કૃતિક કાર્યક્રમો માટે તમારા વિચારો સૂચવો.",
   },
 ];
 
@@ -134,87 +196,6 @@ export const ALL_EVENTS: MandirEvent[] = [
     time: "08:00 PM - 09:30 PM",
     desc: "Monthly meeting to discuss mandir maintenance and upcoming festivals.",
     location: "Mandir Hall",
-  },
-];
-
-// --- TRANSLATED DATA HELPERS ---
-
-export const getGallerySummary = (t: any) => [
-  {
-    id: "1",
-    title: t("home.events.janmashtami.title"),
-    date: t("home.events.janmashtami.date"),
-    image:
-      "https://images.unsplash.com/photo-1623345805780-8f6e85c18c26?q=80&w=600&auto=format&fit=crop",
-  },
-  {
-    id: "2",
-    title: t("home.events.navratri.title"),
-    date: t("home.events.navratri.date"),
-    image:
-      "https://images.unsplash.com/photo-1561336313-0bd5518eb139?q=80&w=600&auto=format&fit=crop",
-  },
-  {
-    id: "3",
-    title: t("home.events.diwali.title"),
-    date: t("home.events.diwali.date"),
-    image:
-      "https://images.unsplash.com/photo-1606216794074-735e91aa7c5e?q=80&w=600&auto=format&fit=crop",
-  },
-];
-
-export const getAnnouncementSummary = (t: any) => [
-  {
-    id: "1",
-    title: t("home.announcements.paryushan.title"),
-    date: t("home.announcements.paryushan.date"),
-    author: t("home.announcements.paryushan.author"),
-    description: t("home.announcements.paryushan.description"),
-  },
-  {
-    id: "2",
-    title: t("home.announcements.assembly.title"),
-    date: t("home.announcements.assembly.date"),
-    author: t("home.announcements.assembly.author"),
-    description: t("home.announcements.assembly.description"),
-  },
-  {
-    id: "3",
-    title: t("home.announcements.medicalCamp.title"),
-    date: t("home.announcements.medicalCamp.date"),
-    author: t("home.announcements.medicalCamp.author"),
-    description: t("home.announcements.medicalCamp.description"),
-  },
-];
-
-export const getAnnouncements = (t: any) => [
-  {
-    id: "1",
-    title: t("announcements.list.paryushan.title"),
-    date: t("announcements.list.paryushan.date"),
-    author: t("announcements.list.paryushan.author"),
-    desc: t("announcements.list.paryushan.desc"),
-  },
-  {
-    id: "2",
-    title: t("announcements.list.agm.title"),
-    date: t("announcements.list.agm.date"),
-    author: t("announcements.list.agm.author"),
-    desc: t("announcements.list.agm.desc"),
-  },
-  {
-    id: "3",
-    title: t("announcements.list.medicalCamp.title"),
-    date: t("announcements.list.medicalCamp.date"),
-    author: t("announcements.list.medicalCamp.author"),
-    desc: t("announcements.list.medicalCamp.desc"),
-  },
-  {
-    id: "4",
-    title: t("announcements.list.diwali.title"),
-    date: t("announcements.list.diwali.date"),
-    author: t("announcements.list.diwali.author"),
-    desc: t("announcements.list.diwali.desc"),
   },
 ];
 

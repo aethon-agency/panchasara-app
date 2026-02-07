@@ -13,19 +13,21 @@ import { AppHeader } from "@/src/components/AppHeader";
 import { useRouter } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import Animated, { FadeInUp } from "react-native-reanimated";
+import { useLanguage } from "@/src/hooks/useLanguage";
 import { GALLERY_DATA } from "@/src/constants/data";
 
 const { width } = Dimensions.get("window");
 
 export default function GalleryListScreen() {
   const router = useRouter();
+  const { t } = useLanguage();
 
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
       <AppHeader
-        title="Event Gallery"
-        subtitle="Memories & Moments"
+        title={t("home.eventGallery")}
+        subtitle={t("home.whatsNew")}
         showBack={true}
         onBack={() => router.back()}
       />
@@ -35,7 +37,7 @@ export default function GalleryListScreen() {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.grid}>
-          {GALLERY_DATA.map((item, index) => (
+          {GALLERY_DATA.map((item: any, index: number) => (
             <Animated.View
               key={item.id}
               entering={FadeInUp.delay(index * 100).duration(500)}
