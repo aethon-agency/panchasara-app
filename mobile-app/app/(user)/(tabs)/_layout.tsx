@@ -1,5 +1,11 @@
-import React from "react";
-import { View, StyleSheet, Platform, TouchableOpacity } from "react-native";
+import React, { useEffect } from "react";
+import {
+  View,
+  StyleSheet,
+  Platform,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
 import { Tabs } from "expo-router";
 import {
   FontAwesome,
@@ -9,22 +15,25 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import * as Haptics from "expo-haptics";
 import Animated, {
-  FadeIn,
-  FadeOut,
-  LinearTransition,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useLanguage } from "@/src/hooks/useLanguage";
 
+const { width } = Dimensions.get("window");
+
 const renderIcon = (routeName: string, focused: boolean) => {
   const color = focused ? "#431407" : "#9CA3AF";
+  const size = 22;
 
   switch (routeName) {
     case "home":
       return (
         <Ionicons
           name={focused ? "home" : "home-outline"}
-          size={24}
+          size={size}
           color={color}
         />
       );
@@ -32,7 +41,7 @@ const renderIcon = (routeName: string, focused: boolean) => {
       return (
         <MaterialCommunityIcons
           name={focused ? "calendar" : "calendar-blank"}
-          size={24}
+          size={size}
           color={color}
         />
       );
@@ -40,7 +49,7 @@ const renderIcon = (routeName: string, focused: boolean) => {
       return (
         <Ionicons
           name={focused ? "compass" : "compass-outline"}
-          size={24}
+          size={size}
           color={color}
         />
       );
@@ -48,22 +57,42 @@ const renderIcon = (routeName: string, focused: boolean) => {
       return (
         <FontAwesome
           name={focused ? "user" : "user-o"}
-          size={24}
+          size={size}
           color={color}
         />
       );
     default:
-      return <Ionicons name="help-circle-outline" size={24} color={color} />;
+      return <Ionicons name="help-circle-outline" size={size} color={color} />;
   }
 };
 
 const CustomTabBar = ({ state, descriptors, navigation }: any) => {
   const insets = useSafeAreaInsets();
 
+  // Layout Constants
+  const numTabs = state.routes.length;
+  const TAB_BAR_MARGIN = 20; // Total horizontal padding for the main box
+  const tabWidth = (width - TAB_BAR_MARGIN) / numTabs;
+
+  // Shared value for the sliding animation
+  const translateX = useSharedValue(0);
+
+  useEffect(() => {
+    // Move the pill to the current active index
+    translateX.value = withSpring(state.index * tabWidth, {
+      damping: 60,
+      stiffness: 300,
+    });
+  }, [state.index, tabWidth]);
+
+  const animatedPillStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: translateX.value }],
+  }));
+
   return (
-    <View style={[styles.tabBarWrapper]}>
+    <View style={styles.tabBarWrapper}>
       <View
-        style={[styles.innerContainer, { paddingBottom: insets?.bottom || 20 }]}
+        style={[styles.innerContainer, { paddingBottom: insets?.bottom || 16 }]}
       >
         <LinearGradient
           colors={["#FFFFFF", "#FFFBEB"]}
@@ -73,6 +102,15 @@ const CustomTabBar = ({ state, descriptors, navigation }: any) => {
         <View style={styles.topBorder} />
 
         <View style={styles.mainBox}>
+          {/* Sliding Background Highlight */}
+          <Animated.View
+            style={[
+              styles.activePill,
+              { width: tabWidth - 12 }, // Slight margin inside the pill
+              animatedPillStyle,
+            ]}
+          />
+
           {state.routes.map((route: any, index: number) => {
             const isFocused = state.index === index;
             const label = descriptors[route.key].options.title ?? route.name;
@@ -95,29 +133,20 @@ const CustomTabBar = ({ state, descriptors, navigation }: any) => {
               <TouchableOpacity
                 key={route.key}
                 onPress={onPress}
-                style={styles.tabItem}
+                style={[styles.tabItem, { width: tabWidth }]}
                 activeOpacity={1}
               >
-                <Animated.View
-                  layout={LinearTransition.springify()
-                    .damping(20)
-                    .stiffness(150)}
-                  style={[
-                    styles.contentContainer,
-                    isFocused && styles.activeContentContainer,
-                  ]}
-                >
+                <View style={styles.contentContainer}>
                   {renderIcon(route.name, isFocused)}
-                  {isFocused && (
-                    <Animated.Text
-                      entering={FadeIn.delay(50)}
-                      exiting={FadeOut.duration(50)}
-                      style={styles.label}
-                    >
-                      {label}
-                    </Animated.Text>
-                  )}
-                </Animated.View>
+                  <Animated.Text
+                    style={[
+                      styles.label,
+                      { color: isFocused ? "#431407" : "#9CA3AF" },
+                    ]}
+                  >
+                    {label}
+                  </Animated.Text>
+                </View>
               </TouchableOpacity>
             );
           })}
@@ -133,9 +162,7 @@ export default function TabsLayout() {
   return (
     <Tabs
       tabBar={(props) => <CustomTabBar {...props} />}
-      screenOptions={{
-        headerShown: false,
-      }}
+      screenOptions={{ headerShown: false }}
     >
       <Tabs.Screen name="home" options={{ title: t("tabs.home") }} />
       <Tabs.Screen name="event" options={{ title: t("tabs.events") }} />
@@ -150,19 +177,22 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 0,
     width: "100%",
-    alignItems: "center",
     backgroundColor: "transparent",
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
   },
   innerContainer: {
     width: "100%",
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    borderTopLeftRadius: 32,
+    borderTopRightRadius: 32,
     overflow: "hidden",
-    paddingTop: 10,
-    borderWidth: 0.5,
-    borderColor: "rgba(253, 230, 138, 0.5)", // FDE68A with opacity
+    paddingTop: 12,
+    borderWidth: 1,
+    borderColor: "rgba(253, 230, 138, 0.4)",
+    // Shadow/Elevation for modern look
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: -4 },
+    shadowOpacity: 0.05,
+    shadowRadius: 12,
+    elevation: 8,
   },
   topBorder: {
     height: 1,
@@ -170,38 +200,40 @@ const styles = StyleSheet.create({
     backgroundColor: "#FDE68A",
     position: "absolute",
     top: 0,
-    opacity: 0.5,
+    opacity: 0.3,
   },
   mainBox: {
-    flex: 1,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-around",
-    paddingHorizontal: 10,
+    paddingHorizontal: 10, // Must match half of TAB_BAR_MARGIN logic
+    position: "relative",
   },
-  tabItem: {
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  contentContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    height: 48,
-    minWidth: 48,
-    borderRadius: 24,
-  },
-  activeContentContainer: {
+  activePill: {
+    position: "absolute",
+    height: 56,
     backgroundColor: "#FFF7ED",
-    paddingHorizontal: 16,
+    borderRadius: 20,
+    left: 16, // Manual alignment tweak for the first tab
     borderWidth: 1,
     borderColor: "#FFEDD5",
+    zIndex: 0,
+  },
+  tabItem: {
+    height: 60,
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 1,
+  },
+  contentContainer: {
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
   },
   label: {
-    fontSize: 13,
-    fontWeight: "900",
-    color: "#431407",
-    marginLeft: 8,
-    letterSpacing: 0.2,
+    fontSize: 10,
+    fontWeight: "800",
+    marginTop: 4,
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
   },
 });
