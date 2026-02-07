@@ -21,7 +21,6 @@ export default function GalleryDetailsScreen() {
   const params = useLocalSearchParams();
   const id = params.id as string;
 
-  // Find the gallery item to get its specific images
   const item = GALLERY_DATA.find((g) => g.id === id);
   const title = (params.title as string) || item?.title || "Event Gallery";
   const date = (params.date as string) || item?.date || "Recent";
