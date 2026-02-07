@@ -11,7 +11,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { AppHeader } from "@/src/components/AppHeader";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { ALL_EVENTS, MandirEvent } from "../../src/constants/events";
+import { ALL_EVENTS, MandirEvent } from "@/src/constants/data";
 
 export default function EventDetailsScreen() {
   const { id } = useLocalSearchParams();

@@ -13,37 +13,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import Animated, { FadeInUp } from "react-native-reanimated";
 import { useLanguage } from "@/src/hooks/useLanguage";
-
-const getAnnouncements = (t: any) => [
-  {
-    id: "1",
-    title: t("announcements.list.paryushan.title"),
-    date: t("announcements.list.paryushan.date"),
-    author: t("announcements.list.paryushan.author"),
-    desc: t("announcements.list.paryushan.desc"),
-  },
-  {
-    id: "2",
-    title: t("announcements.list.agm.title"),
-    date: t("announcements.list.agm.date"),
-    author: t("announcements.list.agm.author"),
-    desc: t("announcements.list.agm.desc"),
-  },
-  {
-    id: "3",
-    title: t("announcements.list.medicalCamp.title"),
-    date: t("announcements.list.medicalCamp.date"),
-    author: t("announcements.list.medicalCamp.author"),
-    desc: t("announcements.list.medicalCamp.desc"),
-  },
-  {
-    id: "4",
-    title: t("announcements.list.diwali.title"),
-    date: t("announcements.list.diwali.date"),
-    author: t("announcements.list.diwali.author"),
-    desc: t("announcements.list.diwali.desc"),
-  },
-];
+import { getAnnouncements } from "@/src/constants/data";
 
 export default function AnnouncementsListScreen() {
   const router = useRouter();

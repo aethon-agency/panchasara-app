@@ -13,61 +13,10 @@ import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import Animated, { FadeInUp } from "react-native-reanimated";
 import { useLanguage } from "@/src/hooks/useLanguage";
+import { getExploreItems } from "@/src/constants/data";
 
 const { width } = Dimensions.get("window");
 const CARD_WIDTH = (width - 48) / 2;
-
-const getExploreItems = (t: any) => [
-  {
-    id: "accounts",
-    title: t("explore.accounts.title"),
-    subtitle: t("explore.accounts.subtitle"),
-    icon: (color: string) => (
-      <Ionicons name="card-outline" size={28} color={color} />
-    ),
-    route: "/accounts",
-  },
-  {
-    id: "donations",
-    title: t("explore.donations.title"),
-    subtitle: t("explore.donations.subtitle"),
-    icon: (color: string) => (
-      <Ionicons name="heart-outline" size={28} color={color} />
-    ),
-    route: "/donations",
-  },
-  {
-    id: "mandir",
-    title: t("explore.mandir.title"),
-    subtitle: t("explore.mandir.subtitle"),
-    icon: (color: string) => (
-      <MaterialCommunityIcons name="temple-buddhist" size={28} color={color} />
-    ),
-    route: "/mandir-details",
-  },
-  {
-    id: "contact",
-    title: t("explore.contact.title"),
-    subtitle: t("explore.contact.subtitle"),
-    icon: (color: string) => (
-      <Ionicons name="call-outline" size={28} color={color} />
-    ),
-    route: "/contact",
-  },
-  {
-    id: "history",
-    title: t("explore.history.title"),
-    subtitle: t("explore.history.subtitle"),
-    icon: (color: string) => (
-      <MaterialCommunityIcons
-        name="book-open-variant"
-        size={28}
-        color={color}
-      />
-    ),
-    route: "/history",
-  },
-];
 
 export default function ExploreScreen() {
   const router = useRouter();

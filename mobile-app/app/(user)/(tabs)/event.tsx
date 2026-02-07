@@ -10,7 +10,7 @@ import { AppHeader } from "@/src/components/AppHeader";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import Animated, { FadeInUp, LinearTransition } from "react-native-reanimated";
 import { useRouter } from "expo-router";
-import { ALL_EVENTS, MandirEvent } from "@/src/constants/events";
+import { ALL_EVENTS, MandirEvent } from "@/src/constants/data";
 import { useLanguage } from "@/src/hooks/useLanguage";
 
 export default function EventScreen() {

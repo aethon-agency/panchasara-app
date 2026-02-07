@@ -18,6 +18,11 @@ import Animated, { FadeInRight } from "react-native-reanimated";
 import { useRouter } from "expo-router";
 import { LanguageSelector } from "@/src/components/LanguageSelector";
 import { useLanguage } from "@/src/hooks/useLanguage";
+import {
+  HERO_IMAGES,
+  getGallerySummary,
+  getAnnouncementSummary,
+} from "@/src/constants/data";
 
 const { width } = Dimensions.get("window");
 
@@ -25,68 +30,14 @@ const ITEM_MARGIN = 20;
 const CARD_WIDTH = width - ITEM_MARGIN * 2;
 const PAGE_WIDTH = width;
 
-const HERO_IMAGES = [
-  "https://eijolqvtchrmhuvuytbl.supabase.co/storage/v1/object/public/BANNER/Banner.jpeg",
-  "https://eijolqvtchrmhuvuytbl.supabase.co/storage/v1/object/public/BANNER/Banner.jpeg",
-  "https://eijolqvtchrmhuvuytbl.supabase.co/storage/v1/object/public/BANNER/Banner.jpeg",
-];
-
-const getGalleryData = (t: any) => [
-  {
-    id: "1",
-    title: t("home.events.janmashtami.title"),
-    date: t("home.events.janmashtami.date"),
-    image:
-      "https://images.unsplash.com/photo-1623345805780-8f6e85c18c26?q=80&w=600&auto=format&fit=crop",
-  },
-  {
-    id: "2",
-    title: t("home.events.navratri.title"),
-    date: t("home.events.navratri.date"),
-    image:
-      "https://images.unsplash.com/photo-1561336313-0bd5518eb139?q=80&w=600&auto=format&fit=crop",
-  },
-  {
-    id: "3",
-    title: t("home.events.diwali.title"),
-    date: t("home.events.diwali.date"),
-    image:
-      "https://images.unsplash.com/photo-1606216794074-735e91aa7c5e?q=80&w=600&auto=format&fit=crop",
-  },
-];
-
-const getAnnouncementData = (t: any) => [
-  {
-    id: "1",
-    title: t("home.announcements.paryushan.title"),
-    date: t("home.announcements.paryushan.date"),
-    author: t("home.announcements.paryushan.author"),
-    description: t("home.announcements.paryushan.description"),
-  },
-  {
-    id: "2",
-    title: t("home.announcements.assembly.title"),
-    date: t("home.announcements.assembly.date"),
-    author: t("home.announcements.assembly.author"),
-    description: t("home.announcements.assembly.description"),
-  },
-  {
-    id: "3",
-    title: t("home.announcements.medicalCamp.title"),
-    date: t("home.announcements.medicalCamp.date"),
-    author: t("home.announcements.medicalCamp.author"),
-    description: t("home.announcements.medicalCamp.description"),
-  },
-];
-
 const HomeScreen = () => {
   const { user } = useAuthStore();
   const router = useRouter();
   const { t } = useLanguage();
 
   // Get translated data
-  const GALLERY_DATA = getGalleryData(t);
-  const ANNOUNCEMENT_DATA = getAnnouncementData(t);
+  const GALLERY_DATA = getGallerySummary(t);
+  const ANNOUNCEMENT_DATA = getAnnouncementSummary(t);
 
   const flatListRef = useRef<FlatList>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -253,7 +204,11 @@ const HomeScreen = () => {
           <Text style={styles.seeAll}>{t("home.seeAll")}</Text>
         </View>
 
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ paddingRight: 20 }}
+        >
           {GALLERY_DATA.map((item) => (
             <GalleryCard key={item.id} item={item} />
           ))}

@@ -13,54 +13,9 @@ import { AppHeader } from "@/src/components/AppHeader";
 import { useRouter } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import Animated, { FadeInUp } from "react-native-reanimated";
+import { GALLERY_DATA } from "@/src/constants/data";
 
 const { width } = Dimensions.get("window");
-
-// Mock Data (Expanded)
-const GALLERY_DATA = [
-  {
-    id: "1",
-    title: "Janmashtami 2025",
-    date: "August 2025",
-    image:
-      "https://images.unsplash.com/photo-1623345805780-8f6e85c18c26?q=80&w=600&auto=format&fit=crop",
-  },
-  {
-    id: "2",
-    title: "Navratri Garba 2025",
-    date: "October 2025",
-    image:
-      "https://images.unsplash.com/photo-1561336313-0bd5518eb139?q=80&w=600&auto=format&fit=crop",
-  },
-  {
-    id: "3",
-    title: "Diwali Pujan 2024",
-    date: "November 2024",
-    image:
-      "https://images.unsplash.com/photo-1606216794074-735e91aa7c5e?q=80&w=600&auto=format&fit=crop",
-  },
-  {
-    id: "4",
-    title: "Vasant Panchami",
-    date: "February 2024",
-    image:
-      "https://images.unsplash.com/photo-1544434255-a0f2C55db236?q=80&w=600&auto=format&fit=crop",
-  },
-  {
-    id: "5",
-    title: "Community Picnic",
-    date: "December 2023",
-    image:
-      "https://images.unsplash.com/photo-1510672981848-a1c4f1cb5ccf?q=80&w=600&auto=format&fit=crop",
-  },
-  {
-    id: "6",
-    title: "Health Camp",
-    date: "November 2023",
-    image:
-      "https://images.unsplash.com/photo-1542382156-97216664e43e?q=80&w=600&auto=format&fit=crop",
-  },
-];
 
 export default function GalleryListScreen() {
   const router = useRouter();
