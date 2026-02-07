@@ -66,7 +66,7 @@ const HomeScreen = () => {
 
       <AppHeader
         title={t("home.title")}
-        subtitle={user?.firstname || t("home.defaultUser")}
+        subtitle={user?.firstname || t("home.bhaduka")}
         rightAction={<LanguageSelector />}
       />
 
@@ -123,8 +123,8 @@ const HomeScreen = () => {
 
         {/* ANNOUNCEMENTS SECTION */}
         <Section
-          title={t("home.whatsNew")}
-          onSeeAll={() => router.push("/(user)/announcements" as any)}
+          title={t("home.announcements")}
+          onSeeAll={() => router.push("/(user)/(announcements)" as any)}
           contentStyle={{ gap: 12 }}
         >
           {ALL_ANNOUNCEMENTS?.slice(0, 3).map((item) => (
@@ -141,7 +141,7 @@ const HomeScreen = () => {
         {/* GALLERY */}
         <Section
           title={t("home.eventGallery")}
-          onSeeAll={() => router.push("/(user)/gallery" as any)}
+          onSeeAll={() => router.push("/(user)/(gallery)" as any)}
         >
           <ScrollView
             horizontal

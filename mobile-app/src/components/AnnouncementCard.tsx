@@ -35,7 +35,7 @@ export const AnnouncementCard: React.FC<AnnouncementCardProps> = ({
       activeOpacity={0.8}
       onPress={() =>
         router.push({
-          pathname: "/(user)/announcements/details",
+          pathname: "/(user)/(announcements)/details",
           params: { id },
         } as any)
       }

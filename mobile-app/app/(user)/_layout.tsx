@@ -6,8 +6,8 @@ export default function UserLayout() {
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="(tabs)" />
       <Stack.Screen name="(others)" />
-      <Stack.Screen name="announcements" />
-      <Stack.Screen name="gallery" />
+      <Stack.Screen name="(announcements)" />
+      <Stack.Screen name="(gallery)" />
     </Stack>
   );
 }

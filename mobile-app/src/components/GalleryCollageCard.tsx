@@ -31,7 +31,7 @@ export const GalleryCollageCard: React.FC<GalleryCollageCardProps> = ({
 
   const handlePress = () => {
     router.push({
-      pathname: "/(user)/gallery/details",
+      pathname: "/(user)/(gallery)/details",
       params: { id, title, date },
     } as any);
   };

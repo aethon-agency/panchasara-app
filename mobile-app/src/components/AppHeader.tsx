@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20, // Increased size for left-aligned branding
-    fontWeight: "900",
+    fontWeight: "800",
     color: "#431407",
   },
   subtitle: {
@@ -159,9 +159,6 @@ const styles = StyleSheet.create({
     fontWeight: "800",
     color: "#9A3412",
     textTransform: "uppercase",
-    letterSpacing: 1,
-    marginTop: 0,
-    opacity: 0.8,
   },
   bottomBorder: {
     height: 1,
