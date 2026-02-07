@@ -123,7 +123,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "900",
     color: "#431407",
-    flex: 1,
   },
   badge: {
     backgroundColor: "#EA580C",
