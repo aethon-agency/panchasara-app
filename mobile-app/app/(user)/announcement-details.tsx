@@ -1,72 +1,129 @@
 import React from "react";
-import { View, Text, StyleSheet, ScrollView, StatusBar } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  StatusBar,
+  Share,
+  TouchableOpacity,
+  Linking,
+} from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { AppHeader } from "@/src/components/AppHeader";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+import { useLanguage } from "@/src/hooks/useLanguage";
+
+import { ALL_ANNOUNCEMENTS } from "@/src/constants/data";
+
+// 1. Define types for better dev experience
+interface AnnouncementParams {
+  id?: string;
+}
 
 export default function AnnouncementDetailsScreen() {
   const router = useRouter();
-  const params = useLocalSearchParams();
+  const { t } = useLanguage();
+  const params = useLocalSearchParams() as unknown as AnnouncementParams;
+  const { id } = params;
 
-  // Default fallback data if no params provided
-  const title = (params.title as string) || "Paryushan Mahaparva 2026";
-  const date = (params.date as string) || "15 Aug 2026";
-  const description =
-    (params.description as string) ||
-    "Join us for the 8 days of spiritual purification. Daily Pravacahns, Pratikraman, and Bhakti Sangeet will be organized. \n\nDetailed Schedule:\n- 6:00 AM: Snatra Puja\n- 9:30 AM: Pravachan\n- 8:00 PM: Bhakti Bhavna\n\nPlease register your name at the office for Ekasana and Upvas.";
-  const author = (params.author as string) || "Mandir Admin";
+  // Fetch data from central source
+  const announcement = ALL_ANNOUNCEMENTS.find((a) => a.id === id);
+
+  const {
+    title = announcement?.title || "Paryushan Mahaparva 2026",
+    description = announcement?.description ||
+      "Join us for the 8 days of spiritual purification...",
+    contactNumber = announcement?.contactNumber,
+  } = (announcement || {}) as any;
+
+  const handleCall = async () => {
+    if (contactNumber) {
+      // Remove any non-numeric characters for the URL
+      const sanitizedNumber = contactNumber.replace(/\D/g, "");
+      const url = `tel:${sanitizedNumber}`;
+
+      try {
+        const supported = await Linking.canOpenURL(url);
+        if (supported) {
+          await Linking.openURL(url);
+        } else {
+          console.warn("Phone dialer not supported on this device/simulator");
+        }
+      } catch (error) {
+        console.error("Error opening dialer:", error);
+      }
+    }
+  };
+
+  const handleShare = async () => {
+    try {
+      await Share.share({
+        message: `${title}\n\n${description}\n\n- Jai Mataji`,
+      });
+    } catch (error) {
+      console.error("Error sharing:", error);
+    }
+  };
 
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
+
       <AppHeader
         title="Announcement"
-        subtitle="News & Updates"
+        subtitle="Important Update"
         showBack={true}
         onBack={() => router.back()}
+        rightAction={
+          <TouchableOpacity onPress={handleShare} style={styles.shareBtn}>
+            <Ionicons name="share-outline" size={22} color="#EA580C" />
+          </TouchableOpacity>
+        }
       />
 
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContent}
+      >
         <View style={styles.card}>
+          {/* Header Section */}
           <LinearGradient
             colors={["#FFF7ED", "#FFFFFF"]}
             style={styles.headerGradient}
           >
             <View style={styles.iconContainer}>
               <MaterialCommunityIcons
-                name="bullhorn-outline"
-                size={32}
+                name="bullhorn-variant"
+                size={20}
                 color="#EA580C"
               />
             </View>
             <Text style={styles.title}>{title}</Text>
-
-            <View style={styles.metaRow}>
-              <View style={styles.metaItem}>
-                <Ionicons name="calendar-outline" size={14} color="#64748B" />
-                <Text style={styles.metaText}>{date}</Text>
-              </View>
-              <View style={styles.metaItem}>
-                <Ionicons
-                  name="person-circle-outline"
-                  size={14}
-                  color="#64748B"
-                />
-                <Text style={styles.metaText}>Posted by: {author}</Text>
-              </View>
-            </View>
           </LinearGradient>
 
           <View style={styles.divider} />
 
+          {/* Content Section */}
           <View style={styles.body}>
             <Text style={styles.description}>{description}</Text>
           </View>
+
+          {contactNumber && (
+            <TouchableOpacity
+              style={styles.actionButton}
+              activeOpacity={0.8}
+              onPress={handleCall}
+            >
+              <Ionicons name="call-outline" size={20} color="#FFF" />
+              <Text style={styles.actionButtonText}>Contact for Details</Text>
+            </TouchableOpacity>
+          )}
         </View>
 
         <View style={styles.footer}>
-          <Text style={styles.footerText}>-- Jai Jinendra --</Text>
+          <Text style={styles.footerText}>{t("common.jaiMataji")}</Text>
         </View>
       </ScrollView>
     </View>
@@ -76,71 +133,69 @@ export default function AnnouncementDetailsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FCF9F1",
+    backgroundColor: "#FDFCF9",
+  },
+  shareBtn: {
+    padding: 8,
   },
   scrollContent: {
-    padding: 20,
-    paddingBottom: 40,
+    padding: 16,
+    paddingBottom: 60,
   },
   card: {
     backgroundColor: "#FFF",
-    borderRadius: 24,
+    borderRadius: 20,
     overflow: "hidden",
+    elevation: 2,
+    shadowColor: "#431407",
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.05,
+    shadowRadius: 15,
     borderWidth: 1,
     borderColor: "#F1F5F9",
-    elevation: 4,
-    shadowColor: "#9A3412",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
   },
   headerGradient: {
-    padding: 24,
+    paddingVertical: 20,
+    paddingHorizontal: 20,
     alignItems: "center",
+    flexDirection: "row",
+    columnGap: 20,
   },
   iconContainer: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    backgroundColor: "#FFEDD5",
+    width: 50,
+    height: 50,
+    borderRadius: 18,
+    backgroundColor: "#FFF",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 16,
     borderWidth: 1,
-    borderColor: "#FED7AA",
+    borderColor: "#FFEDD5",
+  },
+  badge: {
+    backgroundColor: "#EA580C",
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 12,
+    marginBottom: 12,
+  },
+  badgeText: {
+    color: "#FFF",
+    fontSize: 10,
+    fontWeight: "900",
+    letterSpacing: 1,
   },
   title: {
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: "800",
     color: "#431407",
     textAlign: "center",
-    marginBottom: 16,
-    lineHeight: 30,
-  },
-  metaRow: {
-    flexDirection: "row",
-    gap: 16,
-    flexWrap: "wrap",
-    justifyContent: "center",
-  },
-  metaItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 6,
-    backgroundColor: "#F8FAFC",
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 20,
-  },
-  metaText: {
-    fontSize: 12,
-    color: "#64748B",
-    fontWeight: "600",
+    lineHeight: 32,
+    letterSpacing: -0.5,
   },
   divider: {
     height: 1,
     backgroundColor: "#F1F5F9",
-    width: "100%",
+    marginHorizontal: 24,
   },
   body: {
     padding: 24,
@@ -148,17 +203,31 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 16,
     color: "#334155",
-    lineHeight: 26,
+    lineHeight: 28,
+  },
+  actionButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#9A3412",
+    marginHorizontal: 24,
+    marginBottom: 24,
+    paddingVertical: 14,
+    borderRadius: 16,
+    gap: 8,
+  },
+  actionButtonText: {
+    color: "#FFF",
+    fontSize: 14,
+    fontWeight: "700",
   },
   footer: {
-    marginTop: 40,
+    marginTop: 32,
     alignItems: "center",
   },
   footerText: {
     fontSize: 14,
-    color: "#94A3B8",
-    fontWeight: "700",
-    fontStyle: "italic",
-    letterSpacing: 1,
+    color: "#CBD5E1",
+    fontWeight: "600",
   },
 });

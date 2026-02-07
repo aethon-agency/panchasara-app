@@ -45,10 +45,7 @@ export default function AnnouncementsListScreen() {
                 router.push({
                   pathname: "/(user)/announcement-details",
                   params: {
-                    title: item.title,
-                    date: item.date,
-                    author: item.author,
-                    description: item.description,
+                    id: item.id,
                   },
                 } as any)
               }
