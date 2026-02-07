@@ -43,6 +43,18 @@ const HomeScreen = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const autoScroll = useRef(true);
 
+  const parseDate = (dateStr: string) => {
+    const [d, m, y] = dateStr.split("-").map(Number);
+    return new Date(y, m - 1, d);
+  };
+
+  const now = new Date();
+  const upcomingEvents = ALL_EVENTS.filter(
+    (e) => parseDate(e.date) >= now,
+  ).sort((a, b) => parseDate(a.date).getTime() - parseDate(b.date).getTime());
+
+  const latestEvent = upcomingEvents[0];
+
   // AUTO SLIDE
   useEffect(() => {
     const interval = setInterval(() => {
@@ -124,82 +136,62 @@ const HomeScreen = () => {
         </View>
 
         {/* LATEST EVENT */}
-        {(() => {
-          const parseDate = (dateStr: string) => {
-            const [d, m, y] = dateStr.split("-").map(Number);
-            return new Date(y, m - 1, d);
-          };
-
-          const now = new Date();
-          const upcomingEvents = ALL_EVENTS.filter(
-            (e) => parseDate(e.date) >= now,
-          ).sort(
-            (a, b) => parseDate(a.date).getTime() - parseDate(b.date).getTime(),
-          );
-
-          const latestEvent = upcomingEvents[0];
-
-          if (!latestEvent) return null;
-
-          return (
-            <Section
-              title={t("home.upcomingEvent")}
-              onSeeAll={() => router.push("/(user)/(tabs)/event" as any)}
-            >
-              <View style={styles.eventCardContainer}>
-                <TouchableOpacity
-                  activeOpacity={0.8}
-                  onPress={() =>
-                    router.push({
-                      pathname: "/(user)/(others)/event-details",
-                      params: { id: latestEvent.id },
-                    })
-                  }
-                  style={styles.eventCard}
+        {latestEvent && (
+          <Section
+            title={t("home.upcomingEvent")}
+            onSeeAll={() => router.push("/(user)/(tabs)/event" as any)}
+          >
+            <View style={styles.eventCardContainer}>
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() =>
+                  router.push({
+                    pathname: "/(user)/(others)/event-details",
+                    params: { id: latestEvent.id },
+                  })
+                }
+                style={styles.eventCard}
+              >
+                <LinearGradient
+                  colors={["#FFFBEB", "#FEF3C7"]}
+                  style={styles.eventGradient}
                 >
-                  <LinearGradient
-                    colors={["#FFFBEB", "#FEF3C7"]}
-                    style={styles.eventGradient}
-                  >
-                    <View style={styles.eventInfo}>
-                      <View style={styles.eventTitleRow}>
-                        <Text style={styles.eventTitle}>
-                          {latestEvent.title}
-                        </Text>
-                        <View style={styles.eventBadge}>
-                          <Text style={styles.eventBadgeText}>
-                            {latestEvent.type.toUpperCase()}
-                          </Text>
-                        </View>
-                      </View>
-                      <View style={styles.eventDetailsRow}>
-                        <Ionicons
-                          name="calendar-outline"
-                          size={14}
-                          color="#EA580C"
-                        />
-                        <Text style={styles.eventDateText}>
-                          {latestEvent.date}
-                        </Text>
-                        <View style={styles.eventDot} />
-                        <Text style={styles.eventDayText}>
-                          {latestEvent.dayGujarati} | {latestEvent.dayEnglish}
+                  <View style={styles.eventInfo}>
+                    <View style={styles.eventTitleRow}>
+                      <Text style={styles.eventTitle}>{latestEvent.title}</Text>
+                      <View style={styles.eventBadge}>
+                        <Text style={styles.eventBadgeText}>
+                          {latestEvent.type.toUpperCase()}
                         </Text>
                       </View>
                     </View>
-                    <View style={styles.eventChevron}>
+                    <View style={styles.eventDetailsRow}>
                       <Ionicons
-                        name="chevron-forward"
-                        size={20}
+                        name="calendar-outline"
+                        size={14}
                         color="#EA580C"
                       />
+                      <Text style={styles.eventDateText}>
+                        {latestEvent.date}
+                      </Text>
+                      <View style={styles.eventDot} />
+                      <Text style={styles.eventDayText}>
+                        {latestEvent.dayGujarati} | {latestEvent.dayEnglish}
+                      </Text>
                     </View>
-                  </LinearGradient>
-                </TouchableOpacity>
-              </View>
-            </Section>
-          );
-        })()}
+                  </View>
+                  <View style={styles.eventChevron}>
+                    <Ionicons
+                      name="chevron-forward"
+                      size={20}
+                      color="#EA580C"
+                    />
+                  </View>
+                </LinearGradient>
+              </TouchableOpacity>
+            </View>
+          </Section>
+        )}
 
         {/* ANNOUNCEMENTS SECTION */}
         <Section
