@@ -17,9 +17,9 @@ export default function GuidelinesScreen() {
   };
 
   const sections = sectionKeys.map((key) => ({
-    title: t(`explore.guidelines.sections.${key}.title`),
+    title: t(`guidelines.sections.${key}.title`),
     icon: icons[key],
-    items: t(`explore.guidelines.sections.${key}.rules`, {
+    items: t(`guidelines.sections.${key}.rules`, {
       returnObjects: true,
     }) as string[],
   }));
@@ -27,8 +27,8 @@ export default function GuidelinesScreen() {
   return (
     <View style={styles.container}>
       <AppHeader
-        title={t("explore.guidelines.title")}
-        subtitle={t("explore.guidelines.subtitle")}
+        title={t("guidelines.title")}
+        subtitle={t("guidelines.subtitle")}
         showBack={true}
         onBack={() => router.back()}
       />
@@ -40,7 +40,7 @@ export default function GuidelinesScreen() {
             size={40}
             color="#EA580C"
           />
-          <Text style={styles.introText}>{t("explore.guidelines.intro")}</Text>
+          <Text style={styles.introText}>{t("guidelines.intro")}</Text>
         </View>
 
         {sections.map((section, index) => (
@@ -62,9 +62,7 @@ export default function GuidelinesScreen() {
         ))}
 
         <View style={styles.footer}>
-          <Text style={styles.footerText}>
-            {t("explore.guidelines.footer")}
-          </Text>
+          <Text style={styles.footerText}>{t("guidelines.footer")}</Text>
           <Text style={styles.jaiMataji}>{t("common.jaiMataji")}</Text>
         </View>
       </ScrollView>

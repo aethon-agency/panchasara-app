@@ -207,8 +207,8 @@ export const ALL_EVENTS: MandirEvent[] = [
 export const EXPLORE_ITEMS = [
   {
     id: "guidelines",
-    title: "explore.guidelines.title",
-    subtitle: "explore.guidelines.subtitle",
+    title: "guidelines.title",
+    subtitle: "guidelines.subtitle",
     icon: (color: string) => (
       <Ionicons name="information-circle-outline" size={28} color={color} />
     ),
@@ -216,8 +216,8 @@ export const EXPLORE_ITEMS = [
   },
   {
     id: "contact",
-    title: "explore.contact.title",
-    subtitle: "explore.contact.subtitle",
+    title: "contact.title",
+    subtitle: "contact.subtitle",
     icon: (color: string) => (
       <Ionicons name="call-outline" size={28} color={color} />
     ),
@@ -225,8 +225,8 @@ export const EXPLORE_ITEMS = [
   },
   {
     id: "donations",
-    title: "explore.donations.title",
-    subtitle: "explore.donations.subtitle",
+    title: "donations.title",
+    subtitle: "donations.subtitle",
     icon: (color: string) => (
       <Ionicons name="heart-outline" size={28} color={color} />
     ),
@@ -234,8 +234,8 @@ export const EXPLORE_ITEMS = [
   },
   {
     id: "accounts",
-    title: "explore.accounts.title",
-    subtitle: "explore.accounts.subtitle",
+    title: "accounts.title",
+    subtitle: "accounts.subtitle",
     icon: (color: string) => (
       <Ionicons name="card-outline" size={28} color={color} />
     ),
@@ -243,8 +243,8 @@ export const EXPLORE_ITEMS = [
   },
   {
     id: "history",
-    title: "explore.history.title",
-    subtitle: "explore.history.subtitle",
+    title: "history.title",
+    subtitle: "history.subtitle",
     icon: (color: string) => (
       <MaterialCommunityIcons
         name="book-open-variant"

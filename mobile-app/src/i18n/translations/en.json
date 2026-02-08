@@ -32,61 +32,7 @@
   },
   "explore": {
     "title": "Explore",
-    "subtitle": "Discover Activities",
-    "accounts": {
-      "title": "Bank Accounts",
-      "subtitle": "Donation Details"
-    },
-    "donations": {
-      "title": "Donations List",
-      "subtitle": "View History"
-    },
-    "mandir": {
-      "title": "Mandir Details",
-      "subtitle": "About Temple"
-    },
-    "contact": {
-      "title": "Contact Details",
-      "subtitle": "Get in Touch"
-    },
-    "history": {
-      "title": "Family History",
-      "subtitle": "Panchasara Lineage"
-    },
-    "guidelines": {
-      "title": "Mandir Guidelines",
-      "subtitle": "Rules & Information",
-      "intro": "To ensure a peaceful and spiritual experience for everyone, we kindly request all devotees to follow these guidelines during their visit to Shree Panchasara Parivar Mandir.",
-      "footer": "Thank you for your cooperation in maintaining the sanctity of our temple.",
-      "sections": {
-        "general": {
-          "title": "General Rules",
-          "rules": [
-            "Please maintain silence inside the temple premises.",
-            "Mobile phones should be switched off or kept on silent mode.",
-            "Photography and videography are strictly prohibited inside the main sanctum.",
-            "Footwear must be kept in the designated footwear area outside."
-          ]
-        },
-        "etiquette": {
-          "title": "Darshan Etiquette",
-          "rules": [
-            "Please stand in the designated queues during peak hours.",
-            "Proper traditional attire is recommended while visiting the temple.",
-            "Offerings should be handed over to the priests at the designated counter.",
-            "Maintain a respectful distance from the idols and other devotees."
-          ]
-        },
-        "safety": {
-          "title": "Safety & Hygiene",
-          "rules": [
-            "Help keep the temple clean by disposing of waste in bins provided.",
-            "Supervise children at all times near the temple premises.",
-            "Follow the instructions provided by temple volunteers and security staff."
-          ]
-        }
-      }
-    }
+    "subtitle": "Discover Activities"
   },
   "events": {
     "title": "Events",
@@ -237,5 +183,77 @@
       "cash": "cash",
       "item": "item"
     }
+  },
+  "history": {
+    "title": "Family History",
+    "subtitle": "Panchasara Lineage",
+    "quote": "Knowing our roots allows us to grow stronger branches for the future generations.",
+    "sections": {
+      "intro": {
+        "text": "The word 'Panchasara' is primarily associated with the village of Panchasar in Patan district and its ancient rulers."
+      },
+      "ancient_capital": {
+        "title": "Panchasar: Ancient Capital of Chawda Dynasty",
+        "text": "Before the founding of Patan, Panchasar was a prosperous city and the capital of the Chawda dynasty. In the 7th century, King Jayshikhari Chawda ruled here. Legend says Panchasar was so grand that King Bhuvard of Kalyan attacked it after hearing of its glory. In 697 AD, a fierce battle took place where Jayshikhari Chawda attained martyrdom, ensuring his pregnant queen Rupsundari was safely sent to the forest."
+      },
+      "vanraj_chawda": {
+        "title": "Vanraj Chawda and the Rise of Patan",
+        "text": "Vanraj Chawda, born in the forest after the fall of Panchasar, rebuilt the legacy. In 746 AD, he founded Annhilwad Patan, named after his friend Annhil Bharwad. In honor of his ancestors and Panchasar, he built the grand Panchasara Parshvanath temple in Patan."
+      },
+      "derasar": {
+        "title": "Panchasara Parshvanath Temple (Patan)",
+        "text": "This temple remains a major center of Jainism and architecture in Gujarat. The idol of Lord Parshvanath is believed to have been brought from the original Panchasar village, giving it the name 'Panchasara Parshvanath'."
+      },
+      "lineage": {
+        "title": "Panchasara Family (Caste and Clan)",
+        "text": "Today, 'Panchasara' serves as a surname or clan name. Families whose ancestors hailed from the original Panchasar region identify as 'Panchasara'. This lineage is primarily found in the Jain Vanik and Vishwakarma (Gajjar/Suthar) communities, who have led in craftsmanship, architecture, and trade for generations."
+      },
+      "bhaduka": {
+        "title": "Spiritual Connection to Bhaduka",
+        "text": "Centuries ago, when our ancestors migrated to this region, they brought their deities with them. In the holy land of Bhaduka, Maa Bhavani signaled her desire to settle. Since then, the Panchasara family has made this site their center of faith. The entire family contributes to the temple's maintenance, fostering unity through annual gatherings and community meals. For a Panchasara family member, Bhaduka is not just a village, but the blessing of generations."
+      },
+      "kuldevi": {
+        "title": "Establishment as Kuldevi",
+        "text": "Maa Bhavani, residing in Bhaduka, is the Kuldevi of the Panchasara family. History says that when our ancestors (primarily of the Gajjar/Suthar community) settled in the Panchal region of Saurashtra centuries ago, they established Maa Bhavani as their protector. The temple in Bhaduka is considered the 'Mool Sthanak' (original seat) of the Panchasara family."
+      }
+    }
+  },
+  "guidelines": {
+    "title": "Mandir Guidelines",
+    "subtitle": "Rules & Information",
+    "intro": "To ensure a peaceful and spiritual experience for everyone, we kindly request all devotees to follow these guidelines during their visit to Shree Panchasara Parivar Mandir.",
+    "footer": "Thank you for your cooperation in maintaining the sanctity of our temple.",
+    "sections": {
+      "general": {
+        "title": "General Rules",
+        "rules": [
+          "Please maintain silence inside the temple premises.",
+          "Mobile phones should be switched off or kept on silent mode.",
+          "Photography and videography are strictly prohibited inside the main sanctum.",
+          "Footwear must be kept in the designated footwear area outside."
+        ]
+      },
+      "etiquette": {
+        "title": "Darshan Etiquette",
+        "rules": [
+          "Please stand in the designated queues during peak hours.",
+          "Proper traditional attire is recommended while visiting the temple.",
+          "Offerings should be handed over to the priests at the designated counter.",
+          "Maintain a respectful distance from the idols and other devotees."
+        ]
+      },
+      "safety": {
+        "title": "Safety & Hygiene",
+        "rules": [
+          "Help keep the temple clean by disposing of waste in bins provided.",
+          "Supervise children at all times near the temple premises.",
+          "Follow the instructions provided by temple volunteers and security staff."
+        ]
+      }
+    }
+  },
+  "mandir": {
+    "title": "Mandir Details",
+    "subtitle": "About Temple"
   }
 }
