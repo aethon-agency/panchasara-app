@@ -43,3 +43,23 @@ export const registerUser = async (
     console.error("Error generating OTP:", err);
   }
 };
+
+export const verifyOtp = async (payload: {
+  mobileNumber: string;
+  otp: string;
+  hash: string;
+}) => {
+  try {
+    const response: any = await api.post("/auth/verify-otp", payload);
+
+    if (response?.success) {
+      if (response?.token) {
+        return response?.token;
+      }
+    }
+    return null;
+  } catch (err) {
+    console.error("Error Verifying OTP:", err);
+    return null;
+  }
+};
