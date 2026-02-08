@@ -5,6 +5,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { ALL_EVENTS } from "@/src/constants/data";
 import { useLanguage } from "@/src/hooks/useLanguage";
 import { MandirEventCard } from "@/src/components/MandirEventCard";
+import { LanguageSelector } from "@/src/components/LanguageSelector";
 
 export default function EventScreen() {
   const { t } = useLanguage();
@@ -20,14 +21,18 @@ export default function EventScreen() {
 
   return (
     <View style={styles.container}>
-      <AppHeader title={t("events.title")} subtitle={t("events.subtitle")} />
+      <AppHeader
+        title={t("events.title")}
+        subtitle={t("events.subtitle")}
+        rightAction={<LanguageSelector />}
+      />
 
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
         {sortedEvents.map((item, index) => (
-          <MandirEventCard key={item.id} event={item} index={index} />
+          <MandirEventCard key={item.id} event={item} />
         ))}
 
         {sortedEvents.length === 0 && (

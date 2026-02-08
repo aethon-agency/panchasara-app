@@ -9,7 +9,6 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import Animated, { FadeIn } from "react-native-reanimated";
 import { useLanguage } from "@/src/hooks/useLanguage";
 import { toGujarati } from "@/src/utils/functions";
 import { MandirEvent } from "../constants/data";
@@ -45,8 +44,7 @@ export const MandirEventCard: React.FC<MandirEventCardProps> = ({
   };
 
   return (
-    <Animated.View
-      entering={FadeIn.duration(400)}
+    <View
       style={[
         styles.cardContainer,
         { backgroundColor: "transparent" },
@@ -88,7 +86,7 @@ export const MandirEventCard: React.FC<MandirEventCardProps> = ({
           </View>
         </LinearGradient>
       </TouchableOpacity>
-    </Animated.View>
+    </View>
   );
 };
 

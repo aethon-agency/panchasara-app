@@ -10,9 +10,9 @@ import {
 import { AppHeader } from "@/src/components/AppHeader";
 import { useRouter } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
-import Animated, { FadeInUp } from "react-native-reanimated";
 import { useLanguage } from "@/src/hooks/useLanguage";
 import { EXPLORE_ITEMS } from "@/src/constants/data";
+import { LanguageSelector } from "@/src/components/LanguageSelector";
 
 const { width } = Dimensions.get("window");
 const CARD_WIDTH = (width - 48) / 2;
@@ -28,7 +28,11 @@ export default function ExploreScreen() {
 
   return (
     <View style={styles.container}>
-      <AppHeader title={t("explore.title")} subtitle={t("explore.subtitle")} />
+      <AppHeader
+        title={t("explore.title")}
+        subtitle={t("explore.subtitle")}
+        rightAction={<LanguageSelector />}
+      />
 
       <ScrollView
         contentContainerStyle={styles.scrollContent}
@@ -36,11 +40,7 @@ export default function ExploreScreen() {
       >
         <View style={styles.gridContainer}>
           {EXPLORE_ITEMS.map((item, index) => (
-            <Animated.View
-              key={item.id}
-              entering={FadeInUp.delay(index * 100).duration(500)}
-              style={styles.cardContainer}
-            >
+            <View key={item.id} style={styles.cardContainer}>
               <TouchableOpacity
                 activeOpacity={0.8}
                 onPress={() => handlePress(item)}
@@ -57,7 +57,7 @@ export default function ExploreScreen() {
                   <Text style={styles.cardSubtitle}>{t(item?.subtitle)}</Text>
                 </LinearGradient>
               </TouchableOpacity>
-            </Animated.View>
+            </View>
           ))}
         </View>
 
