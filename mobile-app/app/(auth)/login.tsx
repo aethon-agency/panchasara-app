@@ -28,8 +28,7 @@ import { KeyboardAvoidingContainer } from "@/src/components/KeyboardAvoidingCont
 import { useLanguage } from "@/src/hooks/useLanguage";
 import { useCommon } from "@/src/hooks/useCommon";
 import { useKeyboardVisible } from "@/src/hooks/useKeyboardVisible";
-import api from "@/src/services/api";
-import { generateOTP, registerUser } from "@/src/services/authServices";
+import { sendOTP, registerUser } from "@/src/services/authServices";
 
 const { width, height } = Dimensions.get("window");
 
@@ -60,7 +59,7 @@ const LoginScreen = () => {
       Keyboard.dismiss();
       let hash;
       if (activeTab === "login") {
-        hash = await generateOTP(mobileNumber);
+        hash = await sendOTP(mobileNumber);
       } else {
         hash = await registerUser(
           firstName,

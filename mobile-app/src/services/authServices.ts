@@ -1,6 +1,6 @@
 import api from "./api";
 
-export const generateOTP = async (mobileNumber: string) => {
+export const sendOTP = async (mobileNumber: string) => {
   try {
     if (!mobileNumber) return;
     const response: any = await api.post("/auth/login", { mobileNumber });
@@ -9,7 +9,8 @@ export const generateOTP = async (mobileNumber: string) => {
     }
     return null;
   } catch (err) {
-    console.error("Error generating OTP:", err);
+    console.error("Error sending OTP:", err);
+    throw err;
   }
 };
 
