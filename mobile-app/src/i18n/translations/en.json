@@ -187,5 +187,24 @@
     "footerText": "For more information or inquiries, please contact commity members.",
     "errorNotFound": "Event not found",
     "errorGoBack": "Go Back"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Get in Touch",
+    "intro": "Have questions or need assistance? Reach out to the Committee Members.",
+    "committee": {
+      "title": "Committee Members",
+      "label": "Tap to view members"
+    },
+    "whatsapp": {
+      "title": "WhatsApp",
+      "label": "Chat with us"
+    },
+    "address": {
+      "title": "Mandir Address"
+    },
+    "modal": {
+      "close": "Close"
+    }
   }
 }

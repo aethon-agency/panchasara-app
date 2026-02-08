@@ -307,3 +307,6 @@ export const DONATIONS = [
 
 export const WHATSAPP_GROUP_LINK =
   "https://chat.whatsapp.com/4n01go3yTCp9baMymp5WRH?mode=wwt";
+
+export const MANDIR_ADDRESS = "Panchasara Parivar Bhavani Mataji Madh, Bhaduka";
+export const MANDIR_MAPS_LINK = "https://maps.app.goo.gl/fgebem7Y745vrR7v9";

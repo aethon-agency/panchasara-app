@@ -111,3 +111,13 @@ export const joinWhatsAppGroup = (groupLink: string) => {
     console.error("Failed to join WhatsApp group:", err);
   });
 };
+
+export const openMaps = (url: string) => {
+  if (!url) {
+    console.warn("No map URL provided");
+    return;
+  }
+  Linking.openURL(url).catch((err) => {
+    console.error("Failed to open maps:", err);
+  });
+};

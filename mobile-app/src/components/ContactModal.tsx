@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { callPhoneNumber } from "../utils/functions";
+import { useTranslation } from "react-i18next";
 
 interface ContactItem {
   name: string;
@@ -28,6 +29,8 @@ export const ContactModal: React.FC<ContactModalProps> = ({
   title,
   contacts,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <Modal visible={visible} animationType="fade" transparent={true}>
       <View style={styles.modalOverlay}>
@@ -50,7 +53,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({
           />
 
           <TouchableOpacity style={styles.closeBtn} onPress={onClose}>
-            <Text style={styles.closeBtnText}>Close</Text>
+            <Text style={styles.closeBtnText}>{t("contact.modal.close")}</Text>
           </TouchableOpacity>
         </View>
       </View>

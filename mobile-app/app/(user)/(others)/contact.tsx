@@ -10,26 +10,31 @@ import { AppHeader } from "@/src/components/AppHeader";
 import { ContactModal } from "@/src/components/ContactModal";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { COMMITTEE_MEMBERS, WHATSAPP_GROUP_LINK } from "@/src/constants/data";
-import { joinWhatsAppGroup } from "@/src/utils/functions";
+import {
+  COMMITTEE_MEMBERS,
+  WHATSAPP_GROUP_LINK,
+  MANDIR_ADDRESS,
+  MANDIR_MAPS_LINK,
+} from "@/src/constants/data";
+import { joinWhatsAppGroup, openMaps } from "@/src/utils/functions";
+import { useTranslation } from "react-i18next";
 
 export default function ContactScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
     <View style={styles.container}>
       <AppHeader
-        title="Contact Us"
-        subtitle="Get in Touch"
+        title={t("contact.title")}
+        subtitle={t("contact.subtitle")}
         showBack={true}
         onBack={() => router.back()}
       />
 
       <ScrollView contentContainerStyle={styles.content}>
-        <Text style={styles.introText}>
-          Have questions or need assistance? Reach out to the Mandir Office.
-        </Text>
+        <Text style={styles.introText}>{t("contact.intro")}</Text>
 
         <View style={styles.contactList}>
           {/* ✅ Committee Menu Card */}
@@ -42,8 +47,8 @@ export default function ContactScreen() {
             </View>
 
             <View style={styles.info}>
-              <Text style={styles.value}>Committee Members</Text>
-              <Text style={styles.label}>Tap to view members</Text>
+              <Text style={styles.value}>{t("contact.committee.title")}</Text>
+              <Text style={styles.label}>{t("contact.committee.label")}</Text>
             </View>
 
             <Ionicons name="chevron-forward" size={20} color="#CBD5E1" />
@@ -59,45 +64,28 @@ export default function ContactScreen() {
             </View>
 
             <View style={styles.info}>
-              <Text style={styles.value}>WhatsApp</Text>
-              <Text style={styles.label}>Chat with us</Text>
+              <Text style={styles.value}>{t("contact.whatsapp.title")}</Text>
+              <Text style={styles.label}>{t("contact.whatsapp.label")}</Text>
             </View>
 
             <Ionicons name="chevron-forward" size={20} color="#CBD5E1" />
           </TouchableOpacity>
 
           {/* Address */}
-          <TouchableOpacity style={styles.card}>
+          <TouchableOpacity
+            style={styles.card}
+            onPress={() => openMaps(MANDIR_MAPS_LINK)}
+          >
             <View style={[styles.iconBox, { backgroundColor: "#FFF7ED" }]}>
               <Ionicons name="location" size={24} color="#EA580C" />
             </View>
 
             <View style={styles.info}>
-              <Text style={styles.value}>Mandir Address</Text>
-              <Text style={styles.label}>
-                Shree Panchasara Parivar Mandir, Panchasara, Patan
-              </Text>
+              <Text style={styles.value}>{t("contact.address.title")}</Text>
+              <Text style={styles.label}>{MANDIR_ADDRESS}</Text>
             </View>
+            <Ionicons name="chevron-forward" size={20} color="#CBD5E1" />
           </TouchableOpacity>
-        </View>
-
-        {/* Social */}
-        <View style={styles.socialSection}>
-          <Text style={styles.socialTitle}>Follow Us</Text>
-
-          <View style={styles.socialRow}>
-            <TouchableOpacity style={styles.socialBtn}>
-              <Ionicons name="logo-facebook" size={24} color="#1877F2" />
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.socialBtn}>
-              <Ionicons name="logo-instagram" size={24} color="#E1306C" />
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.socialBtn}>
-              <Ionicons name="logo-youtube" size={24} color="#FF0000" />
-            </TouchableOpacity>
-          </View>
         </View>
       </ScrollView>
 
@@ -105,7 +93,7 @@ export default function ContactScreen() {
       <ContactModal
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
-        title="Committee Members"
+        title={t("contact.committee.title")}
         contacts={COMMITTEE_MEMBERS}
       />
     </View>
