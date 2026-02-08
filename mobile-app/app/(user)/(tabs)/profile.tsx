@@ -14,6 +14,7 @@ import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLanguage } from "@/src/hooks/useLanguage";
+import { LanguageSelector } from "@/src/components/LanguageSelector";
 
 export default function ProfileScreen() {
   const { user, logout } = useAuthStore();
@@ -35,30 +36,13 @@ export default function ProfileScreen() {
           icon: "person-outline",
           label: t("profile.menu.myDetails.label"),
           subtitle: t("profile.menu.myDetails.subtitle"),
-          route: "/(user)/profile/details", // Placeholder
-        },
-      ],
-    },
-    {
-      title: t("profile.sections.seva"),
-      items: [
-        {
-          icon: "heart-outline",
-          label: t("profile.menu.myDonations.label"),
-          subtitle: t("profile.menu.myDonations.subtitle"),
-          route: "/(user)/donations",
+          route: "/(user)/profile/details",
         },
       ],
     },
     {
       title: t("profile.sections.appSettings"),
       items: [
-        {
-          icon: "language-outline",
-          label: t("profile.menu.language.label"),
-          subtitle: t("profile.menu.language.subtitle"),
-          type: "value",
-        },
         {
           icon: "notifications-outline",
           label: t("profile.menu.notifications.label"),
@@ -114,7 +98,11 @@ export default function ProfileScreen() {
 
   return (
     <View style={styles.container}>
-      <AppHeader title={t("profile.title")} subtitle={t("profile.subtitle")} />
+      <AppHeader
+        title={t("profile.title")}
+        subtitle={t("profile.subtitle")}
+        rightAction={<LanguageSelector />}
+      />
 
       <ScrollView
         showsVerticalScrollIndicator={false}
