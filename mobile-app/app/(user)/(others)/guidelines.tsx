@@ -65,7 +65,7 @@ export default function GuidelinesScreen() {
           <Text style={styles.footerText}>
             {t("explore.guidelines.footer")}
           </Text>
-          <Text style={styles.jaiMataji}>— जय माताजी —</Text>
+          <Text style={styles.jaiMataji}>{t("common.jaiMataji")}</Text>
         </View>
       </ScrollView>
     </View>
