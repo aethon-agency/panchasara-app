@@ -11,10 +11,128 @@ import {
 import { AppHeader } from "@/src/components/AppHeader";
 import { useAuthStore } from "../../../src/stores/authStore";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
+import { useRouter, Router } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLanguage } from "@/src/hooks/useLanguage";
 import { LanguageSelector } from "@/src/components/LanguageSelector";
+
+// --- Types ---
+
+interface MenuItemData {
+  icon: keyof typeof Ionicons.glyphMap;
+  label: string;
+  subtitle?: string;
+  route?: string;
+  type?: "toggle" | "value";
+}
+
+interface MenuSectionData {
+  title: string;
+  items: MenuItemData[];
+}
+
+// --- Sub-Components ---
+
+const ProfileCard = ({
+  user,
+  t,
+}: {
+  user: any;
+  t: (key: string) => string;
+}) => (
+  <View style={styles.profileCardWrapper}>
+    <LinearGradient colors={["#FFFFFF", "#FFF7ED"]} style={styles.profileCard}>
+      <View style={styles.profileHeader}>
+        <View style={styles.avatarContainer}>
+          {user?.profileimage ? (
+            <Image
+              source={{ uri: user.profileimage }}
+              style={styles.avatarImage}
+            />
+          ) : (
+            <View style={styles.avatarPlaceholder}>
+              <Text style={styles.avatarInitials}>
+                {user?.firstname?.[0]}
+                {user?.lastname?.[0]}
+              </Text>
+            </View>
+          )}
+          <View style={styles.verifiedBadge}>
+            <Ionicons name="checkmark-circle" size={20} color="#EA580C" />
+          </View>
+        </View>
+
+        <View style={styles.profileInfo}>
+          <Text style={styles.profileName}>
+            {user?.firstname} {user?.lastname}
+          </Text>
+          <Text style={styles.profilePhone}>+91 {user?.mobilenumber}</Text>
+          <View style={styles.membershipTag}>
+            <MaterialCommunityIcons name="crown" size={14} color="#B45309" />
+            <Text style={styles.membershipText}>{t("profile.lifeMember")}</Text>
+          </View>
+        </View>
+      </View>
+    </LinearGradient>
+  </View>
+);
+
+const MenuSection = ({
+  section,
+  router,
+  isLastSection,
+}: {
+  section: MenuSectionData;
+  router: Router;
+  isLastSection: boolean;
+}) => (
+  <View style={styles.section}>
+    <Text style={styles.sectionTitle}>{section.title}</Text>
+    <View style={styles.sectionContent}>
+      {section.items.map((item, idx) => (
+        <TouchableOpacity
+          key={idx}
+          style={[
+            styles.menuItem,
+            idx === section.items.length - 1 && styles.lastMenuItem,
+          ]}
+          onPress={() => (item.route ? router.push(item.route as any) : null)}
+          activeOpacity={0.7}
+        >
+          <View style={styles.menuIconBox}>
+            <Ionicons name={item.icon} size={22} color="#9A3412" />
+          </View>
+          <View style={styles.menuTextContainer}>
+            <Text style={styles.menuLabel}>{item.label}</Text>
+            {item.subtitle && (
+              <Text style={styles.menuSubtitle}>{item.subtitle}</Text>
+            )}
+          </View>
+          <Ionicons name="chevron-forward" size={20} color="#CBD5E1" />
+        </TouchableOpacity>
+      ))}
+    </View>
+  </View>
+);
+
+const LogoutButton = ({
+  onPress,
+  label,
+}: {
+  onPress: () => void;
+  label: string;
+}) => (
+  <TouchableOpacity
+    style={styles.logoutButton}
+    onPress={onPress}
+    activeOpacity={0.8}
+  >
+    <Ionicons name="log-out-outline" size={20} color="#EF4444" />
+    <Text style={styles.logoutText}>{label}</Text>
+  </TouchableOpacity>
+);
+
+// --- Main Component ---
 
 export default function ProfileScreen() {
   const { user, logout } = useAuthStore();
@@ -28,7 +146,7 @@ export default function ProfileScreen() {
     ]);
   };
 
-  const menuItems = [
+  const menuItems: MenuSectionData[] = [
     {
       title: t("profile.sections.personalInfo"),
       items: [
@@ -53,49 +171,6 @@ export default function ProfileScreen() {
     },
   ];
 
-  const renderProfileCard = () => (
-    <View style={styles.profileCardWrapper}>
-      <LinearGradient
-        colors={["#FFFFFF", "#FFF7ED"]}
-        style={styles.profileCard}
-      >
-        <View style={styles.profileHeader}>
-          <View style={styles.avatarContainer}>
-            {user?.profileimage ? (
-              <Image
-                source={{ uri: user.profileimage }}
-                style={styles.avatarImage}
-              />
-            ) : (
-              <View style={styles.avatarPlaceholder}>
-                <Text style={styles.avatarInitials}>
-                  {user?.firstname?.[0]}
-                  {user?.lastname?.[0]}
-                </Text>
-              </View>
-            )}
-            <View style={styles.verifiedBadge}>
-              <Ionicons name="checkmark-circle" size={20} color="#EA580C" />
-            </View>
-          </View>
-
-          <View style={styles.profileInfo}>
-            <Text style={styles.profileName}>
-              {user?.firstname} {user?.lastname}
-            </Text>
-            <Text style={styles.profilePhone}>+91 {user?.mobilenumber}</Text>
-            <View style={styles.membershipTag}>
-              <MaterialCommunityIcons name="crown" size={14} color="#B45309" />
-              <Text style={styles.membershipText}>
-                {t("profile.lifeMember")}
-              </Text>
-            </View>
-          </View>
-        </View>
-      </LinearGradient>
-    </View>
-  );
-
   return (
     <View style={styles.container}>
       <AppHeader
@@ -108,46 +183,18 @@ export default function ProfileScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
-        {renderProfileCard()}
+        <ProfileCard user={user} t={t} />
 
         {menuItems.map((section, index) => (
-          <View key={index} style={styles.section}>
-            <Text style={styles.sectionTitle}>{section.title}</Text>
-            <View style={styles.sectionContent}>
-              {section.items.map((item: any, idx) => (
-                <TouchableOpacity
-                  key={idx}
-                  style={[
-                    styles.menuItem,
-                    idx === section.items.length - 1 && styles.lastMenuItem,
-                  ]}
-                  onPress={() => (item.route ? router.push(item.route) : null)}
-                  activeOpacity={0.7}
-                >
-                  <View style={styles.menuIconBox}>
-                    <Ionicons name={item.icon} size={22} color="#9A3412" />
-                  </View>
-                  <View style={styles.menuTextContainer}>
-                    <Text style={styles.menuLabel}>{item.label}</Text>
-                    {item.subtitle && (
-                      <Text style={styles.menuSubtitle}>{item.subtitle}</Text>
-                    )}
-                  </View>
-                  <Ionicons name="chevron-forward" size={20} color="#CBD5E1" />
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
+          <MenuSection
+            key={index}
+            section={section}
+            router={router}
+            isLastSection={index === menuItems.length - 1}
+          />
         ))}
 
-        <TouchableOpacity
-          style={styles.logoutButton}
-          onPress={handleLogout}
-          activeOpacity={0.8}
-        >
-          <Ionicons name="log-out-outline" size={20} color="#EF4444" />
-          <Text style={styles.logoutText}>{t("common.logoutButton")}</Text>
-        </TouchableOpacity>
+        <LogoutButton onPress={handleLogout} label={t("common.logoutButton")} />
 
         <Text style={styles.versionText}>{t("profile.version")}</Text>
       </ScrollView>
