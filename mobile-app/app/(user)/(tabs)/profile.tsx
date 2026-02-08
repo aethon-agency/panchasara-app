@@ -5,12 +5,11 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Image,
   Alert,
 } from "react-native";
 import { AppHeader } from "@/src/components/AppHeader";
 import { useAuthStore } from "../../../src/stores/authStore";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { useRouter, Router } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLanguage } from "@/src/hooks/useLanguage";
@@ -31,8 +30,6 @@ interface MenuSectionData {
   items: MenuItemData[];
 }
 
-// --- Sub-Components ---
-
 const ProfileCard = ({
   user,
   t,
@@ -43,33 +40,23 @@ const ProfileCard = ({
   <View style={styles.profileCardWrapper}>
     <LinearGradient colors={["#FFFFFF", "#FFF7ED"]} style={styles.profileCard}>
       <View style={styles.profileHeader}>
-        <View style={styles.avatarContainer}>
-          {user?.profileimage ? (
-            <Image
-              source={{ uri: user.profileimage }}
-              style={styles.avatarImage}
-            />
-          ) : (
-            <View style={styles.avatarPlaceholder}>
-              <Text style={styles.avatarInitials}>
-                {user?.firstname?.[0]}
-                {user?.lastname?.[0]}
-              </Text>
-            </View>
-          )}
-          <View style={styles.verifiedBadge}>
-            <Ionicons name="checkmark-circle" size={20} color="#EA580C" />
-          </View>
+        <View style={styles.avatarPlaceholder}>
+          <Text style={styles.avatarInitials}>
+            {user?.firstname ? user?.firstname?.[0] : "D"}
+          </Text>
         </View>
 
         <View style={styles.profileInfo}>
           <Text style={styles.profileName}>
-            {user?.firstname} {user?.lastname}
+            {user?.firstname
+              ? user?.firstname + " " + user?.lastname
+              : "Devam Panchasara"}
           </Text>
-          <Text style={styles.profilePhone}>+91 {user?.mobilenumber}</Text>
-          <View style={styles.membershipTag}>
-            <MaterialCommunityIcons name="crown" size={14} color="#B45309" />
-            <Text style={styles.membershipText}>{t("profile.lifeMember")}</Text>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
+            <Text style={styles.profilePhone}>
+              +91 {user?.mobilenumber ? user?.mobilenumber : "8154909268"}
+            </Text>
+            <Ionicons name="checkmark-circle" size={16} color="#EA580C" />
           </View>
         </View>
       </View>
@@ -80,7 +67,6 @@ const ProfileCard = ({
 const MenuSection = ({
   section,
   router,
-  isLastSection,
 }: {
   section: MenuSectionData;
   router: Router;
@@ -125,7 +111,7 @@ const LogoutButton = ({
   <TouchableOpacity
     style={styles.logoutButton}
     onPress={onPress}
-    activeOpacity={0.8}
+    // activeOpacity={0.8}
   >
     <Ionicons name="log-out-outline" size={20} color="#EF4444" />
     <Text style={styles.logoutText}>{label}</Text>
@@ -221,8 +207,9 @@ const styles = StyleSheet.create({
     borderRadius: 24,
   },
   profileCard: {
-    borderRadius: 24,
-    padding: 20,
+    borderRadius: 20,
+    padding: 10,
+    paddingHorizontal: 20,
     borderWidth: 1,
     borderColor: "#FFEDD5",
   },
@@ -242,8 +229,8 @@ const styles = StyleSheet.create({
     borderColor: "#FFF",
   },
   avatarPlaceholder: {
-    width: 72,
-    height: 72,
+    width: 60,
+    height: 60,
     borderRadius: 36,
     backgroundColor: "#FFEDD5",
     justifyContent: "center",
@@ -271,13 +258,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "800",
     color: "#431407",
-    marginBottom: 2,
   },
   profilePhone: {
     fontSize: 14,
     color: "#94A3B8",
     fontWeight: "600",
-    marginBottom: 8,
+    alignItems: "center",
   },
   membershipTag: {
     flexDirection: "row",
@@ -356,7 +342,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#FEF2F2",
+    backgroundColor: "#EF4444",
     paddingVertical: 16,
     borderRadius: 16,
     borderWidth: 1,
@@ -365,7 +351,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   logoutText: {
-    color: "#EF4444",
+    color: "#FFF",
     fontWeight: "700",
     fontSize: 16,
   },
