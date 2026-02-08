@@ -52,40 +52,6 @@ export default function DonationsScreen() {
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
-        {/* MAKE A CONTRIBUTION SECTION */}
-        <View style={styles.contributeSection}>
-          <Text style={styles.sectionTitle}>Make a Contribution</Text>
-          <View style={styles.contributeGrid}>
-            <TouchableOpacity
-              style={[styles.contributeCard, { backgroundColor: "#FFF7ED" }]}
-              activeOpacity={0.8}
-              onPress={() => openDonateModal("Online")}
-            >
-              <View style={[styles.iconBox, { backgroundColor: "#FFEDD5" }]}>
-                <Ionicons name="qr-code-outline" size={24} color="#EA580C" />
-              </View>
-              <Text style={styles.contributeLabel}>Online / UPI</Text>
-              <Text style={styles.contributeSub}>Instant Receipt</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[styles.contributeCard, { backgroundColor: "#F0FDF4" }]}
-              activeOpacity={0.8}
-              onPress={() => openDonateModal("Cash")}
-            >
-              <View style={[styles.iconBox, { backgroundColor: "#DCFCE7" }]}>
-                <Ionicons name="cash-outline" size={24} color="#16A34A" />
-              </View>
-              <Text style={[styles.contributeLabel, { color: "#15803D" }]}>
-                Cash
-              </Text>
-              <Text style={[styles.contributeSub, { color: "#166534" }]}>
-                At Mandir Office
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-
         <Text style={styles.historyTitle}>Recent History</Text>
 
         {DONATIONS.map((item, index) => (
@@ -155,57 +121,6 @@ export default function DonationsScreen() {
           </Animated.View>
         ))}
       </ScrollView>
-
-      {/* DONATION MODAL */}
-      <Modal visible={showModal} animationType="slide" transparent>
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>
-                {donationType === "Online"
-                  ? "Online Donation"
-                  : "Cash Donation"}
-              </Text>
-              <TouchableOpacity onPress={() => setShowModal(false)}>
-                <Ionicons name="close-circle" size={24} color="#64748B" />
-              </TouchableOpacity>
-            </View>
-
-            <Text style={styles.modalSub}>
-              {donationType === "Online"
-                ? "Scan QR Code or enter UPI ID to donate."
-                : "Visit Mandir office or pledge here."}
-            </Text>
-
-            <View style={styles.inputGroup}>
-              <Text style={styles.label}>Amount (₹)</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="e.g. 501"
-                keyboardType="numeric"
-                value={amount}
-                onChangeText={setAmount}
-              />
-            </View>
-
-            {donationType === "Online" && (
-              <View style={styles.inputGroup}>
-                <Text style={styles.label}>Transaction ID / UPI Ref</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Enter 12-digit Ref No"
-                  value={txnId}
-                  onChangeText={setTxnId}
-                />
-              </View>
-            )}
-
-            <TouchableOpacity style={styles.submitBtn} onPress={handleDonate}>
-              <Text style={styles.submitBtnText}>Submit Donation</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
     </View>
   );
 }
