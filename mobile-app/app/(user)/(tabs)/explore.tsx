@@ -9,11 +9,10 @@ import {
 } from "react-native";
 import { AppHeader } from "@/src/components/AppHeader";
 import { useRouter } from "expo-router";
-import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import Animated, { FadeInUp } from "react-native-reanimated";
 import { useLanguage } from "@/src/hooks/useLanguage";
-import { getExploreItems } from "@/src/constants/data";
+import { EXPLORE_ITEMS } from "@/src/constants/data";
 
 const { width } = Dimensions.get("window");
 const CARD_WIDTH = (width - 48) / 2;
@@ -21,7 +20,6 @@ const CARD_WIDTH = (width - 48) / 2;
 export default function ExploreScreen() {
   const router = useRouter();
   const { t } = useLanguage();
-  const EXPLORE_ITEMS = getExploreItems(t);
 
   const handlePress = (item: any) => {
     // Navigate to the respective screen
@@ -55,8 +53,8 @@ export default function ExploreScreen() {
                   <View style={styles.iconContainer}>
                     {item.icon("#EA580C")}
                   </View>
-                  <Text style={styles.cardTitle}>{item.title}</Text>
-                  <Text style={styles.cardSubtitle}>{item.subtitle}</Text>
+                  <Text style={styles.cardTitle}>{t(item?.title)}</Text>
+                  <Text style={styles.cardSubtitle}>{t(item?.subtitle)}</Text>
                 </LinearGradient>
               </TouchableOpacity>
             </Animated.View>

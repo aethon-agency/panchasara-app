@@ -200,38 +200,42 @@ export const ALL_EVENTS: MandirEvent[] = [
   },
 ];
 
-export const getExploreItems = (t: any) => [
-  {
-    id: "accounts",
-    title: t("explore.accounts.title"),
-    subtitle: t("explore.accounts.subtitle"),
-    icon: (color: string) => (
-      <Ionicons name="card-outline" size={28} color={color} />
-    ),
-    route: "/accounts",
-  },
+export const EXPLORE_ITEMS = [
   {
     id: "donations",
-    title: t("explore.donations.title"),
-    subtitle: t("explore.donations.subtitle"),
+    title: "explore.donations.title",
+    subtitle: "explore.donations.subtitle",
     icon: (color: string) => (
       <Ionicons name="heart-outline" size={28} color={color} />
     ),
     route: "/donations",
   },
   {
-    id: "mandir",
-    title: t("explore.mandir.title"),
-    subtitle: t("explore.mandir.subtitle"),
+    id: "accounts",
+    title: "explore.accounts.title",
+    subtitle: "explore.accounts.subtitle",
     icon: (color: string) => (
-      <MaterialCommunityIcons name="temple-buddhist" size={28} color={color} />
+      <Ionicons name="card-outline" size={28} color={color} />
+    ),
+    route: "/accounts",
+  },
+  {
+    id: "mandir",
+    title: "explore.mandir.title",
+    subtitle: "explore.mandir.subtitle",
+    icon: (color: string) => (
+      <MaterialCommunityIcons
+        name="temple-hindu-outline"
+        size={28}
+        color={color}
+      />
     ),
     route: "/mandir-details",
   },
   {
     id: "contact",
-    title: t("explore.contact.title"),
-    subtitle: t("explore.contact.subtitle"),
+    title: "explore.contact.title",
+    subtitle: "explore.contact.subtitle",
     icon: (color: string) => (
       <Ionicons name="call-outline" size={28} color={color} />
     ),
@@ -239,8 +243,8 @@ export const getExploreItems = (t: any) => [
   },
   {
     id: "history",
-    title: t("explore.history.title"),
-    subtitle: t("explore.history.subtitle"),
+    title: "explore.history.title",
+    subtitle: "explore.history.subtitle",
     icon: (color: string) => (
       <MaterialCommunityIcons
         name="book-open-variant"
@@ -249,6 +253,15 @@ export const getExploreItems = (t: any) => [
       />
     ),
     route: "/history",
+  },
+  {
+    id: "guidelines",
+    title: "explore.guidelines.title",
+    subtitle: "explore.guidelines.subtitle",
+    icon: (color: string) => (
+      <Ionicons name="information-circle-outline" size={28} color={color} />
+    ),
+    route: "/guidelines",
   },
 ];
 

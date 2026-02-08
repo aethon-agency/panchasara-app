@@ -52,6 +52,40 @@
     "history": {
       "title": "Family History",
       "subtitle": "Panchasara Lineage"
+    },
+    "guidelines": {
+      "title": "Mandir Guidelines",
+      "subtitle": "Rules & Information",
+      "intro": "To ensure a peaceful and spiritual experience for everyone, we kindly request all devotees to follow these guidelines during their visit to Shree Panchasara Parivar Mandir.",
+      "footer": "Thank you for your cooperation in maintaining the sanctity of our temple.",
+      "sections": {
+        "general": {
+          "title": "General Rules",
+          "rules": [
+            "Please maintain silence inside the temple premises.",
+            "Mobile phones should be switched off or kept on silent mode.",
+            "Photography and videography are strictly prohibited inside the main sanctum.",
+            "Footwear must be kept in the designated footwear area outside."
+          ]
+        },
+        "etiquette": {
+          "title": "Darshan Etiquette",
+          "rules": [
+            "Please stand in the designated queues during peak hours.",
+            "Proper traditional attire is recommended while visiting the temple.",
+            "Offerings should be handed over to the priests at the designated counter.",
+            "Maintain a respectful distance from the idols and other devotees."
+          ]
+        },
+        "safety": {
+          "title": "Safety & Hygiene",
+          "rules": [
+            "Help keep the temple clean by disposing of waste in bins provided.",
+            "Supervise children at all times near the temple premises.",
+            "Follow the instructions provided by temple volunteers and security staff."
+          ]
+        }
+      }
     }
   },
   "events": {
