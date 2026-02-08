@@ -13,6 +13,10 @@ export interface MandirEvent {
   location: string;
   organizerName?: string;
 }
+export const WHATSAPP_GROUP_LINK =
+  "https://chat.whatsapp.com/4n01go3yTCp9baMymp5WRH?mode=wwt";
+
+export const MANDIR_MAPS_LINK = "https://maps.app.goo.gl/fgebem7Y745vrR7v9";
 
 export const HERO_IMAGES = [
   "https://eijolqvtchrmhuvuytbl.supabase.co/storage/v1/object/public/BANNER/Banner.jpeg",
@@ -266,47 +270,29 @@ export const EXPLORE_ITEMS = [
 ];
 
 export const COMMITTEE_MEMBERS = [
-  { name: "Maheshbhai Patel", phone: "+919876543210" },
-  { name: "Rameshbhai Patel", phone: "+919812345678" },
-  { name: "Sureshbhai Patel", phone: "+919823456789" },
-  { name: "Nareshbhai Patel", phone: "+919834567890" },
+  { name: "Maheshbhai Panchasara", phone: "+919876543210" },
+  { name: "Rameshbhai Panchasara", phone: "+919812345678" },
+  { name: "Sureshbhai Panchasara", phone: "+919823456789" },
+  { name: "Nareshbhai Panchasara", phone: "+919834567890" },
 ];
 
 export const DONATIONS = [
   {
     id: "1",
-    amount: "₹5,001",
-    date: "12 Mar 2026",
-    purpose: "Poonam Bhojan Prasad",
-    receiptNo: "RCP-2026-045",
-    type: "Online",
-    transactionId: "UPI-8979328472",
-    donorName: "Gajjar Family",
+    type: "cash",
+    purpose: "Shree Kantilal Panchasara (Bhaduka)",
+    donorName: "Rajesh, Mahesh & Suresh Panchasara (Bhaduka)",
+    amount: "11,000",
+    date: "12 Jan 2026",
   },
+
   {
     id: "2",
-    amount: "₹1,100",
-    date: "20 Feb 2026",
-    purpose: "General Donation",
-    receiptNo: "RCP-2026-012",
-    type: "Cash",
-    transactionId: "-",
-    donorName: "Gajjar Family",
-  },
-  {
-    id: "3",
-    amount: "₹501",
-    date: "01 Jan 2026",
-    purpose: "Aarti Seva",
-    receiptNo: "RCP-2026-003",
-    type: "Online",
-    transactionId: "UPI-2384723984",
-    donorName: "Gajjar Family",
+    type: "item",
+    purpose: "Late Shree Ramanbhai Panchasara (Bhaduka)",
+    donorName: "Panchasara Family",
+    itemName: "Fans",
+    itemQty: "8",
+    date: "15 Jan 2026",
   },
 ];
-
-export const WHATSAPP_GROUP_LINK =
-  "https://chat.whatsapp.com/4n01go3yTCp9baMymp5WRH?mode=wwt";
-
-export const MANDIR_ADDRESS = "Panchasara Parivar Bhavani Mataji Madh, Bhaduka";
-export const MANDIR_MAPS_LINK = "https://maps.app.goo.gl/fgebem7Y745vrR7v9";
