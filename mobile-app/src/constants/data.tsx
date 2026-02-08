@@ -295,4 +295,14 @@ export const DONATIONS = [
     itemQty: "8",
     date: "15 Jan 2026",
   },
+
+  {
+    id: "3",
+    type: "item",
+    purpose: "Panchasara Family",
+    donorName: "પંચાસરા ફામીલી",
+    itemName: "પંખા",
+    itemQty: "8",
+    date: "15 જન્યુઆરી 2026",
+  },
 ];

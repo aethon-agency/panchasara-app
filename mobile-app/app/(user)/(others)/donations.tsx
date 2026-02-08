@@ -74,7 +74,9 @@ export default function DonationsScreen() {
                     <Text style={styles.mainName}>{item.purpose}</Text>
 
                     {/* ✅ DONORS */}
-                    <Text style={styles.donorName}>By: {item.donorName}</Text>
+                    {item.donorName && item.donorName !== item.purpose && (
+                      <Text style={styles.donorName}>By: {item.donorName}</Text>
+                    )}
                   </View>
 
                   {item.type === "cash" ? (
