@@ -22,6 +22,10 @@
     "comingSoon": "More features coming soon...",
     "logoutConfirm": "Are you sure you want to logout?",
     "logoutButton": "Logout from App",
+    "saving": "Saving...",
+    "saveChanges": "Save Changes",
+    "success": "Success",
+    "error": "Error",
     "jaiMataji": "— Jai Mataji —"
   },
   "tabs": {
@@ -72,6 +76,9 @@
         "subtitle": "On"
       }
     },
+    "fillAllFields": "Please fill all fields",
+    "updateSuccess": "Profile updated successfully",
+    "updateError": "Failed to update profile",
     "version": "Version 1.0.0 • Panchasara Samaj"
   },
   "announcements": {

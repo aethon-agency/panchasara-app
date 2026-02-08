@@ -136,8 +136,6 @@ const LogoutButton = ({
   </TouchableOpacity>
 );
 
-// --- Main Component ---
-
 export default function ProfileScreen() {
   const { user, logout } = useAuthStore();
   const router = useRouter();
@@ -164,7 +162,7 @@ export default function ProfileScreen() {
           icon: "person-outline",
           label: t("profile.menu.myDetails.label"),
           subtitle: t("profile.menu.myDetails.subtitle"),
-          route: "/(user)/profile/details",
+          route: "/(user)/(others)/profile-details",
         },
       ],
     },

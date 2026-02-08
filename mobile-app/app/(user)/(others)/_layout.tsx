@@ -19,6 +19,7 @@ export default function OthersLayout() {
       <Stack.Screen name="mandir-details" />
       <Stack.Screen name="contact" />
       <Stack.Screen name="history" />
+      <Stack.Screen name="profile-details" />
     </Stack>
   );
 }

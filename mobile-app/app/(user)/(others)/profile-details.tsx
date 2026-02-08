@@ -22,14 +22,18 @@ export default function ProfileDetailsScreen() {
   const router = useRouter();
 
   const [firstName, setFirstName] = useState(user?.firstname || "");
+  const [middleName, setMiddleName] = useState(user?.middlename || "");
   const [lastName, setLastName] = useState(user?.lastname || "");
-  const [mobileNumber, setMobileNumber] = useState(
-    user?.mobilenumber?.toString() || "",
-  );
+  const [mobileNumber, setMobileNumber] = useState(user?.mobilenumber || "");
+
   const [loading, setLoading] = useState(false);
 
   const handleSave = async () => {
-    if (!firstName.trim() || !lastName.trim() || !mobileNumber.trim()) {
+    if (
+      !firstName.trim() ||
+      !lastName.trim() ||
+      !mobileNumber?.toString().trim()
+    ) {
       Alert.alert(t("common.error"), t("profile.fillAllFields"));
       return;
     }
@@ -42,7 +46,7 @@ export default function ProfileDetailsScreen() {
       updateUser({
         firstname: firstName,
         lastname: lastName,
-        mobilenumber: parseInt(mobileNumber),
+        mobilenumber: parseInt(mobileNumber?.toString()),
       });
 
       Alert.alert(t("common.success"), t("profile.updateSuccess"), [
@@ -57,7 +61,11 @@ export default function ProfileDetailsScreen() {
 
   return (
     <View style={styles.container}>
-      <AppHeader title={t("profile.menu.myDetails.label")} showBack />
+      <AppHeader
+        title={t("profile.menu.myDetails.label")}
+        showBack
+        onBack={() => router.back()}
+      />
 
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -68,18 +76,17 @@ export default function ProfileDetailsScreen() {
           showsVerticalScrollIndicator={false}
         >
           <View style={styles.formCard}>
-            <View style={styles.avatarContainer}>
-              <View style={styles.avatarPlaceholder}>
-                <Text style={styles.avatarInitials}>
-                  {firstName?.[0]}
-                  {lastName?.[0]}
-                </Text>
+            <View style={styles.readOnlyContainer}>
+              <View style={styles.readOnlyValueContainer}>
+                <Text style={styles.readOnlyPrefix}>🇮🇳 +91</Text>
+                <Text style={styles.readOnlyValue}>{mobileNumber}</Text>
+                <Ionicons
+                  name="lock-closed-outline"
+                  size={18}
+                  color="#94A3B8"
+                />
               </View>
-              <TouchableOpacity style={styles.editAvatarButton}>
-                <Ionicons name="camera" size={20} color="#FFF" />
-              </TouchableOpacity>
             </View>
-
             <View style={styles.inputsContainer}>
               <CustomInput
                 label={t("login.firstNameLabel") ?? "First Name"}
@@ -90,23 +97,19 @@ export default function ProfileDetailsScreen() {
               />
 
               <CustomInput
+                label={t("login.middleNameLabel") ?? "Middle Name"}
+                icon="account-outline"
+                placeholder={t("login.middleNameLabel") ?? "Enter middle name"}
+                value={middleName}
+                onChangeText={setMiddleName}
+              />
+
+              <CustomInput
                 label={t("login.lastNameLabel") ?? "Last Name"}
                 icon="account-details-outline"
                 placeholder={t("login.lastNameLabel") ?? "Enter last name"}
                 value={lastName}
                 onChangeText={setLastName}
-              />
-
-              <CustomInput
-                label={t("login.mobileTitle") ?? "Mobile Number"}
-                prefix="🇮🇳 +91"
-                placeholder="00000 00000"
-                keyboardType="phone-pad"
-                maxLength={10}
-                value={mobileNumber}
-                onChangeText={setMobileNumber}
-                editable={false} // Usually mobile number changes require OTP verification
-                style={{ opacity: 0.6 }}
               />
             </View>
 
@@ -201,5 +204,40 @@ const styles = StyleSheet.create({
     color: "#FFF",
     fontSize: 16,
     fontWeight: "700",
+  },
+  readOnlyContainer: {
+    marginBottom: 28,
+  },
+  label: {
+    fontSize: 12,
+    fontWeight: "700",
+    marginBottom: 8,
+    color: "#431407",
+    textTransform: "uppercase",
+    letterSpacing: 1,
+    opacity: 0.8,
+  },
+  readOnlyValueContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    backgroundColor: "#F8FAFC",
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
+  },
+  readOnlyPrefix: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#64748B",
+    marginRight: 8,
+  },
+  readOnlyValue: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#334155",
+    flex: 1,
+    letterSpacing: 1,
   },
 });
