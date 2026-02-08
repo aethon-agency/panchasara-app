@@ -198,10 +198,11 @@
     },
     "whatsapp": {
       "title": "WhatsApp",
-      "label": "Chat with us"
+      "label": "Join WhatsApp Group"
     },
     "address": {
-      "title": "Mandir Address"
+      "title": "Mandir Address",
+      "label": "Panchasara Parivar Bhavani Mataji Madh, Bhaduka"
     },
     "modal": {
       "close": "Close"

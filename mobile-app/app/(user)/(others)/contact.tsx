@@ -13,7 +13,6 @@ import { Ionicons } from "@expo/vector-icons";
 import {
   COMMITTEE_MEMBERS,
   WHATSAPP_GROUP_LINK,
-  MANDIR_ADDRESS,
   MANDIR_MAPS_LINK,
 } from "@/src/constants/data";
 import { joinWhatsAppGroup, openMaps } from "@/src/utils/functions";
@@ -28,7 +27,6 @@ export default function ContactScreen() {
     <View style={styles.container}>
       <AppHeader
         title={t("contact.title")}
-        subtitle={t("contact.subtitle")}
         showBack={true}
         onBack={() => router.back()}
       />
@@ -37,7 +35,6 @@ export default function ContactScreen() {
         <Text style={styles.introText}>{t("contact.intro")}</Text>
 
         <View style={styles.contactList}>
-          {/* ✅ Committee Menu Card */}
           <TouchableOpacity
             style={styles.card}
             onPress={() => setModalVisible(true)}
@@ -82,7 +79,7 @@ export default function ContactScreen() {
 
             <View style={styles.info}>
               <Text style={styles.value}>{t("contact.address.title")}</Text>
-              <Text style={styles.label}>{MANDIR_ADDRESS}</Text>
+              <Text style={styles.label}>{t("contact.address.label")}</Text>
             </View>
             <Ionicons name="chevron-forward" size={20} color="#CBD5E1" />
           </TouchableOpacity>
