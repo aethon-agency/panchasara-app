@@ -207,5 +207,35 @@
     "modal": {
       "close": "Close"
     }
+  },
+  "accounts": {
+    "title": "Bank Accounts",
+    "subtitle": "Donation Details",
+    "sectionTitle": "For Online Transfer",
+    "sectionSubtitle": "Use these details for NEFT/RTGS/IMPS",
+    "bankName": "State Bank of India",
+    "labels": {
+      "accountHolder": "Account Holder",
+      "accountNumber": "Account Number",
+      "ifscCode": "IFSC Code",
+      "branch": "Branch",
+      "upiPayment": "UPI Payment",
+      "copy": "Copy",
+      "note": "Note: Please share transaction details on WhatsApp after donation."
+    },
+    "overlay": {
+      "title": "Account Setup Coming Soon",
+      "text": "Trust bank account setup is in progress."
+    }
+  },
+  "donations": {
+    "title": "Donations",
+    "subtitle": "History",
+    "historyTitle": "Recent History",
+    "by": "By: {{donorName}}",
+    "types": {
+      "cash": "cash",
+      "item": "item"
+    }
   }
 }

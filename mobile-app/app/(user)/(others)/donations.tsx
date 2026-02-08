@@ -12,15 +12,16 @@ import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import Animated, { FadeInUp } from "react-native-reanimated";
 import { DONATIONS } from "@/src/constants/data";
+import { useTranslation } from "react-i18next";
 
 export default function DonationsScreen() {
+  const { t } = useTranslation();
   const router = useRouter();
 
   return (
     <View style={styles.container}>
       <AppHeader
-        title="My Donations"
-        subtitle="History"
+        title={t("donations.title")}
         showBack
         onBack={() => router.back()}
       />
@@ -29,7 +30,7 @@ export default function DonationsScreen() {
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.historyTitle}>Recent History</Text>
+        <Text style={styles.historyTitle}>{t("donations.historyTitle")}</Text>
 
         {DONATIONS.map((item, index) => (
           <Animated.View
@@ -60,7 +61,7 @@ export default function DonationsScreen() {
                           : styles.badgeTextCash,
                       ]}
                     >
-                      {item.type}
+                      {t(`donations.types.${item.type}`)}
                     </Text>
                   </View>
 
@@ -75,7 +76,9 @@ export default function DonationsScreen() {
 
                     {/* ✅ DONORS */}
                     {item.donorName && item.donorName !== item.purpose && (
-                      <Text style={styles.donorName}>By: {item.donorName}</Text>
+                      <Text style={styles.donorName}>
+                        {t("donations.by", { donorName: item.donorName })}
+                      </Text>
                     )}
                   </View>
 

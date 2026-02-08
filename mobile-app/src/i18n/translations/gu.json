@@ -207,5 +207,35 @@
     "modal": {
       "close": "બંધ કરો"
     }
+  },
+  "accounts": {
+    "title": "બેંક ખાતાઓ",
+    "subtitle": "દાનની વિગતો",
+    "sectionTitle": "ઓનલાઇન ટ્રાન્સફર માટે",
+    "sectionSubtitle": "NEFT/RTGS/IMPS માટે આ વિગતોનો ઉપયોગ કરો",
+    "bankName": "સ્ટેટ બેંક ઓફ ઇન્ડિયા",
+    "labels": {
+      "accountHolder": "ખાતાધારક",
+      "accountNumber": "ખાતા નંબર",
+      "ifscCode": "IFSC કોડ",
+      "branch": "શાખા",
+      "upiPayment": "UPI પેમેન્ટ",
+      "copy": "કોપી",
+      "note": "નોંધ: દાન કર્યા પછી કૃપા કરીને વ્યવહારની વિગતો વોટ્સએપ પર શેર કરો."
+    },
+    "overlay": {
+      "title": "બેંક ખાતાની ગોઠવણ ટૂંક સમયમાં આવી રહી છે",
+      "text": "ટ્રસ્ટ બેંક ખાતાનું સેટઅપ ચાલુ છે."
+    }
+  },
+  "donations": {
+    "title": "દાન",
+    "subtitle": "ઇતિહાસ",
+    "historyTitle": "તાજેતરનો ઇતિહાસ",
+    "by": "દ્વારા: {{donorName}}",
+    "types": {
+      "cash": "રોકડ",
+      "item": "વસ્તુ"
+    }
   }
 }

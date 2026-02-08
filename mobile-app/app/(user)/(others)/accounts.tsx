@@ -11,8 +11,10 @@ import { useRouter } from "expo-router";
 import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Clipboard from "expo-clipboard";
+import { useTranslation } from "react-i18next";
 
 export default function AccountsScreen() {
+  const { t } = useTranslation();
   const router = useRouter();
   const [showOverlay, setShowOverlay] = useState(true);
 
@@ -24,35 +26,38 @@ export default function AccountsScreen() {
   return (
     <View style={styles.container}>
       <AppHeader
-        title="Bank Accounts"
-        subtitle="Donation Details"
+        title={t("accounts.title")}
         showBack
         onBack={() => router.back()}
       />
 
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>For Online Transfer</Text>
+          <Text style={styles.sectionTitle}>{t("accounts.sectionTitle")}</Text>
           <Text style={styles.sectionSubtitle}>
-            Use these details for NEFT/RTGS/IMPS
+            {t("accounts.sectionSubtitle")}
           </Text>
         </View>
 
         {/* Bank Card */}
         <LinearGradient colors={["#431407", "#7C2D12"]} style={styles.bankCard}>
           <View style={styles.cardHeader}>
-            <Text style={styles.bankName}>State Bank of India</Text>
+            <Text style={styles.bankName}>{t("accounts.bankName")}</Text>
             <FontAwesome name="bank" size={24} color="#FDE68A" />
           </View>
 
           <View style={styles.cardBody}>
             <View>
-              <Text style={styles.label}>Account Holder</Text>
+              <Text style={styles.label}>
+                {t("accounts.labels.accountHolder")}
+              </Text>
               <Text style={styles.value}>Shree Panchasara Parivar Trust</Text>
             </View>
 
             <View>
-              <Text style={styles.label}>Account Number</Text>
+              <Text style={styles.label}>
+                {t("accounts.labels.accountNumber")}
+              </Text>
               <View style={styles.valueRow}>
                 <Text style={styles.valueLarge}>3021 5648 ****</Text>
                 <TouchableOpacity
@@ -65,7 +70,9 @@ export default function AccountsScreen() {
 
             <View style={styles.row}>
               <View>
-                <Text style={styles.label}>IFSC Code</Text>
+                <Text style={styles.label}>
+                  {t("accounts.labels.ifscCode")}
+                </Text>
                 <View style={styles.valueRow}>
                   <Text style={styles.value}>SBIN000****</Text>
                   <TouchableOpacity
@@ -77,7 +84,7 @@ export default function AccountsScreen() {
               </View>
 
               <View>
-                <Text style={styles.label}>Branch</Text>
+                <Text style={styles.label}>{t("accounts.labels.branch")}</Text>
                 <Text style={styles.value}>Main Road, Patan</Text>
               </View>
             </View>
@@ -86,7 +93,9 @@ export default function AccountsScreen() {
 
         {/* UPI */}
         <View style={styles.upiContainer}>
-          <Text style={styles.sectionTitle}>UPI Payment</Text>
+          <Text style={styles.sectionTitle}>
+            {t("accounts.labels.upiPayment")}
+          </Text>
 
           <View style={styles.upiBox}>
             <View style={styles.upiIconBox}>
@@ -102,14 +111,12 @@ export default function AccountsScreen() {
               style={styles.copyButton}
               onPress={() => copyToClipboard("panchasara@sbi")}
             >
-              <Text style={styles.copyText}>Copy</Text>
+              <Text style={styles.copyText}>{t("accounts.labels.copy")}</Text>
             </TouchableOpacity>
           </View>
         </View>
 
-        <Text style={styles.note}>
-          Note: Please share transaction details on WhatsApp after donation.
-        </Text>
+        <Text style={styles.note}>{t("accounts.labels.note")}</Text>
       </ScrollView>
 
       {/* ✅ Overlay */}
@@ -117,10 +124,10 @@ export default function AccountsScreen() {
         <View style={styles.overlay} pointerEvents="box-none">
           <View style={styles.overlayCard} pointerEvents="auto">
             <Ionicons name="information-circle" size={30} color="#EA580C" />
-            <Text style={styles.overlayTitle}>Account Setup Coming Soon</Text>
-            <Text style={styles.overlayText}>
-              Trust bank account setup is in progress.
+            <Text style={styles.overlayTitle}>
+              {t("accounts.overlay.title")}
             </Text>
+            <Text style={styles.overlayText}>{t("accounts.overlay.text")}</Text>
           </View>
         </View>
       )}
