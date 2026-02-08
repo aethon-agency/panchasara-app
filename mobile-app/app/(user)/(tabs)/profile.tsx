@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Alert,
+  Switch,
 } from "react-native";
 import { AppHeader } from "@/src/components/AppHeader";
 import { useAuthStore } from "../../../src/stores/authStore";
@@ -20,7 +21,9 @@ interface MenuItemData {
   label: string;
   subtitle?: string;
   route?: string;
-  type?: "toggle" | "value";
+  type?: "toggle" | "value" | "link";
+  value?: boolean;
+  onValueChange?: (value: boolean) => void;
 }
 
 interface MenuSectionData {
@@ -80,8 +83,14 @@ const MenuSection = ({
             styles.menuItem,
             idx === section.items.length - 1 && styles.lastMenuItem,
           ]}
-          onPress={() => (item.route ? router.push(item.route as any) : null)}
-          activeOpacity={0.7}
+          onPress={() => {
+            if (item.type === "toggle" && item.onValueChange) {
+              item.onValueChange(!item.value);
+            } else if (item.route) {
+              router.push(item.route as any);
+            }
+          }}
+          activeOpacity={item.type === "toggle" ? 1 : 0.7}
         >
           <View style={styles.menuIconBox}>
             <Ionicons name={item.icon} size={22} color="#9A3412" />
@@ -92,7 +101,18 @@ const MenuSection = ({
               <Text style={styles.menuSubtitle}>{item.subtitle}</Text>
             )}
           </View>
-          <Ionicons name="chevron-forward" size={20} color="#CBD5E1" />
+
+          {item.type === "toggle" ? (
+            <Switch
+              value={item.value}
+              onValueChange={item.onValueChange}
+              trackColor={{ false: "#CBD5E1", true: "#FED7AA" }}
+              thumbColor={item.value ? "#EA580C" : "#F1F5F9"}
+              ios_backgroundColor="#CBD5E1"
+            />
+          ) : (
+            <Ionicons name="chevron-forward" size={20} color="#CBD5E1" />
+          )}
         </TouchableOpacity>
       ))}
     </View>
@@ -122,6 +142,12 @@ export default function ProfileScreen() {
   const { user, logout } = useAuthStore();
   const router = useRouter();
   const { t } = useLanguage();
+  const [notificationsEnabled, setNotificationsEnabled] = React.useState(true);
+
+  const toggleNotifications = (value: boolean) => {
+    setNotificationsEnabled(value);
+    // Here you would typically also update a setting in store or backend
+  };
 
   const handleLogout = () => {
     Alert.alert(t("common.logout"), t("common.logoutConfirm"), [
@@ -150,6 +176,8 @@ export default function ProfileScreen() {
           label: t("profile.menu.notifications.label"),
           subtitle: t("profile.menu.notifications.subtitle"),
           type: "toggle",
+          value: notificationsEnabled,
+          onValueChange: toggleNotifications,
         },
       ],
     },
