@@ -46,7 +46,7 @@ router.post("/check-user", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/signin", async (req: Request, res: Response) => {
+router.post("/login", async (req: Request, res: Response) => {
   try {
     const { mobileNumber } = req.body as SigninRequest;
 
@@ -83,50 +83,6 @@ router.post("/signin", async (req: Request, res: Response) => {
     }
   } catch (error: any) {
     console.error("Error in signin:", error);
-    res.status(500).json({
-      success: false,
-      error: error.message || "Failed to send OTP",
-    });
-  }
-});
-
-router.post("/resend-otp", async (req: Request, res: Response) => {
-  try {
-    const { mobileNumber } = req.body;
-
-    if (!mobileNumber) {
-      res.status(400).json({
-        success: false,
-        error: "Mobile number is required",
-      });
-      return;
-    }
-
-    const mobileRegex = /^[0-9]{10}$/;
-    if (!mobileRegex.test(mobileNumber)) {
-      res.status(400).json({
-        success: false,
-        error: "Invalid mobile number format. Must be 10 digits.",
-      });
-      return;
-    }
-
-    const response: { success: boolean; message: string } =
-      await resendOTP(mobileNumber);
-
-    if (response.success) {
-      res.json({
-        success: true,
-        message: response.message || "OTP resent successfully",
-      });
-    } else {
-      res.status(500).json({
-        success: false,
-        error: response.message || "Failed to send OTP",
-      });
-    }
-  } catch (error: any) {
-    console.error("Error in resend-otp:", error);
     res.status(500).json({
       success: false,
       error: error.message || "Failed to send OTP",
@@ -182,15 +138,15 @@ router.post("/verify-otp", async (req: Request, res: Response) => {
   }
 });
 
-router.post("/signup", async (req: Request, res: Response) => {
+router.post("/register", async (req: Request, res: Response) => {
   try {
-    const { mobileNumber, firstName, lastName, vehicleNo, upiId } =
+    const { mobileNumber, firstName, middleName, lastName } =
       req.body as SignupRequest;
 
-    if (!mobileNumber || !firstName || !lastName || !vehicleNo) {
+    if (!mobileNumber || !firstName || !middleName || !lastName) {
       return res.status(400).json({
         success: false,
-        error: "Required fields: mobileNumber, firstName, lastName, vehicleNo",
+        error: "Required fields: mobileNumber, firstName, middleName, lastName",
       });
     }
 
@@ -217,9 +173,8 @@ router.post("/signup", async (req: Request, res: Response) => {
         {
           mobilenumber: mobileNumber,
           firstname: firstName,
+          middlename: middleName,
           lastname: lastName,
-          vehiclenumber: vehicleNo,
-          upiid: upiId,
         },
       ])
       .select();

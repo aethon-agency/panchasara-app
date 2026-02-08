@@ -1,0 +1,44 @@
+import api from "./api";
+
+export const generateOTP = async (mobileNumber: string) => {
+  try {
+    if (!mobileNumber) return;
+    const response: any = await api.post("/auth/login", { mobileNumber });
+    if (response?.success) {
+      return response?.hash;
+    }
+    return null;
+  } catch (err) {
+    console.error("Error generating OTP:", err);
+  }
+};
+
+export const registerUser = async (
+  firstName: string,
+  middleName: string,
+  lastName: string,
+  mobileNumber: string,
+) => {
+  try {
+    if (
+      !firstName ||
+      !middleName ||
+      !lastName ||
+      !mobileNumber ||
+      mobileNumber.length < 10
+    )
+      return;
+    const response: any = await api.post("/auth/register", {
+      mobileNumber,
+      firstName,
+      middleName,
+      lastName,
+    });
+    if (response?.success) {
+      return response?.hash;
+    }
+    return null;
+  } catch (err) {
+    console.error("Error generating OTP:", err);
+  }
+};
