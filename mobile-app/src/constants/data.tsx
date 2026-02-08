@@ -242,19 +242,6 @@ export const EXPLORE_ITEMS = [
     route: "/accounts",
   },
   {
-    id: "mandir",
-    title: "explore.mandir.title",
-    subtitle: "explore.mandir.subtitle",
-    icon: (color: string) => (
-      <MaterialCommunityIcons
-        name="temple-hindu-outline"
-        size={28}
-        color={color}
-      />
-    ),
-    route: "/mandir-details",
-  },
-  {
     id: "history",
     title: "explore.history.title",
     subtitle: "explore.history.subtitle",
