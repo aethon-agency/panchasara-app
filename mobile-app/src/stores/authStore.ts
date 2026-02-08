@@ -6,6 +6,7 @@ type User = {
   id: string;
   mobilenumber: number;
   firstname: string;
+  middlename: string;
   lastname: string;
   vehiclenumber: string;
   upiid: string;
@@ -17,7 +18,7 @@ type AuthState = {
   user: User | null;
   token: string | null;
   pushToken: string | null;
-  isLoading: boolean;
+  authLoading: boolean;
   login: (token: string, user: User) => void;
   updateUser: (user: Partial<User>) => void;
   setPushToken: (token: string | null) => void;
@@ -30,7 +31,7 @@ export const useAuthStore = create<AuthState>()(
       user: null,
       token: null,
       pushToken: null,
-      isLoading: true,
+      authLoading: false,
       login: async (token, user) => {
         set({ token, user });
       },
@@ -54,9 +55,12 @@ export const useAuthStore = create<AuthState>()(
         user: state.user,
         pushToken: state.pushToken,
       }),
-      onRehydrateStorage: () => (state) => {
+      onRehydrateStorage: () => (state, error) => {
+        if (error) {
+          console.error("[AuthStore] Rehydration error:", error);
+        }
         if (state) {
-          state.isLoading = false;
+          state.authLoading = false;
         }
       },
     },

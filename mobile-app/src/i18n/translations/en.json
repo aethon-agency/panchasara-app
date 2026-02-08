@@ -1,0 +1,266 @@
+{
+  "common": {
+    "welcome": "Welcome",
+    "login": "Login",
+    "signup": "Sign Up",
+    "home": "Home",
+    "settings": "Settings",
+    "language": "Language",
+    "english": "English",
+    "gujarati": "Gujarati",
+    "hindi": "Hindi",
+    "search": "Search",
+    "profile": "Profile",
+    "logout": "Logout",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "submit": "Submit",
+    "on": "On",
+    "off": "Off",
+    "comingSoon": "More features coming soon...",
+    "logoutConfirm": "Are you sure you want to logout?",
+    "logoutButton": "Logout from App",
+    "saving": "Saving...",
+    "saveChanges": "Save Changes",
+    "success": "Success",
+    "error": "Error",
+    "jaiMataji": "— Jai Mataji —"
+  },
+  "tabs": {
+    "home": "Home",
+    "events": "Events",
+    "explore": "Explore",
+    "profile": "Profile"
+  },
+  "explore": {
+    "title": "Explore",
+    "subtitle": "Discover Activities"
+  },
+  "events": {
+    "title": "Events",
+    "subtitle": "Upcoming Mandir Schedule",
+    "badges": {
+      "poonam": "Poonam",
+      "havan": "Havan",
+      "special": "Special",
+      "event": "Event"
+    },
+    "emptyState": "No upcoming events scheduled"
+  },
+  "profile": {
+    "title": "My Profile",
+    "subtitle": "Manage your account",
+    "lifeMember": "Life Member",
+    "sections": {
+      "personalInfo": "Personal Information",
+      "seva": "Seva & Dharma",
+      "appSettings": "App Settings"
+    },
+    "menu": {
+      "myDetails": {
+        "label": "My Details",
+        "subtitle": "Name, Gotra, Village"
+      },
+      "myDonations": {
+        "label": "My Donations",
+        "subtitle": "History of contributions"
+      },
+      "language": {
+        "label": "Language / ભાષા",
+        "subtitle": "English"
+      },
+      "notifications": {
+        "label": "Notifications",
+        "subtitle": "On"
+      }
+    },
+    "fillAllFields": "Please fill all fields",
+    "updateSuccess": "Profile updated successfully",
+    "updateError": "Failed to update profile",
+    "version": "Version 1.0.0 • Panchasara Samaj"
+  },
+  "announcements": {
+    "title": "Announcements",
+    "subtitle": "News & Updates"
+  },
+  "announcementDetails": {
+    "title": "Announcement",
+    "subtitle": "Important Update"
+  },
+  "login": {
+    "title": "Jai Mataji",
+    "subtitle": "Your gateway to divine blessings",
+    "mobileTitle": "Enter Mobile Number",
+    "mobileSubtitle": "Sign in to access Darshan, Pooja, and Seva",
+    "mobilePlaceholder": "12345 67890",
+    "loginTab": "Login",
+    "registerTab": "Register",
+    "firstNameLabel": "First Name",
+    "middleNameLabel": "Middle Name",
+    "lastNameLabel": "Last Name",
+    "cta": "Get OTP",
+    "sendingOtp": "Sending OTP...",
+    "footer": "Secure login for Panchasara Parivar members 🪔",
+    "footerText": "By joining, you agree to our Terms and Privacy Policy",
+    "otpTitle": "Verify OTP",
+    "otpLabel": "Enter OTP Code",
+    "otpSubtitle": "Enter the 4-digit code sent to your mobile",
+    "otpResendText": "Didn't receive code?",
+    "resendAction": "Resend OTP",
+    "verifyCta": "Verify & Continue"
+  },
+  "home": {
+    "title": "Jai Bhavani Maa",
+    "bhaduka": "Bhaduka",
+    "announcements": "Announcements",
+    "seeAll": "See All",
+    "eventGallery": "Gallery",
+    "upcomingEvent": "Latest Event"
+  },
+  "days": {
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday"
+  },
+  "eventDetails": {
+    "title": "Event Invitation",
+    "headerTitle": "Jay Bhavani Maa",
+    "dateTimeLabel": "DATE AND TIME : ",
+    "venueLabel": "VENUE",
+    "messageTitle": "Bhojan Prasad Invitation",
+    "messageTemplate": "We are pleased to inform all family members that the {{eventTitle}} program is scheduled on {{date}}, {{day}}, as per the schedule. The donor of the Bhojan Prasad will be \"{{organizerName}}\".",
+    "welcomeNote": "— All are welcome to join —",
+    "shareButton": "Share Invitation",
+    "footerText": "For more information or inquiries, please contact commity members.",
+    "errorNotFound": "Event not found",
+    "errorGoBack": "Go Back"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Get in Touch",
+    "intro": "Have questions or need assistance? Reach out to the Committee Members.",
+    "committee": {
+      "title": "Committee Members",
+      "label": "Tap to view members"
+    },
+    "whatsapp": {
+      "title": "WhatsApp",
+      "label": "Join WhatsApp Group"
+    },
+    "address": {
+      "title": "Mandir Address",
+      "label": "Panchasara Parivar Bhavani Mataji Madh, Bhaduka"
+    },
+    "modal": {
+      "close": "Close"
+    }
+  },
+  "accounts": {
+    "title": "Bank Accounts",
+    "subtitle": "Donation Details",
+    "sectionTitle": "For Online Transfer",
+    "sectionSubtitle": "Use these details for NEFT/RTGS/IMPS",
+    "bankName": "State Bank of India",
+    "labels": {
+      "accountHolder": "Account Holder",
+      "accountNumber": "Account Number",
+      "ifscCode": "IFSC Code",
+      "branch": "Branch",
+      "upiPayment": "UPI Payment",
+      "copy": "Copy",
+      "note": "Note: Please share transaction details on WhatsApp after donation."
+    },
+    "overlay": {
+      "title": "Account Setup Coming Soon",
+      "text": "Trust bank account setup is in progress."
+    }
+  },
+  "donations": {
+    "title": "Donations",
+    "subtitle": "History",
+    "historyTitle": "Recent History",
+    "by": "By: {{donorName}}",
+    "types": {
+      "cash": "cash",
+      "item": "item"
+    }
+  },
+  "history": {
+    "title": "Family History",
+    "subtitle": "Panchasara Lineage",
+    "quote": "Knowing our roots allows us to grow stronger branches for the future generations.",
+    "sections": {
+      "intro": {
+        "text": "The word 'Panchasara' is primarily associated with the village of Panchasar in Patan district and its ancient rulers."
+      },
+      "ancient_capital": {
+        "title": "Panchasar: Ancient Capital of Chawda Dynasty",
+        "text": "Before the founding of Patan, Panchasar was a prosperous city and the capital of the Chawda dynasty. In the 7th century, King Jayshikhari Chawda ruled here. Legend says Panchasar was so grand that King Bhuvard of Kalyan attacked it after hearing of its glory. In 697 AD, a fierce battle took place where Jayshikhari Chawda attained martyrdom, ensuring his pregnant queen Rupsundari was safely sent to the forest."
+      },
+      "vanraj_chawda": {
+        "title": "Vanraj Chawda and the Rise of Patan",
+        "text": "Vanraj Chawda, born in the forest after the fall of Panchasar, rebuilt the legacy. In 746 AD, he founded Annhilwad Patan, named after his friend Annhil Bharwad. In honor of his ancestors and Panchasar, he built the grand Panchasara Parshvanath temple in Patan."
+      },
+      "derasar": {
+        "title": "Panchasara Parshvanath Temple (Patan)",
+        "text": "This temple remains a major center of Jainism and architecture in Gujarat. The idol of Lord Parshvanath is believed to have been brought from the original Panchasar village, giving it the name 'Panchasara Parshvanath'."
+      },
+      "lineage": {
+        "title": "Panchasara Family (Caste and Clan)",
+        "text": "Today, 'Panchasara' serves as a surname or clan name. Families whose ancestors hailed from the original Panchasar region identify as 'Panchasara'. This lineage is primarily found in the Jain Vanik and Vishwakarma (Gajjar/Suthar) communities, who have led in craftsmanship, architecture, and trade for generations."
+      },
+      "bhaduka": {
+        "title": "Spiritual Connection to Bhaduka",
+        "text": "Centuries ago, when our ancestors migrated to this region, they brought their deities with them. In the holy land of Bhaduka, Maa Bhavani signaled her desire to settle. Since then, the Panchasara family has made this site their center of faith. The entire family contributes to the temple's maintenance, fostering unity through annual gatherings and community meals. For a Panchasara family member, Bhaduka is not just a village, but the blessing of generations."
+      },
+      "kuldevi": {
+        "title": "Establishment as Kuldevi",
+        "text": "Maa Bhavani, residing in Bhaduka, is the Kuldevi of the Panchasara family. History says that when our ancestors (primarily of the Gajjar/Suthar community) settled in the Panchal region of Saurashtra centuries ago, they established Maa Bhavani as their protector. The temple in Bhaduka is considered the 'Mool Sthanak' (original seat) of the Panchasara family."
+      }
+    }
+  },
+  "guidelines": {
+    "title": "Mandir Guidelines",
+    "subtitle": "Rules & Information",
+    "intro": "To ensure a peaceful and spiritual experience for everyone, we kindly request all devotees to follow these guidelines during their visit to Shree Panchasara Parivar Mandir.",
+    "footer": "Thank you for your cooperation in maintaining the sanctity of our temple.",
+    "sections": {
+      "general": {
+        "title": "General Rules",
+        "rules": [
+          "Please maintain silence inside the temple premises.",
+          "Mobile phones should be switched off or kept on silent mode.",
+          "Photography and videography are strictly prohibited inside the main sanctum.",
+          "Footwear must be kept in the designated footwear area outside."
+        ]
+      },
+      "etiquette": {
+        "title": "Darshan Etiquette",
+        "rules": [
+          "Please stand in the designated queues during peak hours.",
+          "Proper traditional attire is recommended while visiting the temple.",
+          "Offerings should be handed over to the priests at the designated counter.",
+          "Maintain a respectful distance from the idols and other devotees."
+        ]
+      },
+      "safety": {
+        "title": "Safety & Hygiene",
+        "rules": [
+          "Help keep the temple clean by disposing of waste in bins provided.",
+          "Supervise children at all times near the temple premises.",
+          "Follow the instructions provided by temple volunteers and security staff."
+        ]
+      }
+    }
+  },
+  "mandir": {
+    "title": "Mandir Details",
+    "subtitle": "About Temple"
+  }
+}

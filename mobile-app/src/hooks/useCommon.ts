@@ -8,7 +8,7 @@ export const useCommon = () => {
   const router = useRouter();
   const toast = useToast();
   const navigation = useNavigation();
-  const insent = useSafeAreaInsets();
+  const insets = useSafeAreaInsets();
   const { networkState } = useNetwork();
   const isIOS = Platform.OS === "ios";
 
@@ -21,7 +21,7 @@ export const useCommon = () => {
   return {
     router,
     toast,
-    insent,
+    insets,
     navigation,
     networkState,
     isIOS,

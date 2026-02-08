@@ -1,89 +1,307 @@
-import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
-  KeyboardAvoidingView,
   Platform,
   ScrollView,
   StatusBar,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
+  Image,
+  Dimensions,
+  Keyboard,
 } from "react-native";
-import { COLORS } from "../../src/constants/colors";
-import { FONTS } from "../../src/constants/fonts";
+import { LinearGradient } from "expo-linear-gradient";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+  interpolate,
+  Extrapolation,
+  Easing,
+} from "react-native-reanimated";
+import { LanguageSelector } from "@/src/components/LanguageSelector";
+import { CustomInput } from "@/src/components/CustomInput";
+import { SwipeButton } from "@/src/components/SwipeButton";
+import { KeyboardAvoidingContainer } from "@/src/components/KeyboardAvoidingContainer";
+import { useLanguage } from "@/src/hooks/useLanguage";
+import { useCommon } from "@/src/hooks/useCommon";
+import { useKeyboardVisible } from "@/src/hooks/useKeyboardVisible";
+
+const { width, height } = Dimensions.get("window");
 
 const LoginScreen = () => {
+  const { t } = useLanguage();
+  const { insets } = useCommon();
+  const isKeyboardVisible = useKeyboardVisible();
+  const [activeTab, setActiveTab] = useState<"login" | "register">("login");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [middleName, setMiddleName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // Transition value: 0 for login, 1 for register
+  const transition = useSharedValue(0);
+
+  useEffect(() => {
+    transition.value = withTiming(activeTab === "register" ? 1 : 0, {
+      duration: 500,
+      easing: Easing.bezier(0.33, 1, 0.68, 1),
+    });
+  }, [activeTab]);
+
   const handleSendOTP = () => {
-    if (phoneNumber.length < 10) {
-      // In a real app, use Toast here
-      return;
+    if (activeTab === "login") {
+      if (phoneNumber.length < 10) return;
+    } else {
+      if (!firstName || !middleName || !lastName || phoneNumber.length < 10)
+        return;
     }
+
+    // Dismiss keyboard before navigation
+    Keyboard.dismiss();
+
     setLoading(true);
-    // Mock API call
+    // Simulate API Call
     setTimeout(() => {
       setLoading(false);
       router.push("/(auth)/otp");
     }, 1500);
   };
 
-  return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.container}
-    >
-      <StatusBar barStyle="dark-content" />
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        <View style={styles.header}>
-          <View style={styles.logoContainer}>
-            <Ionicons name="sunny" size={80} color={COLORS.primary} />
-          </View>
-          <Text style={styles.title}>Panchasara Mandir</Text>
-          <Text style={styles.subtitle}>Welcome to the Divine Journey</Text>
-        </View>
+  const isFormValid =
+    activeTab === "login"
+      ? phoneNumber.length === 10
+      : firstName.trim() !== "" &&
+        middleName.trim() !== "" &&
+        lastName.trim() !== "" &&
+        phoneNumber.length === 10;
 
-        <View style={styles.formContainer}>
-          <Text style={styles.label}>Mobile Number</Text>
-          <View style={styles.inputWrapper}>
-            <Text style={styles.prefix}>+91</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Enter your 10 digit number"
-              keyboardType="phone-pad"
-              maxLength={10}
-              value={phoneNumber}
-              onChangeText={setPhoneNumber}
-              placeholderTextColor={COLORS.textTertiary}
+  // ANIMATED STYLES
+  const animatedTopSectionStyle = useAnimatedStyle(() => {
+    const collapsedHeight = insets.top + 40;
+
+    const sectionHeight = interpolate(
+      transition.value,
+      [0, 1],
+      [height * 0.35, collapsedHeight],
+      Extrapolation.CLAMP,
+    );
+    return {
+      height: sectionHeight,
+    };
+  });
+
+  const animatedLogoStyle = useAnimatedStyle(() => {
+    const opacity = interpolate(
+      transition.value,
+      [0, 0.8],
+      [1, 0],
+      Extrapolation.CLAMP,
+    );
+    const scale = interpolate(
+      transition.value,
+      [0, 1],
+      [1, 0.7],
+      Extrapolation.CLAMP,
+    );
+    const translateY = interpolate(
+      transition.value,
+      [0, 1],
+      [0, -20],
+      Extrapolation.CLAMP,
+    );
+
+    return {
+      opacity,
+      transform: [{ scale }, { translateY }],
+    };
+  });
+
+  const animatedLanguageStyle = useAnimatedStyle(() => {
+    const opacity = interpolate(
+      transition.value,
+      [0, 0.6],
+      [1, 0],
+      Extrapolation.CLAMP,
+    );
+    return {
+      opacity,
+    };
+  });
+
+  const animatedFormSheetStyle = useAnimatedStyle(() => {
+    // Margin Top interpolation to create the "floating" gap at the top
+    const marginTop = interpolate(
+      transition.value,
+      [0, 1],
+      [-25, 0], // In Register mode, it sits below the collapsed topSection (which is insets.top+40)
+      Extrapolation.CLAMP,
+    );
+
+    const borderRadius = interpolate(
+      transition.value,
+      [0, 1],
+      [40, 32],
+      Extrapolation.CLAMP,
+    );
+
+    return {
+      marginTop,
+      borderTopLeftRadius: borderRadius,
+      borderTopRightRadius: borderRadius,
+    };
+  });
+
+  return (
+    <View style={styles.container}>
+      <StatusBar barStyle="dark-content" />
+
+      {/* LIGHT SAFFRON BACKGROUND */}
+      <LinearGradient
+        colors={["#FFF7ED", "#FFEDD5", "#FED7AA"]}
+        style={StyleSheet.absoluteFill}
+      />
+
+      <View style={[styles.topHalo, { top: -width * 0.3 }]} />
+
+      <Animated.View style={[styles.topSection, animatedTopSectionStyle]}>
+        <Animated.View
+          style={[
+            styles.languageRow,
+            { top: Math.max(insets.top, 10) },
+            animatedLanguageStyle,
+          ]}
+        >
+          <LanguageSelector />
+        </Animated.View>
+
+        <Animated.View style={[styles.logoWrapper, animatedLogoStyle]}>
+          <View style={styles.logoHalo}>
+            <Image
+              source={require("../../assets/images/screen-logo.png")}
+              style={styles.logo}
+              resizeMode="contain"
             />
           </View>
+        </Animated.View>
+      </Animated.View>
 
-          <TouchableOpacity
-            style={[
-              styles.button,
-              (phoneNumber.length < 10 || loading) && styles.buttonDisabled,
-            ]}
-            onPress={handleSendOTP}
-            disabled={phoneNumber.length < 10 || loading}
-          >
-            <Text style={styles.buttonText}>
-              {loading ? "Sending..." : "Send OTP"}
-            </Text>
-          </TouchableOpacity>
+      <KeyboardAvoidingContainer style={{ flex: 1 }} iosOffset={0}>
+        <Animated.View style={[styles.formSheet, animatedFormSheetStyle]}>
+          <View style={styles.sheetContent}>
+            <View style={styles.tabBar}>
+              <TouchableOpacity
+                onPress={() => setActiveTab("login")}
+                style={[styles.tab, activeTab === "login" && styles.activeTab]}
+              >
+                <Text
+                  style={[
+                    styles.tabText,
+                    activeTab === "login" && styles.activeTabText,
+                  ]}
+                >
+                  {t("login.loginTab") ?? "Login"}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => setActiveTab("register")}
+                style={[
+                  styles.tab,
+                  activeTab === "register" && styles.activeTab,
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.tabText,
+                    activeTab === "register" && styles.activeTabText,
+                  ]}
+                >
+                  {t("login.registerTab") ?? "Register"}
+                </Text>
+              </TouchableOpacity>
+            </View>
 
-          <View style={styles.footer}>
-            <Text style={styles.footerText}>
-              By continuing, you agree to our{" "}
-              <Text style={styles.link}>Terms & Conditions</Text>
-            </Text>
+            <ScrollView
+              style={{ flex: 1 }}
+              contentContainerStyle={{ flexGrow: 1 }}
+              showsVerticalScrollIndicator={true}
+              keyboardShouldPersistTaps="handled"
+            >
+              {activeTab === "register" && (
+                <>
+                  <CustomInput
+                    label={t("login.firstNameLabel") ?? "First Name"}
+                    icon="account-outline"
+                    placeholder={
+                      t("login.firstNameLabel") ?? "Enter first name"
+                    }
+                    value={firstName}
+                    onChangeText={setFirstName}
+                  />
+
+                  <CustomInput
+                    label={t("login.middleNameLabel") ?? "Middle Name"}
+                    icon="account-outline"
+                    placeholder={
+                      t("login.middleNameLabel") ?? "Enter middle name"
+                    }
+                    value={middleName}
+                    onChangeText={setMiddleName}
+                  />
+
+                  <CustomInput
+                    label={t("login.lastNameLabel") ?? "Last Name"}
+                    icon="account-details-outline"
+                    placeholder={t("login.lastNameLabel") ?? "Enter last name"}
+                    value={lastName}
+                    onChangeText={setLastName}
+                  />
+                </>
+              )}
+
+              <CustomInput
+                label={t("login.mobileTitle") ?? "Mobile Number"}
+                prefix="🇮🇳 +91"
+                placeholder={t("login.mobilePlaceholder") ?? "00000 00000"}
+                keyboardType="phone-pad"
+                maxLength={10}
+                value={phoneNumber}
+                onChangeText={setPhoneNumber}
+                style={{ letterSpacing: 1.5 }}
+              />
+            </ScrollView>
+
+            <View
+              style={{
+                paddingTop: 10,
+                paddingBottom: isKeyboardVisible
+                  ? 10
+                  : Math.max(insets.bottom, 10) + 10,
+              }}
+            >
+              <SwipeButton
+                label={t("login.cta") ?? "Slide to get OTP"}
+                onSwipeComplete={handleSendOTP}
+                loading={loading}
+                disabled={!isFormValid}
+                height={54}
+                borderRadius={28}
+              />
+
+              <View style={styles.footer}>
+                <Text style={styles.footerText}>
+                  {t("login.footerText") ??
+                    "Secure portal for Panchasara Parivar members 🪔"}
+                </Text>
+              </View>
+            </View>
           </View>
-        </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+        </Animated.View>
+      </KeyboardAvoidingContainer>
+    </View>
   );
 };
 
@@ -92,108 +310,120 @@ export default LoginScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.backgroundPrimary,
   },
-  scrollContent: {
-    flexGrow: 1,
-    paddingHorizontal: 24,
-    paddingTop: 80,
-    paddingBottom: 40,
+  topHalo: {
+    position: "absolute",
+    left: -width * 0.1,
+    width: width * 1.2,
+    height: width * 0.7,
+    backgroundColor: "rgba(251, 191, 36, 0.25)",
+    borderBottomLeftRadius: width,
+    borderBottomRightRadius: width,
   },
-  header: {
-    alignItems: "center",
-    marginBottom: 60,
-  },
-  logoContainer: {
-    width: 120,
-    height: 120,
-    backgroundColor: COLORS.onboarding.illustrationBackground2,
-    borderRadius: 60,
+  topSection: {
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 20,
-    borderWidth: 2,
-    borderColor: COLORS.secondary,
+    overflow: "hidden",
   },
-  title: {
-    fontSize: 28,
-    fontFamily: FONTS.INTER_700,
-    color: COLORS.primaryDark,
-    marginBottom: 8,
+  languageRow: {
+    position: "absolute",
+    right: 20,
+    zIndex: 10,
   },
-  subtitle: {
-    fontSize: 16,
-    fontFamily: FONTS.INTER_400,
-    color: COLORS.textSecondary,
+  logoWrapper: {
+    marginTop: 20,
   },
-  formContainer: {
-    width: "100%",
+  logoHalo: {
+    borderRadius: 100,
+    backgroundColor: "#FFF",
+    borderWidth: 1.5,
+    borderColor: "rgba(251, 146, 60, 0.3)",
+    ...Platform.select({
+      ios: {
+        shadowColor: "#EA580C",
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.1,
+        shadowRadius: 10,
+      },
+      android: {
+        elevation: 4,
+      },
+    }),
   },
-  label: {
-    fontSize: 14,
-    fontFamily: FONTS.INTER_600,
-    color: COLORS.textPrimary,
-    marginBottom: 8,
+  logo: {
+    width: 200,
+    height: 200,
   },
-  inputWrapper: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: COLORS.backgroundSecondary,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    paddingHorizontal: 16,
-    height: 56,
-    marginBottom: 24,
-  },
-  prefix: {
-    fontSize: 16,
-    fontFamily: FONTS.INTER_600,
-    color: COLORS.textPrimary,
-    marginRight: 12,
-  },
-  input: {
+  formSheet: {
     flex: 1,
-    fontSize: 16,
-    fontFamily: FONTS.INTER_400,
-    color: COLORS.textPrimary,
-    height: "100%",
+    backgroundColor: "#FFFFFF",
+    paddingTop: 12,
+    ...Platform.select({
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: -10 },
+        shadowOpacity: 0.1,
+        shadowRadius: 20,
+      },
+      android: {
+        elevation: 20,
+      },
+    }),
   },
-  button: {
-    backgroundColor: COLORS.primary,
-    height: 56,
-    borderRadius: 12,
-    justifyContent: "center",
+  sheetContent: {
+    flex: 1,
+    marginHorizontal: 24,
+  },
+  tabBar: {
+    flexDirection: "row",
+    backgroundColor: "rgba(251, 146, 60, 0.08)",
+    borderRadius: 24,
+    padding: 6,
+    marginBottom: 32,
+  },
+  tab: {
+    flex: 1,
+    paddingVertical: 12,
     alignItems: "center",
-    shadowColor: COLORS.primary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 5,
+    borderRadius: 18,
   },
-  buttonDisabled: {
-    backgroundColor: COLORS.gray[300],
-    shadowOpacity: 0,
-    elevation: 0,
+  activeTab: {
+    backgroundColor: "#FFF",
+    ...Platform.select({
+      ios: {
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.05,
+        shadowRadius: 8,
+      },
+      android: {
+        elevation: 3,
+      },
+    }),
   },
-  buttonText: {
-    fontSize: 18,
-    fontFamily: FONTS.INTER_700,
-    color: COLORS.white,
+  tabText: {
+    fontSize: 15,
+    fontWeight: "700",
+    color: "#64748B",
+  },
+  activeTabText: {
+    color: "#EA580C",
+  },
+  scrollForm: {},
+  formInputs: {
+    flex: 1,
+    justifyContent: "flex-start",
   },
   footer: {
-    marginTop: 24,
+    marginTop: 12,
     alignItems: "center",
   },
   footerText: {
     fontSize: 12,
-    fontFamily: FONTS.INTER_400,
-    color: COLORS.textTertiary,
+    color: "#94A3B8",
     textAlign: "center",
     lineHeight: 18,
-  },
-  link: {
-    color: COLORS.primary,
-    fontFamily: FONTS.INTER_600,
+    paddingHorizontal: 20,
+    fontWeight: "500",
   },
 });
