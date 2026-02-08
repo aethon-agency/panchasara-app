@@ -15,8 +15,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useLanguage } from "@/src/hooks/useLanguage";
 import { LanguageSelector } from "@/src/components/LanguageSelector";
 
-// --- Types ---
-
 interface MenuItemData {
   icon: keyof typeof Ionicons.glyphMap;
   label: string;
