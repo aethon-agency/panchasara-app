@@ -202,6 +202,24 @@ export const ALL_EVENTS: MandirEvent[] = [
 
 export const EXPLORE_ITEMS = [
   {
+    id: "guidelines",
+    title: "explore.guidelines.title",
+    subtitle: "explore.guidelines.subtitle",
+    icon: (color: string) => (
+      <Ionicons name="information-circle-outline" size={28} color={color} />
+    ),
+    route: "/guidelines",
+  },
+  {
+    id: "contact",
+    title: "explore.contact.title",
+    subtitle: "explore.contact.subtitle",
+    icon: (color: string) => (
+      <Ionicons name="call-outline" size={28} color={color} />
+    ),
+    route: "/contact",
+  },
+  {
     id: "donations",
     title: "explore.donations.title",
     subtitle: "explore.donations.subtitle",
@@ -233,15 +251,6 @@ export const EXPLORE_ITEMS = [
     route: "/mandir-details",
   },
   {
-    id: "contact",
-    title: "explore.contact.title",
-    subtitle: "explore.contact.subtitle",
-    icon: (color: string) => (
-      <Ionicons name="call-outline" size={28} color={color} />
-    ),
-    route: "/contact",
-  },
-  {
     id: "history",
     title: "explore.history.title",
     subtitle: "explore.history.subtitle",
@@ -254,15 +263,13 @@ export const EXPLORE_ITEMS = [
     ),
     route: "/history",
   },
-  {
-    id: "guidelines",
-    title: "explore.guidelines.title",
-    subtitle: "explore.guidelines.subtitle",
-    icon: (color: string) => (
-      <Ionicons name="information-circle-outline" size={28} color={color} />
-    ),
-    route: "/guidelines",
-  },
+];
+
+export const COMMITTEE_MEMBERS = [
+  { name: "Maheshbhai Patel", phone: "+919876543210" },
+  { name: "Rameshbhai Patel", phone: "+919812345678" },
+  { name: "Sureshbhai Patel", phone: "+919823456789" },
+  { name: "Nareshbhai Patel", phone: "+919834567890" },
 ];
 
 export const DONATIONS = [
@@ -297,3 +304,6 @@ export const DONATIONS = [
     donorName: "Gajjar Family",
   },
 ];
+
+export const WHATSAPP_GROUP_LINK =
+  "https://chat.whatsapp.com/4n01go3yTCp9baMymp5WRH?mode=wwt";

@@ -87,3 +87,27 @@ export const toGujarati = (text: string) => {
   const map = ["૦", "૧", "૨", "૩", "૪", "૫", "૬", "૭", "૮", "૯"];
   return text.replace(/[0-9]/g, (d: any) => map[d]);
 };
+
+export const openWhatsApp = (phoneNumber: string) => {
+  if (!phoneNumber) {
+    console.warn("No phone number provided for WhatsApp");
+    return;
+  }
+  // Remove non-numeric characters for the link
+  const cleanNumber = phoneNumber.replace(/\D/g, "");
+  const url = `https://wa.me/${cleanNumber}`;
+
+  Linking.openURL(url).catch((err) => {
+    console.error("Failed to open WhatsApp:", err);
+  });
+};
+
+export const joinWhatsAppGroup = (groupLink: string) => {
+  if (!groupLink) {
+    console.warn("No group link provided for WhatsApp");
+    return;
+  }
+  Linking.openURL(groupLink).catch((err) => {
+    console.error("Failed to join WhatsApp group:", err);
+  });
+};
