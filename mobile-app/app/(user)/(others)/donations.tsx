@@ -10,7 +10,6 @@ import { AppHeader } from "@/src/components/AppHeader";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import Animated, { FadeInUp } from "react-native-reanimated";
 import { DONATIONS } from "@/src/constants/data";
 import { useTranslation } from "react-i18next";
 
@@ -33,11 +32,7 @@ export default function DonationsScreen() {
         <Text style={styles.historyTitle}>{t("donations.historyTitle")}</Text>
 
         {DONATIONS.map((item, index) => (
-          <Animated.View
-            key={item.id}
-            entering={FadeInUp.delay(index * 100).duration(500)}
-            style={styles.cardContainer}
-          >
+          <View key={item.id} style={styles.cardContainer}>
             <TouchableOpacity activeOpacity={0.8} style={styles.card}>
               <LinearGradient
                 colors={["#FFFFFF", "#FFF7ED"]}
@@ -95,7 +90,7 @@ export default function DonationsScreen() {
                 </View>
               </LinearGradient>
             </TouchableOpacity>
-          </Animated.View>
+          </View>
         ))}
       </ScrollView>
     </View>
