@@ -1,4 +1,4 @@
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import React, { useRef, useState, useEffect } from "react";
 import {
   Platform,
@@ -23,13 +23,16 @@ import { verifyOTP } from "@/src/services/authServices";
 
 const { width, height } = Dimensions.get("window");
 
-const OTPScreen = ({
-  mobileNumber,
-  hash,
-}: {
-  mobileNumber: number;
-  hash: string;
-}) => {
+const OTPScreen = () => {
+  const params = useLocalSearchParams();
+  const mobileNumber = Array.isArray(params.mobileNumber)
+    ? params.mobileNumber[0]
+    : params.mobileNumber;
+  const hash = Array.isArray(params.hash) ? params.hash[0] : params.hash;
+
+  if (!mobileNumber || !hash) {
+    console.error("Missing mobileNumber or hash in OTP screen");
+  }
   const { t } = useLanguage();
   const insets = useSafeAreaInsets();
   const isKeyboardVisible = useKeyboardVisible();
@@ -72,7 +75,7 @@ const OTPScreen = ({
       const verifyDone = await verifyOTP({
         mobileNumber,
         otp: otp.join(""),
-        hash: "",
+        hash: hash,
       });
       if (verifyDone) {
         //TODO: FETCH USER

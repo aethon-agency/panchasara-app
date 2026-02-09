@@ -1,3 +1,12 @@
 export const TABLE_NAME = {
   USERS: "users",
 } as const;
+
+export const COLUMN_NAME = {
+  USERS: {
+    MOBILE_NUMBER: "mobilenumber",
+    FIRST_NAME: "firstname",
+    MIDDLE_NAME: "middlename",
+    LAST_NAME: "lastname",
+  },
+};

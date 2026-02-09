@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import { supabase } from "../database/index.js";
-import { TABLE_NAME } from "../util/constant.js";
-import { resendOTP, sendOTP, verifyOTP } from "../services/otp.js";
+import { COLUMN_NAME, TABLE_NAME } from "../util/constant.js";
+import { sendOTP, verifyOTP } from "../services/otp.js";
 import { generateToken } from "../services/jwt.js";
 import { SigninRequest, SignupRequest, User } from "../types/auth.js";
 
@@ -55,40 +55,43 @@ router.post("/verify-otp", async (req: Request, res: Response) => {
   try {
     const { mobileNumber, otp, hash } = req.body;
 
-    if (!otp || !hash) {
+    if (!otp || !hash || !mobileNumber) {
       return res.status(400).json({
         success: false,
         error: "Missing fields",
       });
     }
 
-    const isValid = await verifyOTP(otp, hash);
-
-    if (!isValid) {
-      return res.status(401).json({
-        success: false,
-        error: "Invalid or expired OTP",
-      });
-    }
-
     const { data: users, error } = await supabase
       .from(TABLE_NAME.USERS)
       .select("*")
-      .eq("mobilenumber", mobileNumber)
+      .eq(COLUMN_NAME.USERS.MOBILE_NUMBER, mobileNumber)
       .limit(1);
 
     if (error) throw new Error(error.message);
 
     if (users && users.length > 0) {
+      const isValid = await verifyOTP(otp, hash);
+
+      if (!isValid) {
+        return res.status(401).json({
+          success: false,
+          error: "Invalid or expired OTP",
+        });
+      }
+
       const user = users[0];
-      const token = generateToken(user.id, user.mobilenumber);
+      const token = generateToken(
+        user.id,
+        user[COLUMN_NAME.USERS.MOBILE_NUMBER],
+      );
       return res.json({ success: true, token, user });
     }
 
     return res.json({
       success: true,
       newUser: true,
-      message: "OTP verified. User not registered.",
+      message: "Please Register User First",
     });
   } catch (error: any) {
     console.error("Error in verify-otp:", error);
