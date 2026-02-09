@@ -1,112 +1,19 @@
-import express, { Response } from "express";
+import express, { Request, Response } from "express";
 import { supabase } from "../database/index.js";
 import { TABLE_NAME } from "../util/constant.js";
 import { AuthRequest, middleware } from "../util/middleware.js";
 
 const router = express.Router();
 
-// GET /user/riding - Check if user is currently riding
-router.get("/riding", middleware, async (req: AuthRequest, res: Response) => {
-  try {
-    const userId = req.user!.id;
-
-    // Fetch the user's riding status
-    const { data, error } = await supabase
-      .from(TABLE_NAME.USERS)
-      .select("isriding")
-      .eq("id", userId)
-      .single();
-
-    if (error) {
-      console.error("Error fetching user riding status:", error);
-      return res
-        .status(500)
-        .json({ status: false, error: "Failed to fetch riding status" });
-    }
-
-    if (!data) {
-      return res.status(404).json({ status: false, error: "User not found" });
-    }
-
-    return res.status(200).json({
-      status: true,
-      data: {
-        isriding: data.isriding,
-      },
-    });
-  } catch (error) {
-    return res.status(500).json({
-      status: false,
-      error: "Internal server error",
-    });
-  }
-});
-
-router.patch(
-  "/riding/:status",
-  middleware,
-  async (req: AuthRequest, res: Response) => {
-    try {
-      const userId = req.user!.id;
-      const { status } = req.params;
-
-      // Validate the input - convert string to boolean
-      if (status !== "true" && status !== "false") {
-        return res.status(400).json({
-          status: false,
-          error: 'Status must be either "true" or "false"',
-        });
-      }
-
-      const isriding = status === "true";
-
-      // Update the user's riding status
-      const { data, error } = await supabase
-        .from(TABLE_NAME.USERS)
-        .update({ isriding })
-        .eq("id", userId)
-        .select("isriding")
-        .single();
-
-      if (error) {
-        console.error("Error updating user riding status:", error);
-        return res.status(500).json({
-          status: false,
-          error: "Failed to update riding status",
-        });
-      }
-
-      if (!data) {
-        return res.status(404).json({ status: false, error: "User not found" });
-      }
-
-      return res.status(200).json({
-        status: true,
-        message: "Riding status updated successfully",
-        data: {
-          isriding: data.isriding,
-        },
-      });
-    } catch (error) {
-      return res.status(500).json({
-        status: false,
-        error: "Internal server error",
-      });
-    }
-  },
-);
-
 // GET /user/profile - Fetch all user details for editing
-router.get("/profile", middleware, async (req: AuthRequest, res: Response) => {
+router.get("/profile", middleware, async (req: Request, res: Response) => {
   try {
-    const userId = req.user!.id;
+    const userId = (req as AuthRequest).user.id;
 
     // Fetch all user details
     const { data, error } = await supabase
       .from(TABLE_NAME.USERS)
-      .select(
-        "id, mobilenumber, firstname, lastname, vehiclenumber, upiid, profileimage, email",
-      )
+      .select("id, mobilenumber, firstname, lastname, middlename")
       .eq("id", userId)
       .single();
 
@@ -129,10 +36,7 @@ router.get("/profile", middleware, async (req: AuthRequest, res: Response) => {
         mobileNumber: data.mobilenumber,
         firstName: data.firstname,
         lastName: data.lastname,
-        vehicleNumber: data.vehiclenumber,
-        upiId: data.upiid,
-        profileImage: data.profileimage,
-        email: data.email || null,
+        middleName: data.middlename,
       },
     });
   } catch (error) {
@@ -144,84 +48,64 @@ router.get("/profile", middleware, async (req: AuthRequest, res: Response) => {
 });
 
 // PATCH /user/profile - Update user profile details
-router.patch(
-  "/profile",
-  middleware,
-  async (req: AuthRequest, res: Response) => {
-    try {
-      const userId = req.user!.id;
-      const {
-        firstName,
-        lastName,
-        vehicleNumber,
-        upiId,
-        mobileNumber,
-        profileImage,
-        email,
-      } = req.body;
+router.patch("/profile", middleware, async (req: Request, res: Response) => {
+  try {
+    const userId = (req as AuthRequest).user.id;
+    const { firstName, lastName, middleName, mobileNumber }: any = req.body;
 
-      // Build update object with only provided fields
-      const updateData: any = {};
+    // Build update object with only provided fields
+    const updateData: any = {};
 
-      if (firstName !== undefined) updateData.firstname = firstName;
-      if (lastName !== undefined) updateData.lastname = lastName;
-      if (vehicleNumber !== undefined) updateData.vehiclenumber = vehicleNumber;
-      if (upiId !== undefined) updateData.upiid = upiId;
-      if (mobileNumber !== undefined) updateData.mobilenumber = mobileNumber;
-      if (profileImage !== undefined) updateData.profileimage = profileImage;
-      if (email !== undefined) updateData.email = email;
+    if (firstName !== undefined) updateData.firstname = firstName;
 
-      // Check if there are any fields to update
-      if (Object.keys(updateData).length === 0) {
-        return res.status(400).json({
-          status: false,
-          error: "No fields provided to update",
-        });
-      }
+    if (lastName !== undefined) updateData.lastname = lastName;
+    if (mobileNumber !== undefined) updateData.mobilenumber = mobileNumber;
 
-      // Update the user's profile
-      const { data, error } = await supabase
-        .from(TABLE_NAME.USERS)
-        .update(updateData)
-        .eq("id", userId)
-        .select(
-          "id, mobilenumber, firstname, lastname, vehiclenumber, upiid, profileimage, email",
-        )
-        .single();
-
-      if (error) {
-        console.error("Error updating user profile:", error);
-        return res.status(500).json({
-          status: false,
-          error: "Failed to update user profile",
-        });
-      }
-
-      if (!data) {
-        return res.status(404).json({ status: false, error: "User not found" });
-      }
-
-      return res.status(200).json({
-        status: true,
-        message: "Profile updated successfully",
-        data: {
-          id: data.id,
-          mobileNumber: data.mobilenumber,
-          firstName: data.firstname,
-          lastName: data.lastname,
-          vehicleNumber: data.vehiclenumber,
-          upiId: data.upiid,
-          profileImage: data.profileimage,
-          email: data.email || null,
-        },
-      });
-    } catch (error) {
-      return res.status(500).json({
+    // Check if there are any fields to update
+    if (Object.keys(updateData).length === 0) {
+      return res.status(400).json({
         status: false,
-        error: "Internal server error",
+        error: "No fields provided to update",
       });
     }
-  },
-);
+
+    // Update the user's profile
+    const { data, error } = await supabase
+      .from(TABLE_NAME.USERS)
+      .update(updateData)
+      .eq("id", userId)
+      .select("id, mobilenumber, firstname, lastname, middlename")
+      .single();
+
+    if (error) {
+      console.error("Error updating user profile:", error);
+      return res.status(500).json({
+        status: false,
+        error: "Failed to update user profile",
+      });
+    }
+
+    if (!data) {
+      return res.status(404).json({ status: false, error: "User not found" });
+    }
+
+    return res.status(200).json({
+      status: true,
+      message: "Profile updated successfully",
+      data: {
+        id: data.id,
+        mobileNumber: data.mobilenumber,
+        firstName: data.firstname,
+        lastName: data.lastname,
+        middleName: data.middlename,
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: false,
+      error: "Internal server error",
+    });
+  }
+});
 
 export default router;

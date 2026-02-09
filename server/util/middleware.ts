@@ -1,15 +1,16 @@
 import { Request, Response, NextFunction } from "express";
 import { verifyToken } from "../services/jwt.js";
 
-export interface AuthRequest extends Request {
-  user?: { id: any; mobileNumber?: any };
+export interface UserPayload {
+  id: string;
+  mobileNumber: string;
 }
 
-export const middleware = (
-  req: AuthRequest,
-  res: Response,
-  next: NextFunction,
-) => {
+export interface AuthRequest extends Request {
+  user: UserPayload;
+}
+
+export const middleware = (req: Request, res: Response, next: NextFunction) => {
   try {
     const token = req.headers.authorization?.split(" ")[1];
     if (!token) {
@@ -20,13 +21,16 @@ export const middleware = (
 
     const decoded = verifyToken(token);
 
-    if (!decoded || !decoded.sub) {
+    if (!decoded || !decoded.id) {
       return res
         .status(401)
         .json({ success: false, error: "Invalid token payload" });
     }
 
-    req.user = { id: decoded.sub, mobileNumber: decoded.phone };
+    (req as AuthRequest).user = {
+      id: decoded.id,
+      mobileNumber: decoded.mobileNumber,
+    };
     next();
   } catch (error: any) {
     if (error.name === "TokenExpiredError") {

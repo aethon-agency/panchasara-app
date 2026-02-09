@@ -9,7 +9,7 @@ if (!JWT_SECRET) {
 const SECRET = JWT_SECRET;
 
 export interface JWTPayload {
-  userId: string;
+  id: string;
   mobileNumber: string;
   iat?: number;
   exp?: number;
@@ -17,13 +17,13 @@ export interface JWTPayload {
 
 /**
  * Generate a JWT token for authenticated user
- * @param userId - User's unique ID
+ * @param id - User's unique ID
  * @param mobileNumber - User's mobile number
  * @returns JWT token string
  */
-export const generateToken = (userId: string, mobileNumber: string): string => {
+export const generateToken = (id: string, mobileNumber: string): string => {
   const payload: JWTPayload = {
-    userId,
+    id,
     mobileNumber,
   };
 
