@@ -77,7 +77,7 @@ const HomeScreen = () => {
 
       <AppHeader
         title={t("home.title")}
-        subtitle={user?.firstname || t("home.bhaduka")}
+        subtitle={t("home.bhaduka")}
         rightAction={<LanguageSelector />}
       />
 
