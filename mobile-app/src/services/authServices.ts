@@ -5,7 +5,9 @@ export const sendOTP = async (mobileNumber: string) => {
     if (!mobileNumber) return;
     const response: any = await api.post("/auth/login", { mobileNumber });
     if (response?.success) {
-      return response?.hash;
+      console.log("OTP Sent via App Service:", response);
+      // Return the whole response so UI can check for newUser or hash
+      return response;
     }
     return null;
   } catch (err) {

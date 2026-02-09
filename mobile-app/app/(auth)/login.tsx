@@ -29,6 +29,7 @@ import { useLanguage } from "@/src/hooks/useLanguage";
 import { useCommon } from "@/src/hooks/useCommon";
 import { useKeyboardVisible } from "@/src/hooks/useKeyboardVisible";
 import { sendOTP, registerUser } from "@/src/services/authServices";
+import { Toast } from "@/src/contexts/ToastProvider";
 
 const { width, height } = Dimensions.get("window");
 
@@ -57,22 +58,33 @@ const LoginScreen = () => {
     try {
       setLoading(true);
       Keyboard.dismiss();
-      let hash;
+
       if (activeTab === "login") {
-        hash = await sendOTP(mobileNumber);
+        const response = await sendOTP(mobileNumber);
+        if (response?.newUser) {
+          setActiveTab("register");
+          Toast.success(response.message || "Please register first");
+        } else if (response?.hash) {
+          const hash = response?.hash;
+          router.push({
+            pathname: "/(auth)/otp",
+            params: { hash, mobileNumber },
+          });
+        }
       } else {
-        hash = await registerUser(
+        const hash = await registerUser(
           firstName,
           middleName,
           lastName,
           mobileNumber,
         );
-      }
-      if (hash) {
-        router.push({
-          pathname: "/(auth)/otp",
-          params: { hash, mobileNumber },
-        });
+
+        if (hash) {
+          router.push({
+            pathname: "/(auth)/otp",
+            params: { hash, mobileNumber },
+          });
+        }
       }
     } catch (err) {
       console.error("Error sending OTP:", err);

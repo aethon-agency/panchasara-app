@@ -28,6 +28,26 @@ router.post("/login", async (req: Request, res: Response) => {
       return;
     }
 
+    // Check if user exists
+    const { data: users, error } = await supabase
+      .from(TABLE_NAME.USERS)
+      .select("*")
+      .eq(COLUMN_NAME.USERS.MOBILE_NUMBER, mobileNumber)
+      .limit(1);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    if (!users || users.length === 0) {
+      res.json({
+        success: true,
+        newUser: true,
+        message: "Please Register User First",
+      });
+      return;
+    }
+
     const requestId: string | null = await sendOTP(mobileNumber);
 
     if (requestId) {
@@ -117,7 +137,7 @@ router.post("/register", async (req: Request, res: Response) => {
     const { data: users, error: fetchError } = await supabase
       .from(TABLE_NAME.USERS)
       .select("*")
-      .eq("mobilenumber", mobileNumber)
+      .eq(COLUMN_NAME.USERS.MOBILE_NUMBER, mobileNumber)
       .limit(1);
 
     if (fetchError) {
@@ -125,9 +145,13 @@ router.post("/register", async (req: Request, res: Response) => {
     }
 
     if (users && users.length > 0) {
+      // If user exists, send OTP for login instead (or error out)
+      // For now, let's treat it as "User already registered" and maybe trigger login flow on frontend
+      // But typically register endpoint should error if user exists.
       return res.status(409).json({
         success: false,
         error: "User already registered",
+        isRegistered: true,
       });
     }
 
@@ -151,10 +175,20 @@ router.post("/register", async (req: Request, res: Response) => {
       throw new Error("Failed to create user");
     }
 
-    const user = newUsers[0] as User;
-    const token = generateToken(user.id, user.mobilenumber);
+    const requestId: string | null = await sendOTP(mobileNumber);
 
-    return res.status(201).json({ success: true, token, user });
+    if (requestId) {
+      res.status(201).json({
+        success: true,
+        hash: requestId,
+        message: "User registered. OTP sent.",
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: "User registered but failed to send OTP.",
+      });
+    }
   } catch (error: any) {
     console.error("Error in signup:", error);
     return res.status(500).json({
