@@ -43,22 +43,22 @@ const ProfileCard = ({
       <View style={styles.profileHeader}>
         <View style={styles.avatarPlaceholder}>
           <Text style={styles.avatarInitials}>
-            {user?.firstname ? user?.firstname?.[0] : "D"}
+            {user?.firstname ? user?.firstname?.[0] : "U"}
           </Text>
         </View>
 
         <View style={styles.profileInfo}>
           <Text style={styles.profileName}>
-            {user?.firstname
-              ? user?.firstname + " " + user?.lastname
-              : "Devam Panchasara"}
+            {user?.firstname ? user?.firstname + " " + user?.lastname : "User"}
           </Text>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
-            <Text style={styles.profilePhone}>
-              +91 {user?.mobilenumber ? user?.mobilenumber : "8154909268"}
-            </Text>
-            <Ionicons name="checkmark-circle" size={16} color="#EA580C" />
-          </View>
+          {user?.mobilenumber && (
+            <View
+              style={{ flexDirection: "row", alignItems: "center", gap: 6 }}
+            >
+              <Text style={styles.profilePhone}>+91 {user?.mobilenumber}</Text>
+              <Ionicons name="checkmark-circle" size={16} color="#EA580C" />
+            </View>
+          )}
         </View>
       </View>
     </LinearGradient>

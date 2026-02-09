@@ -144,44 +144,38 @@ router.post("/register", async (req: Request, res: Response) => {
       throw new Error(fetchError.message);
     }
 
-    if (users && users.length > 0) {
-      return res.status(409).json({
-        success: false,
-        error: "User already registered",
-        isRegistered: true,
-      });
+    if (!users || users.length === 0) {
+      const { data: newUsers, error: insertError } = await supabase
+        .from(TABLE_NAME.USERS)
+        .insert([
+          {
+            mobilenumber: mobileNumber,
+            firstname: firstName,
+            middlename: middleName,
+            lastname: lastName,
+          },
+        ])
+        .select();
+
+      if (insertError) {
+        throw new Error(insertError.message);
+      }
+
+      if (!newUsers || newUsers.length === 0) {
+        throw new Error("Failed to register user");
+      }
     }
 
-    const { data: newUsers, error: insertError } = await supabase
-      .from(TABLE_NAME.USERS)
-      .insert([
-        {
-          mobilenumber: mobileNumber,
-          firstname: firstName,
-          middlename: middleName,
-          lastname: lastName,
-        },
-      ])
-      .select();
+    const hash: string | null = await sendOTP(mobileNumber);
 
-    if (insertError) {
-      throw new Error(insertError.message);
-    }
-
-    if (!newUsers || newUsers.length === 0) {
-      throw new Error("Failed to create user");
-    }
-
-    const requestId: string | null = await sendOTP(mobileNumber);
-
-    if (requestId) {
+    if (hash) {
       res.status(201).json({
         success: true,
-        hash: requestId,
-        message: "User registered. OTP sent.",
+        hash,
+        message: "User registered & OTP sent.",
       });
     } else {
-      res.status(500).json({
+      return res.status(500).json({
         success: false,
         message: "User registered but failed to send OTP.",
       });
