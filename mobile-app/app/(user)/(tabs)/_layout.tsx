@@ -166,6 +166,7 @@ export default function TabsLayout() {
     >
       <Tabs.Screen name="home" options={{ title: t("tabs.home") }} />
       <Tabs.Screen name="event" options={{ title: t("tabs.events") }} />
+      <Tabs.Screen name="admin" options={{ title: t("tabs.admin") }} />
       <Tabs.Screen name="explore" options={{ title: t("tabs.explore") }} />
       <Tabs.Screen name="profile" options={{ title: t("tabs.profile") }} />
     </Tabs>
