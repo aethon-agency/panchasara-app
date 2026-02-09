@@ -3,10 +3,11 @@ import api from "./api";
 export const sendOTP = async (mobileNumber: string) => {
   try {
     if (!mobileNumber) return;
-    const response: any = await api.post("/auth/login", { mobileNumber });
-    if (response?.success) {
-      return response?.hash;
-    }
+    return "bdhebfhef";
+    // const response: any = await api.post("/auth/login", { mobileNumber });
+    // if (response?.success) {
+    //   return response?.hash;
+    // }
     return null;
   } catch (err) {
     console.error("Error sending OTP:", err);
@@ -44,19 +45,21 @@ export const registerUser = async (
   }
 };
 
-export const verifyOtp = async (payload: {
-  mobileNumber: string;
+export const verifyOTP = async (payload: {
+  mobileNumber: number;
   otp: string;
   hash: string;
 }) => {
   try {
-    const response: any = await api.post("/auth/verify-otp", payload);
+    console.log("VERIFY CALL");
 
-    if (response?.success) {
-      if (response?.token) {
-        return response?.token;
-      }
-    }
+    // const response: any = await api.post("/auth/verify-otp", payload);
+
+    // if (response?.success) {
+    //   if (response?.token) {
+    //     return response?.token;
+    //   }
+    // }
     return null;
   } catch (err) {
     console.error("Error Verifying OTP:", err);

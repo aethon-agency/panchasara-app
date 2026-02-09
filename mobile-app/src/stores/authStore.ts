@@ -8,10 +8,6 @@ type User = {
   firstname: string;
   middlename: string;
   lastname: string;
-  vehiclenumber: string;
-  upiid: string;
-  profileimage?: string | null;
-  isriding: boolean;
 };
 
 type AuthState = {

@@ -7,45 +7,6 @@ import { SigninRequest, SignupRequest, User } from "../types/auth.js";
 
 const router = express.Router();
 
-router.post("/check-user", async (req: Request, res: Response) => {
-  try {
-    const { mobileNumber } = req.body;
-
-    if (!mobileNumber) {
-      return res.status(400).json({
-        success: false,
-        error: "Mobile number required",
-      });
-    }
-
-    const { data: users, error } = await supabase
-      .from(TABLE_NAME.USERS)
-      .select("*")
-      .eq("mobilenumber", mobileNumber)
-      .limit(1);
-
-    if (error) throw new Error(error.message);
-
-    if (users && users.length > 0) {
-      return res.json({
-        success: true,
-        user: users[0],
-      });
-    }
-
-    return res.json({
-      success: true,
-      newUser: true,
-    });
-  } catch (error: any) {
-    console.error("Error in check-user:", error);
-    return res.status(500).json({
-      success: false,
-      error: error.message || "Failed to check user",
-    });
-  }
-});
-
 router.post("/login", async (req: Request, res: Response) => {
   try {
     const { mobileNumber } = req.body as SigninRequest;
@@ -94,14 +55,14 @@ router.post("/verify-otp", async (req: Request, res: Response) => {
   try {
     const { mobileNumber, otp, hash } = req.body;
 
-    if (!mobileNumber || !otp || !hash) {
+    if (!otp || !hash) {
       return res.status(400).json({
         success: false,
         error: "Missing fields",
       });
     }
 
-    const isValid = await verifyOTP(mobileNumber, otp, hash);
+    const isValid = await verifyOTP(otp, hash);
 
     if (!isValid) {
       return res.status(401).json({

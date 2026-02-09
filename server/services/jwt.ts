@@ -6,7 +6,7 @@ if (!JWT_SECRET) {
   throw new Error("JWT_SECRET is not defined");
 }
 
-const SECRET = JWT_SECRET || "default-secret-key-change-in-production";
+const SECRET = JWT_SECRET;
 
 export interface JWTPayload {
   userId: string;

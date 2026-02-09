@@ -69,7 +69,10 @@ const LoginScreen = () => {
         );
       }
       if (hash) {
-        router.push({ pathname: "/(auth)/otp", params: { hash } });
+        router.push({
+          pathname: "/(auth)/otp",
+          params: { hash, mobileNumber },
+        });
       }
     } catch (err) {
       console.error("Error sending OTP:", err);

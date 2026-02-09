@@ -1,17 +1,15 @@
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useRef, useState, useEffect } from "react";
 import {
   Platform,
-  ScrollView,
   StatusBar,
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
   Image,
   Dimensions,
+  Keyboard,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useAuthStore } from "@/src/stores/authStore";
@@ -21,10 +19,17 @@ import { SwipeButton } from "@/src/components/SwipeButton";
 import { KeyboardAvoidingContainer } from "@/src/components/KeyboardAvoidingContainer";
 import { useLanguage } from "@/src/hooks/useLanguage";
 import { useKeyboardVisible } from "@/src/hooks/useKeyboardVisible";
+import { verifyOTP } from "@/src/services/authServices";
 
 const { width, height } = Dimensions.get("window");
 
-const OTPScreen = () => {
+const OTPScreen = ({
+  mobileNumber,
+  hash,
+}: {
+  mobileNumber: number;
+  hash: string;
+}) => {
   const { t } = useLanguage();
   const insets = useSafeAreaInsets();
   const isKeyboardVisible = useKeyboardVisible();
@@ -33,7 +38,6 @@ const OTPScreen = () => {
   const inputs: any = useRef([]);
   const login = useAuthStore((state) => state.login);
 
-  // Auto-focus first input on mount
   useEffect(() => {
     const timer = setTimeout(() => {
       inputs.current[0]?.focus();
@@ -59,18 +63,26 @@ const OTPScreen = () => {
     }
   };
 
-  const handleVerify = () => {
+  const handleVerify = async () => {
     if (otp.join("").length < 4) return;
 
-    setLoading(true);
-
-    setTimeout(() => {
+    try {
+      setLoading(true);
+      Keyboard.dismiss();
+      const verifyDone = await verifyOTP({
+        mobileNumber,
+        otp: otp.join(""),
+        hash: "",
+      });
+      if (verifyDone) {
+        //TODO: FETCH USER
+        router.replace("/(user)/(tabs)/home");
+      }
+    } catch (err) {
+      console.error("Error sending OTP:", err);
+    } finally {
       setLoading(false);
-      const mockToken = "mock-jwt-token";
-      const mockUser: any = { id: "1" };
-      login(mockToken, mockUser);
-      router.replace("/(user)/(tabs)/home");
-    }, 1500);
+    }
   };
 
   const isOtpComplete = otp.join("").length === 4;
