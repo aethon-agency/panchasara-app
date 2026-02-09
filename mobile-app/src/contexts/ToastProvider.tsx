@@ -70,7 +70,7 @@ export const ToastProvider = ({ children }: any) => {
       {children}
       {toast && (
         <Animated.View
-          style={[styles.toastContainer, { bottom: insets.bottom + 120 }]}
+          style={[styles.toastContainer, { bottom: insets.bottom + 100 }]}
           entering={FadeInDown.springify()}
           exiting={FadeOutDown}
         >

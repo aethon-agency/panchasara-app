@@ -52,14 +52,7 @@ export const verifyOTP = async (payload: {
   hash: string;
 }) => {
   try {
-    const response: any = await api.post("/auth/verify-otp", payload);
-    if (response?.success) {
-      if (response?.token) {
-        return response?.token;
-      }
-      return true;
-    }
-    return null;
+    return await api.post("/auth/verify-otp", payload);
   } catch (err) {
     console.error("Error Verifying OTP:", err);
     return null;

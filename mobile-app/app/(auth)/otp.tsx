@@ -20,6 +20,7 @@ import { KeyboardAvoidingContainer } from "@/src/components/KeyboardAvoidingCont
 import { useLanguage } from "@/src/hooks/useLanguage";
 import { useKeyboardVisible } from "@/src/hooks/useKeyboardVisible";
 import { verifyOTP } from "@/src/services/authServices";
+import { Toast } from "@/src/contexts/ToastProvider";
 
 const { width, height } = Dimensions.get("window");
 
@@ -72,14 +73,16 @@ const OTPScreen = () => {
     try {
       setLoading(true);
       Keyboard.dismiss();
-      const verifyDone = await verifyOTP({
+      const verifyDone: any = await verifyOTP({
         mobileNumber,
         otp: otp.join(""),
         hash: hash,
       });
-      if (verifyDone) {
-        //TODO: FETCH USER
+      if (verifyDone?.success) {
+        login(verifyDone?.token, verifyDone?.user);
         router.replace("/(user)/(tabs)/home");
+      } else {
+        Toast.error(verifyDone?.message);
       }
     } catch (err) {
       console.error("Error sending OTP:", err);

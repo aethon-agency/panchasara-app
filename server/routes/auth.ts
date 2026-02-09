@@ -94,9 +94,9 @@ router.post("/verify-otp", async (req: Request, res: Response) => {
       const isValid = await verifyOTP(otp, hash);
 
       if (!isValid) {
-        return res.status(401).json({
+        return res.status(200).json({
           success: false,
-          error: "Invalid or expired OTP",
+          message: "Invalid or expired OTP",
         });
       }
 
@@ -145,9 +145,6 @@ router.post("/register", async (req: Request, res: Response) => {
     }
 
     if (users && users.length > 0) {
-      // If user exists, send OTP for login instead (or error out)
-      // For now, let's treat it as "User already registered" and maybe trigger login flow on frontend
-      // But typically register endpoint should error if user exists.
       return res.status(409).json({
         success: false,
         error: "User already registered",
