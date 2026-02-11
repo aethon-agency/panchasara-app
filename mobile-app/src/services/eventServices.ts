@@ -3,7 +3,6 @@ import api from "./api";
 interface CreatePoonamData {
   title: string;
   date: string; // YYYY-MM-DD
-  day: string; // Enum or string
   startTime?: string; // HH:mm
   endTime?: string; // HH:mm
   organizer?: string;

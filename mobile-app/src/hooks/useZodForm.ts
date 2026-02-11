@@ -45,5 +45,6 @@ export const useZodForm = <T extends Record<string, any>>(
     errors,
     handleChange,
     isValid,
+    setValues,
   };
 };

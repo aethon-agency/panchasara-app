@@ -17,34 +17,32 @@ router.post("/poonam", async (req, res) => {
       organizer,
       description,
       location,
-      day,
     } = req.body;
 
     // Basic validation
-    if (!title || !date || !day) {
+    if (!title || !date) {
       return res.status(400).json({
         success: false,
-        message: "Missing required fields: title, date, day",
+        message: "Missing required fields: title, date",
       });
     }
 
     if (startTime && !isValidTime(startTime)) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: "Invalid start time format. Use HH:mm",
-        });
+      return res.status(400).json({
+        success: false,
+        message: "Invalid start time format. Use HH:mm",
+      });
     }
 
     if (endTime && !isValidTime(endTime)) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: "Invalid end time format. Use HH:mm",
-        });
+      return res.status(400).json({
+        success: false,
+        message: "Invalid end time format. Use HH:mm",
+      });
     }
+
+    const dateObj = new Date(date);
+    const dayOfWeek = dateObj.toLocaleDateString("en-US", { weekday: "long" });
 
     const { data, error } = await supabase
       .from("poonams")
@@ -52,7 +50,7 @@ router.post("/poonam", async (req, res) => {
         {
           title,
           event_date: date,
-          day,
+          day: dayOfWeek,
           start_time: startTime || null,
           end_time: endTime || null, // Optional
           organizer_name: organizer || null,
