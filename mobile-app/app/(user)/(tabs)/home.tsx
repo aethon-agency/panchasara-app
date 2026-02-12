@@ -14,13 +14,15 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { LanguageSelector } from "@/src/components/LanguageSelector";
 import { useLanguage } from "@/src/hooks/useLanguage";
-import { HERO_IMAGES, GALLERY_DATA, ALL_EVENTS } from "@/src/constants/data";
+import { HERO_IMAGES, GALLERY_DATA, MandirEvent } from "@/src/constants/data";
 import { Section } from "@/src/components/Section";
 import { GalleryCollageCard } from "@/src/components/GalleryCollageCard";
 import { AnnouncementCard } from "@/src/components/AnnouncementCard";
 import { MandirEventCard } from "@/src/components/MandirEventCard";
 import { getUserProfile } from "@/src/services/userServices";
 import { getAnnouncements } from "@/src/services/announcementServices";
+import { getAllEvents } from "@/src/services/eventServices";
+import { formatDate } from "@/src/utils/functions";
 
 const { width } = Dimensions.get("window");
 
@@ -37,8 +39,9 @@ const HomeScreen = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const autoScroll = useRef(true);
   const [announcements, setAnnouncements] = useState<any[]>([]);
+  const [events, setEvents] = useState<MandirEvent[]>([]);
 
-  // FETCH PROFILE TO SYNC ADMIN STATUS
+  // FETCH DATA
   useEffect(() => {
     const syncProfile = async () => {
       try {
@@ -63,17 +66,62 @@ const HomeScreen = () => {
       }
     };
     fetchAnnouncements();
+
+    const fetchEvents = async () => {
+      try {
+        const response = await getAllEvents();
+        if (response.success) {
+          const mappedEvents = response.data.map((item: any) => ({
+            id: item.id,
+            type: item.type,
+            title: item.title,
+            date: formatDate(item.event_date),
+            day: item.day,
+            startTime: item.start_time,
+            endTime: item.end_time,
+            description: item.description,
+            location: item.location,
+            organizerName: item.organizer_name,
+          }));
+          setEvents(mappedEvents);
+        }
+      } catch (error) {
+        console.error("[HomeScreen] Error fetching events:", error);
+      }
+    };
+    fetchEvents();
   }, []);
 
   const parseDate = (dateStr: string) => {
-    const [d, m, y] = dateStr.split("-").map(Number);
-    return new Date(y, m - 1, d);
+    if (!dateStr) return new Date(0);
+    const parts = dateStr.split(/[-/]/);
+    if (parts.length === 3) {
+      if (parts[0].length === 4) {
+        return new Date(
+          Number(parts[0]),
+          Number(parts[1]) - 1,
+          Number(parts[2]),
+        );
+      } else {
+        return new Date(
+          Number(parts[2]),
+          Number(parts[1]) - 1,
+          Number(parts[0]),
+        );
+      }
+    }
+    return new Date(dateStr);
   };
 
   const now = new Date();
-  const upcomingEvents = ALL_EVENTS?.filter(
-    (e) => parseDate(e.date) >= now,
-  ).sort((a, b) => parseDate(a.date).getTime() - parseDate(b.date).getTime());
+  const upcomingEvents = events
+    ?.filter((e) => {
+      const eventDate = parseDate(e.date);
+      // Set to beginning of day for comparison
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      return eventDate >= today;
+    })
+    .sort((a, b) => parseDate(a.date).getTime() - parseDate(b.date).getTime());
 
   const latestEvent = upcomingEvents[0];
 
