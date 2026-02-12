@@ -10,6 +10,7 @@ import { router } from "expo-router";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { AppHeader } from "@/src/components/AppHeader";
 import { useTranslation } from "react-i18next";
+import { LanguageSelector } from "@/src/components/LanguageSelector";
 
 const AdminScreen = () => {
   const { t } = useTranslation();
@@ -25,7 +26,7 @@ const AdminScreen = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <AppHeader title={t("admin.title")} />
+      <AppHeader title={t("admin.title")} rightAction={<LanguageSelector />} />
       <ScrollView
         style={[styles.container]}
         contentContainerStyle={styles.content}

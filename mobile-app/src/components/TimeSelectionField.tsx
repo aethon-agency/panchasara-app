@@ -17,6 +17,7 @@ export const TimeSelectionField = ({
   label,
   value,
   onSelect,
+  placeholder,
   error,
   style,
   required,
@@ -47,7 +48,7 @@ export const TimeSelectionField = ({
       <SelectionField
         label={label}
         value={value ? formatTimeDisplay(value) : ""}
-        placeholder="Select Time"
+        placeholder={placeholder || "Select Time"}
         icon="time-outline"
         onPress={() => setShowPicker(true)}
         error={error}

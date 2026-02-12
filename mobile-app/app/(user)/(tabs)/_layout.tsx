@@ -45,6 +45,14 @@ const renderIcon = (routeName: string, focused: boolean) => {
           color={color}
         />
       );
+    case "admin":
+      return (
+        <MaterialCommunityIcons
+          name={focused ? "shield-account" : "shield-account-outline"}
+          size={size}
+          color={color}
+        />
+      );
     case "explore":
       return (
         <Ionicons

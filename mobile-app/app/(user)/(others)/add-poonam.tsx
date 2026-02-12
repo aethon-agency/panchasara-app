@@ -114,7 +114,7 @@ const AddPoonamScreen = () => {
             <TimeSelectionField
               label={t("addPoonam.labels.startTime")}
               value={form.startTime}
-              placeholder={t("addPoonam.labels.selectTime")}
+              placeholder={t("addPoonam.placeholders.selectTime")}
               onSelect={(time) => handleChange("startTime", time)}
               style={{ flex: 1 }}
               required
@@ -122,7 +122,7 @@ const AddPoonamScreen = () => {
             <TimeSelectionField
               label={t("addPoonam.labels.endTime")}
               value={form.endTime}
-              placeholder={t("addPoonam.labels.selectTime")}
+              placeholder={t("addPoonam.placeholders.selectTime")}
               onSelect={(time) => handleChange("endTime", time)}
               style={{ flex: 1 }}
               required
@@ -155,13 +155,11 @@ const AddPoonamScreen = () => {
             error={errors.description}
           />
 
-          <View style={styles.buttonContainer}>
-            <PrimaryButton
-              label={t("addPoonam.submit")}
-              onPress={handleSubmit}
-              loading={loading}
-            />
-          </View>
+          <PrimaryButton
+            label={t("addPoonam.submit")}
+            onPress={handleSubmit}
+            loading={loading}
+          />
 
           <SelectionModal
             visible={showTitlePicker}
