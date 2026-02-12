@@ -7,6 +7,7 @@ interface DateSelectionFieldProps {
   label: string;
   value?: string;
   onSelect: (date: string) => void;
+  placeholder?: string;
   error?: string;
   style?: ViewStyle;
   required?: boolean;
@@ -16,6 +17,7 @@ export const DateSelectionField = ({
   label,
   value,
   onSelect,
+  placeholder,
   error,
   style,
   required,
@@ -49,7 +51,7 @@ export const DateSelectionField = ({
       <SelectionField
         label={label}
         value={value ? formatDateDisplay(value) : ""}
-        placeholder="Select Date"
+        placeholder={placeholder || "Select Date"}
         icon="calendar-outline"
         onPress={() => setShowPicker(true)}
         error={error}
@@ -62,8 +64,8 @@ export const DateSelectionField = ({
           mode="date"
           display="default"
           onChange={handleDateChange}
-          maximumDate={new Date(2030, 11, 31)}
-          minimumDate={new Date(2020, 0, 1)}
+          maximumDate={new Date(2035, 11, 31)}
+          minimumDate={new Date()}
         />
       )}
     </>

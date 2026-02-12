@@ -42,7 +42,9 @@ router.post("/poonam", async (req, res) => {
     }
 
     const dateObj = new Date(date);
-    const dayOfWeek = dateObj.toLocaleDateString("en-US", { weekday: "long" });
+    const dayOfWeek = dateObj
+      .toLocaleDateString("en-US", { weekday: "long" })
+      .toLowerCase();
 
     const { data, error } = await supabase
       .from("poonams")
@@ -71,8 +73,7 @@ router.post("/poonam", async (req, res) => {
     console.error("Error creating poonam:", error);
     res.status(500).json({
       success: false,
-      message: "Internal Server Error",
-      error: error.message,
+      message: error.message || "Internal Server Error",
     });
   }
 });

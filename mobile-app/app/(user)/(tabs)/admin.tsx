@@ -9,20 +9,23 @@ import React from "react";
 import { router } from "expo-router";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { AppHeader } from "@/src/components/AppHeader";
+import { useTranslation } from "react-i18next";
 
 const AdminScreen = () => {
+  const { t } = useTranslation();
+
   const menuItems = [
     {
-      title: "Add Poonam Event",
+      title: t("admin.menu.addPoonam.title"),
       icon: "calendar-plus",
       route: "/(user)/(others)/add-poonam" as const,
-      description: "Create a new Poonam event",
+      description: t("admin.menu.addPoonam.description"),
     },
   ];
 
   return (
     <View style={{ flex: 1 }}>
-      <AppHeader title="Admin Dashboard" />
+      <AppHeader title={t("admin.title")} />
       <ScrollView
         style={[styles.container]}
         contentContainerStyle={styles.content}

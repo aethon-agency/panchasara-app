@@ -75,7 +75,9 @@ class ApiClient {
         Toast.error("Session expired. Please relogin");
         router.replace("/login");
       }
-      const error: ApiError = new Error(data?.message ?? "API request failed");
+      const error: ApiError = new Error(
+        data?.message || data?.error || "API request failed",
+      );
       error.status = response.status;
       throw error;
     }

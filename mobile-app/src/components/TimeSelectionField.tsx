@@ -7,6 +7,7 @@ interface TimeSelectionFieldProps {
   label: string;
   value?: string;
   onSelect: (time: string) => void;
+  placeholder?: string;
   error?: string;
   style?: ViewStyle;
   required?: boolean;

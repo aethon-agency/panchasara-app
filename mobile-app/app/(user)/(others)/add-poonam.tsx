@@ -15,6 +15,8 @@ import { SelectionField } from "@/src/components/SelectionField";
 import { TimeSelectionField } from "@/src/components/TimeSelectionField";
 import { DateSelectionField } from "@/src/components/DateSelectionField";
 
+import { useTranslation } from "react-i18next";
+
 const poonamSchema = z.object({
   title: z.string().min(1, "Title is required"),
   date: z.string().min(1, "Date is required"),
@@ -26,6 +28,7 @@ const poonamSchema = z.object({
 });
 
 const AddPoonamScreen = () => {
+  const { t } = useTranslation();
   const {
     values: form,
     errors,
@@ -47,7 +50,7 @@ const AddPoonamScreen = () => {
 
   const handleSubmit = async () => {
     if (!isValid) {
-      Toast.error("Please fill in all required fields correctly.");
+      Toast.error(t("addPoonam.messages.fillRequired"));
       return;
     }
 
@@ -56,7 +59,7 @@ const AddPoonamScreen = () => {
       const payload = { ...form };
       const response = await createPoonam(payload);
       if (response && response.success) {
-        Toast.success("Poonam event created successfully!");
+        Toast.success(t("addPoonam.messages.success"));
         setForm({
           title: "",
           date: "",
@@ -68,10 +71,10 @@ const AddPoonamScreen = () => {
         });
         router.back();
       } else {
-        Toast.error(response?.message || "Failed to create event");
+        Toast.error(response?.message || t("addPoonam.messages.failed"));
       }
     } catch (error: any) {
-      Toast.error(error.message || "An error occurred");
+      Toast.error(error.message || t("common.error"));
     } finally {
       setLoading(false);
     }
@@ -79,7 +82,7 @@ const AddPoonamScreen = () => {
 
   return (
     <KeyboardAvoidingContainer style={{ flex: 1 }}>
-      <AppHeader title="Add Poonam Event" showBack />
+      <AppHeader title={t("addPoonam.header")} showBack />
       <ScrollView
         style={[styles.container]}
         contentContainerStyle={styles.scrollContent}
@@ -87,9 +90,9 @@ const AddPoonamScreen = () => {
       >
         <View style={styles.formContainer}>
           <SelectionField
-            label="Title"
+            label={t("addPoonam.labels.title")}
             value={form.title}
-            placeholder="Select Poonam Title"
+            placeholder={t("addPoonam.placeholders.selectTitle")}
             onPress={() => setShowTitlePicker(true)}
             error={errors.title}
             required
@@ -97,8 +100,9 @@ const AddPoonamScreen = () => {
 
           <View style={styles.row}>
             <DateSelectionField
-              label="Date"
+              label={t("addPoonam.labels.date")}
               value={form.date}
+              placeholder={t("addPoonam.placeholders.selectDate")}
               onSelect={(date) => handleChange("date", date)}
               error={errors.date}
               required
@@ -108,15 +112,17 @@ const AddPoonamScreen = () => {
 
           <View style={styles.row}>
             <TimeSelectionField
-              label="Start Time"
+              label={t("addPoonam.labels.startTime")}
               value={form.startTime}
+              placeholder={t("addPoonam.labels.selectTime")}
               onSelect={(time) => handleChange("startTime", time)}
               style={{ flex: 1 }}
               required
             />
             <TimeSelectionField
-              label="End Time"
+              label={t("addPoonam.labels.endTime")}
               value={form.endTime}
+              placeholder={t("addPoonam.labels.selectTime")}
               onSelect={(time) => handleChange("endTime", time)}
               style={{ flex: 1 }}
               required
@@ -124,24 +130,24 @@ const AddPoonamScreen = () => {
           </View>
 
           <CustomInput
-            label="Organizer Name"
-            placeholder="શ્રી જયંતિભાઇ રાઘવજીભાઈ પંચાસરા"
+            label={t("addPoonam.labels.organizer")}
+            placeholder={t("addPoonam.placeholders.organizer")}
             value={form.organizer}
             onChangeText={(text) => handleChange("organizer", text)}
             error={errors.organizer}
           />
 
           <CustomInput
-            label="Location"
-            placeholder="Location"
+            label={t("addPoonam.labels.location")}
+            placeholder={t("addPoonam.placeholders.location")}
             value={form.location}
             onChangeText={(text) => handleChange("location", text)}
             error={errors.location}
           />
 
           <CustomInput
-            label="Description"
-            placeholder="Event Description (Optional)"
+            label={t("addPoonam.labels.description")}
+            placeholder={t("addPoonam.placeholders.description")}
             value={form.description}
             onChangeText={(text) => handleChange("description", text)}
             multiline
@@ -151,7 +157,7 @@ const AddPoonamScreen = () => {
 
           <View style={styles.buttonContainer}>
             <PrimaryButton
-              label="Create Poonam"
+              label={t("addPoonam.submit")}
               onPress={handleSubmit}
               loading={loading}
             />
@@ -160,7 +166,7 @@ const AddPoonamScreen = () => {
           <SelectionModal
             visible={showTitlePicker}
             onClose={() => setShowTitlePicker(false)}
-            title="Select Poonam"
+            title={t("addPoonam.modal.selectPoonam")}
             data={POONAM_TITLE}
             selectedValue={form.title}
             onSelect={(item) => handleChange("title", item)}

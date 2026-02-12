@@ -263,5 +263,43 @@
   "mandir": {
     "title": "Mandir Details",
     "subtitle": "About Temple"
+  },
+  "admin": {
+    "title": "Admin Dashboard",
+    "menu": {
+      "addPoonam": {
+        "title": "Add Poonam Event",
+        "description": "Create a new Poonam event"
+      }
+    }
+  },
+  "addPoonam": {
+    "header": "Add Poonam Event",
+    "labels": {
+      "title": "Title",
+      "date": "Date",
+      "startTime": "Start Time",
+      "endTime": "End Time",
+      "organizer": "Organizer Name",
+      "location": "Location",
+      "description": "Description"
+    },
+    "placeholders": {
+      "selectTitle": "Select Poonam Title",
+      "selectDate": "Select Date",
+      "selectTime": "Select Time",
+      "organizer": "Shree Jayantibhai Ragvajibhai Panchasara",
+      "location": "Location",
+      "description": "Event Description (Optional)"
+    },
+    "modal": {
+      "selectPoonam": "Select Poonam"
+    },
+    "submit": "Create Poonam",
+    "messages": {
+      "success": "Poonam event created successfully!",
+      "fillRequired": "Please fill in all required fields correctly.",
+      "failed": "Failed to create event"
+    }
   }
 }
