@@ -99,6 +99,24 @@ export const formatDate = (dateStr: string) => {
   }
   return dateStr;
 };
+export const formatDisplayDate = (date: string | Date) => {
+  if (!date) return "";
+  const m = moment(date);
+  if (m.isValid()) {
+    return m.format("DD/MM/YYYY");
+  }
+  return String(date);
+};
+
+export const formatToHHMM = (time: string) => {
+  if (!time) return "";
+
+  const m = moment(time, ["HH:mm:ss", "HH:mm", "hh:mm A"]);
+  if (m.isValid()) {
+    return m.format("hh:mm A");
+  }
+  return time;
+};
 
 export const openWhatsApp = (phoneNumber: string) => {
   if (!phoneNumber) {

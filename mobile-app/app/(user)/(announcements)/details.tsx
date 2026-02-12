@@ -15,7 +15,11 @@ import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLanguage } from "@/src/hooks/useLanguage";
 
-import { callPhoneNumber } from "@/src/utils/functions";
+import {
+  callPhoneNumber,
+  formatDisplayDate,
+  toGujarati,
+} from "@/src/utils/functions";
 import { getAnnouncements } from "@/src/services/announcementServices";
 
 interface AnnouncementParams {
@@ -24,7 +28,7 @@ interface AnnouncementParams {
 
 export default function AnnouncementDetailsScreen() {
   const router = useRouter();
-  const { t } = useLanguage();
+  const { t, isGujarati } = useLanguage();
   const params = useLocalSearchParams() as unknown as AnnouncementParams;
   const { id } = params;
 
@@ -57,7 +61,11 @@ export default function AnnouncementDetailsScreen() {
     title = "",
     description = "",
     contactNumber = announcement?.contact_number,
+    createdAt = announcement?.created_at,
   } = (announcement || {}) as any;
+
+  const displayDate = formatDisplayDate(createdAt);
+  const formattedDate = isGujarati ? toGujarati(displayDate) : displayDate;
 
   const handleCall = async () => {
     if (contactNumber) {
@@ -114,9 +122,21 @@ export default function AnnouncementDetailsScreen() {
                       color="#EA580C"
                     />
                   </View>
-                  <Text style={styles.title} numberOfLines={1}>
-                    {title}
-                  </Text>
+                  <View style={styles.headerInfo}>
+                    <Text style={styles.title} numberOfLines={2}>
+                      {title}
+                    </Text>
+                    {createdAt && (
+                      <View style={styles.dateContainer}>
+                        <Ionicons
+                          name="calendar-outline"
+                          size={14}
+                          color="#9A3412"
+                        />
+                        <Text style={styles.dateText}>{formattedDate}</Text>
+                      </View>
+                    )}
+                  </View>
                 </LinearGradient>
 
                 <View style={styles.divider} />
@@ -201,9 +221,9 @@ const styles = StyleSheet.create({
     columnGap: 10,
   },
   iconContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
+    width: 50,
+    height: 50,
+    borderRadius: 15,
     backgroundColor: "#FFF",
     justifyContent: "center",
     alignItems: "center",
@@ -227,9 +247,22 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "800",
     color: "#431407",
-    textAlign: "center",
-    lineHeight: 32,
+    lineHeight: 28,
     flexShrink: 1,
+    marginBottom: 4,
+  },
+  headerInfo: {
+    flex: 1,
+  },
+  dateContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+  dateText: {
+    fontSize: 13,
+    color: "#9A3412",
+    fontWeight: "600",
   },
   divider: {
     height: 1,

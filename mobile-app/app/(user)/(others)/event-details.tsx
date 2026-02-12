@@ -15,7 +15,12 @@ import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { MandirEvent } from "@/src/constants/data";
 import { useLanguage } from "@/src/hooks/useLanguage";
-import { formatDate, handleShare, toGujarati } from "@/src/utils/functions";
+import {
+  formatDate,
+  handleShare,
+  toGujarati,
+  formatToHHMM,
+} from "@/src/utils/functions";
 import { getEventById } from "@/src/services/eventServices";
 
 export default function EventDetailsScreen() {
@@ -91,7 +96,7 @@ export default function EventDetailsScreen() {
 
   const handleShareClick = async () => {
     const shareTitle = `${getEventLabel(event.type)} - ${t("eventDetails.title")}`;
-    const shareMessage = `જય ભવાની માં\n\nભોજન પ્રસાદ આમંત્રણ\n\nસહર્ષ પરિવારજનોને જણાવવાનું કે ${event.title} નો કાર્યક્રમ તા. ${isGujarati ? toGujarati(event.date) : event.date}, ${t(`days.${event.day.toLowerCase()}`, { lng: "gu" })} ના રોજ રાબેતા મુજબ છે, જેના ભોજન પ્રસાદના દાતા "${event.organizerName}" રહેશે.\n\nસ્થળ: ${event.location}\nસમય: ${event.startTime} - ${event.endTime}\n\n— બધા જોડાવા માટે સ્વાગત છે`;
+    const shareMessage = `જય ભવાની માં\n\nભોજન પ્રસાદ આમંત્રણ\n\nસહર્ષ પરિવારજનોને જણાવવાનું કે ${event.title} નો કાર્યક્રમ તા. ${isGujarati ? toGujarati(event.date) : event.date}, ${t(`days.${event.day.toLowerCase()}`, { lng: "gu" })} ના રોજ રાબેતા મુજબ છે, જેના ભોજન પ્રસાદના દાતા "${event.organizerName}" રહેશે.\n\n${event?.description ? event?.description : ""}\n\nસ્થળ: ${event.location}\nસમય: ${formatToHHMM(event.startTime)} - ${formatToHHMM(event.endTime)}\n\n— બધા જોડાવા માટે સ્વાગત છે`;
     handleShare(shareTitle, shareMessage);
   };
 
@@ -178,11 +183,10 @@ export default function EventDetailsScreen() {
               </View>
             </View>
 
-            {/* Time */}
-            <View style={styles.infoBlock}>
+            <View style={styles.dateContainer}>
               <Ionicons name="time" size={22} color="#B45309" />
               <Text style={styles.timeText}>
-                {event.startTime} - {event.endTime}
+                {formatToHHMM(event.startTime)} - {formatToHHMM(event.endTime)}
               </Text>
             </View>
           </View>
@@ -206,6 +210,12 @@ export default function EventDetailsScreen() {
           </View>
 
           <View style={styles.divider} />
+          {event?.description && (
+            <>
+              <Text style={styles.gujaratiMessage}>{event?.description}</Text>
+              <View style={styles.divider} />
+            </>
+          )}
 
           <View style={styles.venueSection}>
             <Ionicons name="location" size={20} color="#EA580C" />
@@ -380,7 +390,6 @@ const styles = StyleSheet.create({
   },
   venueSection: {
     alignItems: "center",
-    marginVertical: 4,
     flexDirection: "row",
     columnGap: 10,
   },
@@ -510,15 +519,16 @@ const styles = StyleSheet.create({
   },
 
   infoText: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: "900",
     color: "#7C2D12",
   },
 
   dayText: {
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: "700",
-    color: "#B45309",
+    color: "#7C2D12",
+    // color: "#B45309",
   },
 
   timeText: { fontWeight: "700", color: "#64748B" },
