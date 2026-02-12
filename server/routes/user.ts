@@ -13,7 +13,7 @@ router.get("/profile", middleware, async (req: Request, res: Response) => {
     // Fetch all user details
     const { data, error } = await supabase
       .from(TABLE_NAME.USERS)
-      .select("id, mobilenumber, firstname, lastname, middlename")
+      .select("id, mobilenumber, firstname, lastname, middlename, is_admin")
       .eq("id", userId)
       .single();
 
@@ -37,6 +37,7 @@ router.get("/profile", middleware, async (req: Request, res: Response) => {
         firstName: data.firstname,
         lastName: data.lastname,
         middleName: data.middlename,
+        isadmin: data.is_admin,
       },
     });
   } catch (error) {
@@ -73,7 +74,7 @@ router.patch("/profile", middleware, async (req: Request, res: Response) => {
       .from(TABLE_NAME.USERS)
       .update(updateData)
       .eq("id", userId)
-      .select("id, mobilenumber, firstname, lastname, middlename")
+      .select("id, mobilenumber, firstname, lastname, middlename, is_admin")
       .single();
 
     if (error) {
@@ -97,6 +98,7 @@ router.patch("/profile", middleware, async (req: Request, res: Response) => {
         firstName: data.firstname,
         lastName: data.lastname,
         middleName: data.middlename,
+        isadmin: data.is_admin,
       },
     });
   } catch (error) {

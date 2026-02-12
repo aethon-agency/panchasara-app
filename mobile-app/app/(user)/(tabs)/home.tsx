@@ -24,6 +24,7 @@ import { Section } from "@/src/components/Section";
 import { GalleryCollageCard } from "@/src/components/GalleryCollageCard";
 import { AnnouncementCard } from "@/src/components/AnnouncementCard";
 import { MandirEventCard } from "@/src/components/MandirEventCard";
+import { getUserProfile } from "@/src/services/userServices";
 
 const { width } = Dimensions.get("window");
 
@@ -32,13 +33,28 @@ const CARD_WIDTH = width - ITEM_MARGIN * 2;
 const PAGE_WIDTH = width;
 
 const HomeScreen = () => {
-  const { user } = useAuthStore();
+  const { user, updateUser } = useAuthStore();
   const router = useRouter();
   const { t } = useLanguage();
 
   const flatListRef = useRef<FlatList>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const autoScroll = useRef(true);
+
+  // FETCH PROFILE TO SYNC ADMIN STATUS
+  useEffect(() => {
+    const syncProfile = async () => {
+      try {
+        const response = await getUserProfile();
+        if (response?.status && response.data) {
+          updateUser(response.data);
+        }
+      } catch (err) {
+        console.error("[HomeScreen] Profile sync failed:", err);
+      }
+    };
+    syncProfile();
+  }, []);
 
   const parseDate = (dateStr: string) => {
     const [d, m, y] = dateStr.split("-").map(Number);

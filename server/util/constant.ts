@@ -8,5 +8,6 @@ export const COLUMN_NAME = {
     FIRST_NAME: "firstname",
     MIDDLE_NAME: "middlename",
     LAST_NAME: "lastname",
+    IS_ADMIN: "is_admin",
   },
 };

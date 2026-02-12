@@ -100,11 +100,12 @@ router.post("/verify-otp", async (req: Request, res: Response) => {
         });
       }
 
-      const user = users[0];
-      const token = generateToken(
-        user.id,
-        user[COLUMN_NAME.USERS.MOBILE_NUMBER],
-      );
+      const user = {
+        ...users[0],
+        isadmin: users[0].is_admin,
+      };
+
+      const token = generateToken(user.id, user.mobilenumber);
       return res.json({ success: true, token, user });
     }
 

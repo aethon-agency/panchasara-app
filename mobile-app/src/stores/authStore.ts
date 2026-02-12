@@ -7,6 +7,7 @@ type User = {
   mobilenumber: number;
   firstname: string;
   middlename: string;
+  isadmin: boolean;
   lastname: string;
 };
 

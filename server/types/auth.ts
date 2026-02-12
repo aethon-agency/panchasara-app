@@ -23,6 +23,7 @@ export interface User {
   lastname: string;
   vehiclenumber: string;
   upiid: string;
+  isadmin: boolean;
   created_at: string;
 }
 
