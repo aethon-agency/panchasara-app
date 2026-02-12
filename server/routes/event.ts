@@ -78,4 +78,53 @@ router.post("/poonam", async (req, res) => {
   }
 });
 
+// GET / - Fetch all poonams
+router.get("/", async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from("poonams")
+      .select("*")
+      .order("event_date", { ascending: true });
+
+    if (error) throw error;
+
+    res.json({ success: true, data });
+  } catch (error: any) {
+    console.error("Error fetching events:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message || "Failed to fetch events",
+    });
+  }
+});
+
+// GET /:id - Fetch single poonam by ID
+router.get("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { data, error } = await supabase
+      .from("poonams")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (error) throw error;
+
+    if (!data) {
+      return res.status(404).json({
+        success: false,
+        message: "Event not found",
+      });
+    }
+
+    res.json({ success: true, data });
+  } catch (error: any) {
+    console.error("Error fetching event details:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message || "Failed to fetch event details",
+    });
+  }
+});
+
 export default router;

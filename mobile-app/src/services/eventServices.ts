@@ -19,3 +19,23 @@ export const createPoonam = async (data: CreatePoonamData) => {
     throw error;
   }
 };
+
+export const getAllEvents = async () => {
+  try {
+    const response: any = await api.get("/events");
+    return response;
+  } catch (error) {
+    console.error("Error fetching all events:", error);
+    throw error;
+  }
+};
+
+export const getEventById = async (id: string) => {
+  try {
+    const response: any = await api.get(`/events/${id}`);
+    return response;
+  } catch (error) {
+    console.error("Error fetching event by id:", error);
+    throw error;
+  }
+};

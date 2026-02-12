@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,20 +7,63 @@ import {
   TouchableOpacity,
   StatusBar,
   Share,
+  ActivityIndicator,
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { AppHeader } from "@/src/components/AppHeader";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { ALL_EVENTS, MandirEvent } from "@/src/constants/data";
+import { MandirEvent } from "@/src/constants/data";
 import { useLanguage } from "@/src/hooks/useLanguage";
 import { handleShare, toGujarati } from "@/src/utils/functions";
+import { getEventById } from "@/src/services/eventServices";
 
 export default function EventDetailsScreen() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
   const { t, isGujarati } = useLanguage();
-  const event = ALL_EVENTS.find((e) => e.id === id) as MandirEvent;
+  const [event, setEvent] = useState<MandirEvent | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (id && typeof id === "string") {
+      fetchEventDetails(id);
+    }
+  }, [id]);
+
+  const fetchEventDetails = async (eventId: string) => {
+    try {
+      setLoading(true);
+      const response = await getEventById(eventId);
+      if (response.success && response.data) {
+        const item = response.data;
+        setEvent({
+          id: item.id,
+          type: item.type,
+          title: item.title,
+          date: item.event_date,
+          day: item.day,
+          startTime: item.start_time,
+          endTime: item.end_time,
+          description: item.description,
+          location: item.location,
+          organizerName: item.organizer_name,
+        });
+      }
+    } catch (error) {
+      console.error("Failed to fetch event details:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="small" color="#EA580C" />
+      </View>
+    );
+  }
 
   if (!event) {
     return (
@@ -48,7 +91,7 @@ export default function EventDetailsScreen() {
 
   const handleShareClick = async () => {
     const shareTitle = `${getEventLabel(event.type)} - ${t("eventDetails.title")}`;
-    const shareMessage = `જય ભવાની માં\n\nભોજન પ્રસાદ આમંત્રણ\n\nસહર્ષ પરિવારજનોને જણાવવાનું કે ${event.title} નો કાર્યક્રમ તા. ${isGujarati ? toGujarati(event.date) : event.date}, ${t(`days.${event.day.toLowerCase()}`)} ના રોજ રાબેતા મુજબ છે, જેના ભોજન પ્રસાદના દાતા "${event.organizerName}" રહેશે.\n\nસ્થળ: ${event.location}\nસમય: ${event.startTime} - ${event.endTime}\n\n— બધા જોડાવા માટે સ્વાગત છે`;
+    const shareMessage = `જય ભવાની માં\n\nભોજન પ્રસાદ આમંત્રણ\n\nસહર્ષ પરિવારજનોને જણાવવાનું કે ${event.title} નો કાર્યક્રમ તા. ${isGujarati ? toGujarati(event.date) : event.date}, ${t(`days.${event.day.toLowerCase()}`, { lng: "gu" })} ના રોજ રાબેતા મુજબ છે, જેના ભોજન પ્રસાદના દાતા "${event.organizerName}" રહેશે.\n\nસ્થળ: ${event.location}\nસમય: ${event.startTime} - ${event.endTime}\n\n— બધા જોડાવા માટે સ્વાગત છે`;
     handleShare(shareTitle, shareMessage);
   };
 
@@ -153,7 +196,8 @@ export default function EventDetailsScreen() {
               <Text style={styles.donorName}>{event.title}</Text> નો કાર્યક્રમ
               તા.{" "}
               <Text style={styles.donorName}>
-                {toGujarati(event.date)}, {t(`days.${event.day.toLowerCase()}`)}
+                {toGujarati(event.date)},{" "}
+                {t(`days.${event.day.toLowerCase()}`, { lng: "gu" })}
               </Text>{" "}
               ના રોજ રાબેતા મુજબ છે, જેના ભોજન પ્રસાદના દાતા{"\n"}
               <Text style={styles.donorName}>“{event.organizerName}”</Text>{" "}
@@ -207,6 +251,12 @@ const styles = StyleSheet.create({
   scrollContent: {
     padding: 16,
     paddingBottom: 40,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#FCF9F1",
   },
   invitationCard: {
     backgroundColor: "#FFF",
