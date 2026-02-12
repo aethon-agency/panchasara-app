@@ -75,18 +75,16 @@ const AddAnnouncementScreen = () => {
       >
         <View style={styles.formContainer}>
           <CustomInput
-            label={t("addAnnouncement.labels.title", { lng: "gu" })}
-            placeholder={t("addAnnouncement.placeholders.title", { lng: "gu" })}
+            label={t("addAnnouncement.labels.title")}
+            placeholder={t("addAnnouncement.placeholders.title")}
             value={form.title}
             onChangeText={(text) => handleChange("title", text)}
             error={errors.title ? t(errors.title) : ""}
           />
 
           <CustomInput
-            label={t("addAnnouncement.labels.contactNumber", { lng: "gu" })}
-            placeholder={t("addAnnouncement.placeholders.contactNumber", {
-              lng: "gu",
-            })}
+            label={t("addAnnouncement.labels.contactNumber")}
+            placeholder={t("addAnnouncement.placeholders.contactNumber")}
             value={form.contact_number}
             onChangeText={(text) => handleChange("contact_number", text)}
             keyboardType="phone-pad"
@@ -94,10 +92,8 @@ const AddAnnouncementScreen = () => {
           />
 
           <CustomInput
-            label={t("addAnnouncement.labels.description", { lng: "gu" })}
-            placeholder={t("addAnnouncement.placeholders.description", {
-              lng: "gu",
-            })}
+            label={t("addAnnouncement.labels.description")}
+            placeholder={t("addAnnouncement.placeholders.description")}
             value={form.description}
             onChangeText={(text) => handleChange("description", text)}
             multiline

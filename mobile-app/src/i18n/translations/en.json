@@ -287,7 +287,7 @@
     "placeholders": {
       "title": "Enter announcement title",
       "contactNumber": "12345 67890",
-      "description": "Enter announcement description (Optional)"
+      "description": "Enter announcement description"
     },
     "submit": "Create Announcement",
     "messages": {
