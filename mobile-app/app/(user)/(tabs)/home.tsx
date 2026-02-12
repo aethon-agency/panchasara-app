@@ -7,6 +7,7 @@ import {
   Image,
   Dimensions,
   FlatList,
+  RefreshControl,
 } from "react-native";
 import { useAuthStore } from "../../../src/stores/authStore";
 import { AppHeader } from "@/src/components/AppHeader";
@@ -40,56 +41,70 @@ const HomeScreen = () => {
   const autoScroll = useRef(true);
   const [announcements, setAnnouncements] = useState<any[]>([]);
   const [events, setEvents] = useState<MandirEvent[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const fetchHomeData = async () => {
+    try {
+      const syncProfile = async () => {
+        try {
+          const response = await getUserProfile();
+          if (response?.status && response.data) {
+            updateUser(response.data);
+          }
+        } catch (err) {
+          console.error("[HomeScreen] Profile sync failed:", err);
+        }
+      };
+
+      const fetchAnnouncements = async () => {
+        try {
+          const response = await getAnnouncements();
+          if (response && response.success) {
+            setAnnouncements(response.data);
+          }
+        } catch (error) {
+          console.error("[HomeScreen] Error fetching announcements:", error);
+        }
+      };
+
+      const fetchEvents = async () => {
+        try {
+          const response = await getAllEvents();
+          if (response.success) {
+            const mappedEvents = response.data.map((item: any) => ({
+              id: item.id,
+              type: item.type,
+              title: item.title,
+              date: formatDate(item.event_date),
+              day: item.day,
+              startTime: item.start_time,
+              endTime: item.end_time,
+              description: item.description,
+              location: item.location,
+              organizerName: item.organizer_name,
+            }));
+            setEvents(mappedEvents);
+          }
+        } catch (error) {
+          console.error("[HomeScreen] Error fetching events:", error);
+        }
+      };
+
+      await Promise.all([syncProfile(), fetchAnnouncements(), fetchEvents()]);
+    } catch (err) {
+      console.error("[HomeScreen] Error fetching home data:", err);
+    }
+  };
 
   // FETCH DATA
   useEffect(() => {
-    const syncProfile = async () => {
-      try {
-        const response = await getUserProfile();
-        if (response?.status && response.data) {
-          updateUser(response.data);
-        }
-      } catch (err) {
-        console.error("[HomeScreen] Profile sync failed:", err);
-      }
-    };
-    syncProfile();
+    fetchHomeData();
+  }, []);
 
-    const fetchAnnouncements = async () => {
-      try {
-        const response = await getAnnouncements();
-        if (response && response.success) {
-          setAnnouncements(response.data);
-        }
-      } catch (error) {
-        console.error("[HomeScreen] Error fetching announcements:", error);
-      }
-    };
-    fetchAnnouncements();
-
-    const fetchEvents = async () => {
-      try {
-        const response = await getAllEvents();
-        if (response.success) {
-          const mappedEvents = response.data.map((item: any) => ({
-            id: item.id,
-            type: item.type,
-            title: item.title,
-            date: formatDate(item.event_date),
-            day: item.day,
-            startTime: item.start_time,
-            endTime: item.end_time,
-            description: item.description,
-            location: item.location,
-            organizerName: item.organizer_name,
-          }));
-          setEvents(mappedEvents);
-        }
-      } catch (error) {
-        console.error("[HomeScreen] Error fetching events:", error);
-      }
-    };
-    fetchEvents();
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    await fetchHomeData();
+    setRefreshing(false);
   }, []);
 
   const parseDate = (dateStr: string) => {
@@ -157,6 +172,14 @@ const HomeScreen = () => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor="#EA580C"
+            colors={["#EA580C"]}
+          />
+        }
       >
         {/* HERO CAROUSEL */}
         <View style={styles.banner}>

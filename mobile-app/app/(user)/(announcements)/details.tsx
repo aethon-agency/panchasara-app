@@ -201,9 +201,9 @@ const styles = StyleSheet.create({
     columnGap: 10,
   },
   iconContainer: {
-    width: 50,
-    height: 50,
-    borderRadius: 18,
+    width: 40,
+    height: 40,
+    borderRadius: 12,
     backgroundColor: "#FFF",
     justifyContent: "center",
     alignItems: "center",
@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
   title: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: "800",
     color: "#431407",
     textAlign: "center",

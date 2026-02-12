@@ -44,11 +44,19 @@ export const CustomInput = ({
           {
             borderBottomColor: underlineColor,
             borderBottomWidth: underlineWidth,
+            height: props.multiline ? "auto" : 50,
+            alignItems: props.multiline ? "flex-start" : "center",
+            paddingTop: props.multiline ? 8 : 0,
           },
         ]}
       >
         {icon && (
-          <View style={styles.iconContainer}>
+          <View
+            style={[
+              styles.iconContainer,
+              props.multiline && { marginTop: Platform.OS === "ios" ? 4 : 8 },
+            ]}
+          >
             <MaterialCommunityIcons
               name={icon}
               size={22}
@@ -69,6 +77,7 @@ export const CustomInput = ({
           placeholderTextColor="#A8A29E"
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
+          textAlignVertical={props.multiline ? "top" : "center"}
         />
       </View>
 
