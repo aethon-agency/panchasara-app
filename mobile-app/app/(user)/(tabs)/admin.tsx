@@ -22,6 +22,12 @@ const AdminScreen = () => {
       route: "/(user)/(others)/add-poonam" as const,
       description: t("admin.menu.addPoonam.description"),
     },
+    {
+      title: t("admin.menu.addAnnouncement.title"),
+      icon: "bullhorn",
+      route: "/(user)/(others)/add-announcement" as const,
+      description: t("admin.menu.addAnnouncement.description"),
+    },
   ];
 
   return (

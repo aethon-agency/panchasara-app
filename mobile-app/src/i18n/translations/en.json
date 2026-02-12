@@ -270,7 +270,32 @@
       "addPoonam": {
         "title": "Add Poonam Event",
         "description": "Create a new Poonam event"
+      },
+      "addAnnouncement": {
+        "title": "Add Announcement",
+        "description": "Create a new announcement"
       }
+    }
+  },
+  "addAnnouncement": {
+    "header": "Add Announcement",
+    "labels": {
+      "title": "Title",
+      "contactNumber": "Contact Number",
+      "description": "Description"
+    },
+    "placeholders": {
+      "title": "Enter announcement title",
+      "contactNumber": "12345 67890",
+      "description": "Enter announcement description (Optional)"
+    },
+    "submit": "Create Announcement",
+    "messages": {
+      "success": "Announcement created successfully!",
+      "fillRequired": "Please fill in the title.",
+      "descriptionLength": "Description must be at least 10 characters.",
+      "invalidPhone": "Phone number must be exactly 10 digits.",
+      "failed": "Failed to create announcement"
     }
   },
   "addPoonam": {

@@ -14,17 +14,13 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { LanguageSelector } from "@/src/components/LanguageSelector";
 import { useLanguage } from "@/src/hooks/useLanguage";
-import {
-  HERO_IMAGES,
-  ALL_ANNOUNCEMENTS,
-  GALLERY_DATA,
-  ALL_EVENTS,
-} from "@/src/constants/data";
+import { HERO_IMAGES, GALLERY_DATA, ALL_EVENTS } from "@/src/constants/data";
 import { Section } from "@/src/components/Section";
 import { GalleryCollageCard } from "@/src/components/GalleryCollageCard";
 import { AnnouncementCard } from "@/src/components/AnnouncementCard";
 import { MandirEventCard } from "@/src/components/MandirEventCard";
 import { getUserProfile } from "@/src/services/userServices";
+import { getAnnouncements } from "@/src/services/announcementServices";
 
 const { width } = Dimensions.get("window");
 
@@ -40,6 +36,7 @@ const HomeScreen = () => {
   const flatListRef = useRef<FlatList>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const autoScroll = useRef(true);
+  const [announcements, setAnnouncements] = useState<any[]>([]);
 
   // FETCH PROFILE TO SYNC ADMIN STATUS
   useEffect(() => {
@@ -54,6 +51,18 @@ const HomeScreen = () => {
       }
     };
     syncProfile();
+
+    const fetchAnnouncements = async () => {
+      try {
+        const response = await getAnnouncements();
+        if (response && response.success) {
+          setAnnouncements(response.data);
+        }
+      } catch (error) {
+        console.error("[HomeScreen] Error fetching announcements:", error);
+      }
+    };
+    fetchAnnouncements();
   }, []);
 
   const parseDate = (dateStr: string) => {
@@ -162,21 +171,23 @@ const HomeScreen = () => {
         )}
 
         {/* ANNOUNCEMENTS SECTION */}
-        <Section
-          title={t("home.announcements")}
-          onSeeAll={() => router.push("/(user)/(announcements)" as any)}
-          contentStyle={{ gap: 12 }}
-        >
-          {ALL_ANNOUNCEMENTS?.slice(0, 3).map((item) => (
-            <AnnouncementCard
-              key={item.id}
-              id={item.id}
-              title={item.title}
-              description={item.description}
-              containerStyle={styles.announcementCard}
-            />
-          ))}
-        </Section>
+        {announcements.length > 0 && (
+          <Section
+            title={t("home.announcements")}
+            onSeeAll={() => router.push("/(user)/(announcements)" as any)}
+            contentStyle={{ gap: 12 }}
+          >
+            {announcements.slice(0, 3).map((item) => (
+              <AnnouncementCard
+                key={item.id}
+                id={item.id}
+                title={item.title}
+                description={item.description}
+                containerStyle={styles.announcementCard}
+              />
+            ))}
+          </Section>
+        )}
 
         {/* GALLERY */}
         <Section

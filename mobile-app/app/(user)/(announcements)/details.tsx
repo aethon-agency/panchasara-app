@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,7 +7,7 @@ import {
   StatusBar,
   Share,
   TouchableOpacity,
-  Linking,
+  ActivityIndicator,
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { AppHeader } from "@/src/components/AppHeader";
@@ -15,8 +15,8 @@ import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLanguage } from "@/src/hooks/useLanguage";
 
-import { ALL_ANNOUNCEMENTS } from "@/src/constants/data";
 import { callPhoneNumber } from "@/src/utils/functions";
+import { getAnnouncements } from "@/src/services/announcementServices";
 
 interface AnnouncementParams {
   id?: string;
@@ -28,13 +28,35 @@ export default function AnnouncementDetailsScreen() {
   const params = useLocalSearchParams() as unknown as AnnouncementParams;
   const { id } = params;
 
-  const announcement = ALL_ANNOUNCEMENTS.find((a) => a.id === id);
+  const [announcement, setAnnouncement] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAnnouncement = async () => {
+      try {
+        const response = await getAnnouncements();
+        if (response && response.success) {
+          const found = response.data.find(
+            (a: any) => String(a.id) === String(id),
+          );
+          setAnnouncement(found);
+        }
+      } catch (error) {
+        console.error("Error fetching announcement details:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchAnnouncement();
+    }
+  }, [id]);
 
   const {
-    title = announcement?.title || "Paryushan Mahaparva 2026",
-    description = announcement?.description ||
-      "Join us for the 8 days of spiritual purification...",
-    contactNumber = announcement?.contactNumber,
+    title = "",
+    description = "",
+    contactNumber = announcement?.contact_number,
   } = (announcement || {}) as any;
 
   const handleCall = async () => {
@@ -69,51 +91,66 @@ export default function AnnouncementDetailsScreen() {
         }
       />
 
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContent}
-      >
-        <View style={styles.card}>
-          {/* Header Section */}
-          <LinearGradient
-            colors={["#FFF7ED", "#FFFFFF"]}
-            style={styles.headerGradient}
-          >
-            <View style={styles.iconContainer}>
-              <MaterialCommunityIcons
-                name="bullhorn-variant"
-                size={20}
-                color="#EA580C"
-              />
+      {loading ? (
+        <View style={styles.loaderContainer}>
+          <ActivityIndicator size="large" color="#EA580C" />
+        </View>
+      ) : (
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scrollContent}
+        >
+          {announcement ? (
+            <>
+              <View style={styles.card}>
+                <LinearGradient
+                  colors={["#FFF7ED", "#FFFFFF"]}
+                  style={styles.headerGradient}
+                >
+                  <View style={styles.iconContainer}>
+                    <MaterialCommunityIcons
+                      name="bullhorn-variant"
+                      size={20}
+                      color="#EA580C"
+                    />
+                  </View>
+                  <Text style={styles.title} numberOfLines={1}>
+                    {title}
+                  </Text>
+                </LinearGradient>
+
+                <View style={styles.divider} />
+
+                {/* Content Section */}
+                <View style={styles.body}>
+                  <Text style={styles.description}>{description}</Text>
+                </View>
+
+                {contactNumber && (
+                  <TouchableOpacity
+                    style={styles.actionButton}
+                    activeOpacity={0.8}
+                    onPress={handleCall}
+                  >
+                    <Ionicons name="call-outline" size={20} color="#FFF" />
+                    <Text style={styles.actionButtonText}>
+                      Contact for Details
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+
+              <View style={styles.footer}>
+                <Text style={styles.footerText}>{t("common.jaiMataji")}</Text>
+              </View>
+            </>
+          ) : (
+            <View style={styles.errorContainer}>
+              <Text style={styles.errorText}>Announcement not found</Text>
             </View>
-            <Text style={styles.title} numberOfLines={1}>
-              {title}
-            </Text>
-          </LinearGradient>
-
-          <View style={styles.divider} />
-
-          {/* Content Section */}
-          <View style={styles.body}>
-            <Text style={styles.description}>{description}</Text>
-          </View>
-
-          {contactNumber && (
-            <TouchableOpacity
-              style={styles.actionButton}
-              activeOpacity={0.8}
-              onPress={handleCall}
-            >
-              <Ionicons name="call-outline" size={20} color="#FFF" />
-              <Text style={styles.actionButtonText}>Contact for Details</Text>
-            </TouchableOpacity>
           )}
-        </View>
-
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>{t("common.jaiMataji")}</Text>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      )}
     </View>
   );
 }
@@ -122,6 +159,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FDFCF9",
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+  },
+  errorText: {
+    fontSize: 16,
+    color: "#64748B",
   },
   shareBtn: {
     padding: 8,

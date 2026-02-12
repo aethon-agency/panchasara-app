@@ -5,6 +5,7 @@ import morgan from "morgan";
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/user.js";
 import eventRoutes from "./routes/event.js";
+import announcementRoutes from "./routes/announcement.js";
 
 import { checkDBConnected } from "./database/index.js";
 
@@ -19,6 +20,7 @@ app.use(morgan("dev"));
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
 app.use("/events", eventRoutes);
+app.use("/announcements", announcementRoutes);
 
 app.get("/", async (req, res) => {
   try {

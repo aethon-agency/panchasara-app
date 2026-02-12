@@ -270,7 +270,32 @@
       "addPoonam": {
         "title": "પૂનમ કાર્યક્રમ ઉમેરો",
         "description": "નવો પૂનમ કાર્યક્રમ બનાવો"
+      },
+      "addAnnouncement": {
+        "title": "જાહેરાત ઉમેરો",
+        "description": "નવી જાહેરાત બનાવો"
       }
+    }
+  },
+  "addAnnouncement": {
+    "header": "જાહેરાત ઉમેરો",
+    "labels": {
+      "title": "શીર્ષક",
+      "contactNumber": "સંપર્ક નંબર",
+      "description": "વર્ણન"
+    },
+    "placeholders": {
+      "title": "જાહેરાતનું શીર્ષક દાખલ કરો",
+      "contactNumber": "૧૨૩૪૫ ૬૭૮૯૦",
+      "description": "જાહેરાતનું વર્ણન દાખલ કરો"
+    },
+    "submit": "જાહેરાત બનાવો",
+    "messages": {
+      "success": "જાહેરાત સફળતાપૂર્વક બનાવવામાં આવી!",
+      "fillRequired": "કૃપા કરીને શીર્ષક ભરો.",
+      "descriptionLength": "વર્ણન ઓછામાં ઓછું ૧૦ અક્ષરનું હોવું જોઈએ.",
+      "invalidPhone": "મોબાઈલ નંબર ૧૦ અંકનો હોવો જોઈએ.",
+      "failed": "જાહેરાત બનાવવામાં નિષ્ફળ"
     }
   },
   "addPoonam": {
