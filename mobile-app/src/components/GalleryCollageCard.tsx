@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,7 +6,7 @@ import {
   View,
   Image,
   ViewStyle,
-} from "react-native";
+} from "react-native"; // Or 'react-native'
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 
@@ -26,8 +26,14 @@ export const GalleryCollageCard: React.FC<GalleryCollageCardProps> = ({
   containerStyle,
 }) => {
   const router = useRouter();
-  const displayImages = images.slice(0, 4);
-  const remainingCount = images.length - 4;
+
+  // Memoize logic to prevent recalculation on every render
+  const { displayImages, remainingCount } = useMemo(() => {
+    return {
+      displayImages: images.slice(0, 4),
+      remainingCount: images.length - 4,
+    };
+  }, [images]);
 
   const handlePress = () => {
     router.push({
@@ -42,50 +48,59 @@ export const GalleryCollageCard: React.FC<GalleryCollageCardProps> = ({
       activeOpacity={0.8}
       onPress={handlePress}
     >
-      <View style={styles.gridContainer}>
-        {displayImages.map((uri, index) => (
-          <View key={index} style={styles.imageWrapper}>
-            <Image source={{ uri }} style={styles.image} />
-            {index === 3 && remainingCount > 0 && (
-              <View style={styles.moreOverlay}>
-                <Text style={styles.moreText}>+{remainingCount}</Text>
-              </View>
-            )}
-          </View>
-        ))}
-        {/* Placeholder if less than 4 images */}
-        {[...Array(Math.max(0, 4 - displayImages.length))].map((_, i) => (
-          <View
-            key={`placeholder-${i}`}
-            style={[styles.imageWrapper, styles.placeholder]}
-          />
-        ))}
+      {/* 1. Image Frame Wrapper */}
+      <View style={styles.frame}>
+        <View style={styles.gridContainer}>
+          {displayImages.map((uri, index) => (
+            <View key={index} style={styles.imageWrapper}>
+              <Image source={{ uri }} style={styles.image} />
+              {index === 3 && remainingCount > 0 && (
+                <View style={styles.moreOverlay}>
+                  <Text style={styles.moreText}>+{remainingCount}</Text>
+                </View>
+              )}
+            </View>
+          ))}
+
+          {/* Placeholder logic */}
+          {[...Array(Math.max(0, 4 - displayImages.length))].map((_, i) => (
+            <View
+              key={`empty-${i}`}
+              style={[styles.imageWrapper, styles.placeholder]}
+            />
+          ))}
+        </View>
       </View>
 
-      <LinearGradient
-        colors={["transparent", "rgba(0,0,0,0.8)"]}
-        style={styles.overlay}
-      >
-        <Text style={styles.title} numberOfLines={1}>
+      {/* 2. Content Section (Outside the image frame) */}
+      <View style={styles.footer}>
+        <Text style={styles.titleText} numberOfLines={1}>
           {title}
         </Text>
-        <Text style={styles.date}>{date}</Text>
-      </LinearGradient>
+        <Text style={styles.dateOnImage}>{date}</Text>
+      </View>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   card: {
-    borderRadius: 20,
+    borderRadius: 24,
+    backgroundColor: "#FFFFFF", // Solid white for the frame
+    padding: 8, // This creates the "border" effect
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
+  },
+  frame: {
+    height: 180, // Define height so grid doesn't collapse
+    borderRadius: 18,
     overflow: "hidden",
-    backgroundColor: "#F1F5F9",
+    position: "relative",
   },
   gridContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
-    width: "100%",
-    height: "100%",
+    flex: 1,
   },
   imageWrapper: {
     width: "50%",
@@ -95,47 +110,50 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: "100%",
-    resizeMode: "cover",
+    backgroundColor: "#F1F5F9",
   },
   placeholder: {
-    backgroundColor: "#E2E8F0",
+    backgroundColor: "#F1F5F9",
   },
   moreOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(0,0,0,0.4)",
+    backgroundColor: "rgba(0,0,0,0.5)",
     justifyContent: "center",
     alignItems: "center",
-    margin: 1,
   },
   moreText: {
     color: "#FFF",
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: "800",
   },
-  overlay: {
+  gradientOverlay: {
     position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
-    padding: 12,
+    height: 40,
     justifyContent: "flex-end",
+    padding: 8,
   },
-  textContainer: {
-    padding: 12,
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
+
+  footer: {
+    paddingHorizontal: 10,
+    paddingTop: 12,
+    paddingBottom: 4,
+    flexDirection: "row",
+    flex: 1,
+    justifyContent: "space-between",
+    alignItems: "center",
   },
-  title: {
-    color: "#FFF",
-    fontSize: 13,
+  titleText: {
+    color: "#EA580C", // Darker color for visibility on light card
+    fontSize: 16,
     fontWeight: "700",
-    marginBottom: 2,
+    flexShrink: 1,
   },
-  date: {
-    color: "rgba(255,255,255,0.9)",
-    fontSize: 11,
-    fontWeight: "500",
+  dateOnImage: {
+    color: "#64748B",
+    fontSize: 14,
+    fontWeight: "600",
   },
 });

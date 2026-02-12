@@ -321,8 +321,7 @@ const styles = StyleSheet.create({
   },
 
   galleryCard: {
-    width: 200,
-    height: 140,
+    width: 300,
     borderRadius: 20,
     overflow: "hidden",
     marginLeft: 20,

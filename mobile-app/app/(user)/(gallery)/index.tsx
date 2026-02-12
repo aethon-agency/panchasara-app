@@ -46,7 +46,6 @@ export default function GalleryListScreen() {
               title={item.title}
               date={item.date}
               images={item.images}
-              containerStyle={styles.cardContainer}
             />
           ))}
         </View>
@@ -67,14 +66,8 @@ const styles = StyleSheet.create({
   grid: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 16,
     justifyContent: "space-between",
-  },
-  cardContainer: {
-    width: (width - 48) / 2,
-    height: 180,
-    borderRadius: 20,
-    overflow: "hidden",
+    rowGap: 16,
   },
   title: {
     color: "#FFF",
