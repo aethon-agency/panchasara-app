@@ -19,13 +19,13 @@ import { useTranslation } from "react-i18next";
 
 const poonamSchema = z
   .object({
-    title: z.string().min(1, "Title is required"),
-    date: z.string().min(1, "Date is required"),
-    startTime: z.string().min(1, "Start time is required"),
-    endTime: z.string().min(1, "End time is required"),
+    title: z.string().min(1, "addPoonam.messages.fillRequired"),
+    date: z.string().min(1, "addPoonam.messages.fillRequired"),
+    startTime: z.string().min(1, "addPoonam.messages.fillRequired"),
+    endTime: z.string().min(1, "addPoonam.messages.fillRequired"),
     organizer: z.string().optional(),
     description: z.string().optional(),
-    location: z.string().min(1, "Location is required"),
+    location: z.string().min(1, "addPoonam.messages.fillRequired"),
   })
   .refine(
     (data) => {
@@ -33,7 +33,7 @@ const poonamSchema = z
       return data.endTime > data.startTime;
     },
     {
-      message: "End time must be after start time",
+      message: "addPoonam.messages.invalidTime",
       path: ["endTime"],
     },
   );
@@ -60,7 +60,7 @@ const AddPoonamScreen = () => {
   const [showTitlePicker, setShowTitlePicker] = useState(false);
 
   const handleSubmit = async () => {
-    if (!isValid) {
+    if (!poonamSchema.safeParse(form).success) {
       Toast.error(t("addPoonam.messages.fillRequired"));
       return;
     }
@@ -74,8 +74,8 @@ const AddPoonamScreen = () => {
         setForm({
           title: "",
           date: "",
-          startTime: "",
-          endTime: "",
+          startTime: "09:00",
+          endTime: "13:30",
           organizer: "",
           description: "",
           location: "ભવાની માં મઢ - ભાડુકા",
@@ -105,7 +105,7 @@ const AddPoonamScreen = () => {
             value={form.title}
             placeholder={t("addPoonam.placeholders.selectTitle")}
             onPress={() => setShowTitlePicker(true)}
-            error={errors.title}
+            error={errors.title ? t(errors.title) : ""}
             required
           />
 
@@ -115,7 +115,7 @@ const AddPoonamScreen = () => {
               value={form.date}
               placeholder={t("addPoonam.placeholders.selectDate")}
               onSelect={(date) => handleChange("date", date)}
-              error={errors.date}
+              error={errors.date ? t(errors.date) : ""}
               required
               style={{ flex: 1 }}
             />
@@ -126,7 +126,7 @@ const AddPoonamScreen = () => {
             placeholder={t("addPoonam.placeholders.organizer")}
             value={form.organizer}
             onChangeText={(text) => handleChange("organizer", text)}
-            error={errors.organizer}
+            error={errors.organizer ? t(errors.organizer) : ""}
           />
 
           <View style={styles.row}>
@@ -135,6 +135,7 @@ const AddPoonamScreen = () => {
               value={form.startTime}
               placeholder={t("addPoonam.placeholders.selectTime")}
               onSelect={(time) => handleChange("startTime", time)}
+              error={errors.startTime ? t(errors.startTime) : ""}
               style={{ flex: 1 }}
               required
             />
@@ -143,6 +144,7 @@ const AddPoonamScreen = () => {
               value={form.endTime}
               placeholder={t("addPoonam.placeholders.selectTime")}
               onSelect={(time) => handleChange("endTime", time)}
+              error={errors.endTime ? t(errors.endTime) : ""}
               style={{ flex: 1 }}
               required
             />
@@ -153,7 +155,7 @@ const AddPoonamScreen = () => {
             placeholder={t("addPoonam.placeholders.location")}
             value={form.location}
             onChangeText={(text) => handleChange("location", text)}
-            error={errors.location}
+            error={errors.location ? t(errors.location) : ""}
           />
 
           <CustomInput
@@ -163,13 +165,14 @@ const AddPoonamScreen = () => {
             onChangeText={(text) => handleChange("description", text)}
             multiline
             style={{ height: 80 }}
-            error={errors.description}
+            error={errors.description ? t(errors.description) : ""}
           />
 
           <PrimaryButton
             label={t("addPoonam.submit")}
             onPress={handleSubmit}
             loading={loading}
+            disabled={!isValid}
           />
 
           <SelectionModal

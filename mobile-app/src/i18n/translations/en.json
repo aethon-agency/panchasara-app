@@ -299,6 +299,7 @@
     "messages": {
       "success": "Poonam event created successfully!",
       "fillRequired": "Please fill in all required fields correctly.",
+      "invalidTime": "End time must be after start time",
       "failed": "Failed to create event"
     }
   }
