@@ -15,7 +15,7 @@ import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { MandirEvent } from "@/src/constants/data";
 import { useLanguage } from "@/src/hooks/useLanguage";
-import { handleShare, toGujarati } from "@/src/utils/functions";
+import { formatDate, handleShare, toGujarati } from "@/src/utils/functions";
 import { getEventById } from "@/src/services/eventServices";
 
 export default function EventDetailsScreen() {
@@ -41,7 +41,7 @@ export default function EventDetailsScreen() {
           id: item.id,
           type: item.type,
           title: item.title,
-          date: item.event_date,
+          date: formatDate(item.event_date),
           day: item.day,
           startTime: item.start_time,
           endTime: item.end_time,

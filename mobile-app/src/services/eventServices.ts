@@ -2,9 +2,9 @@ import api from "./api";
 
 interface CreatePoonamData {
   title: string;
-  date: string; // YYYY-MM-DD
-  startTime?: string; // HH:mm
-  endTime?: string; // HH:mm
+  date: string; // DD-MM-YYYY
+  startTime: string; // HH:mm
+  endTime: string; // HH:mm
   organizer?: string;
   description?: string;
   location?: string;

@@ -20,38 +20,46 @@ router.post("/poonam", async (req, res) => {
     } = req.body;
 
     // Basic validation
-    if (!title || !date) {
+    if (!title || !date || !startTime || !endTime) {
       return res.status(400).json({
         success: false,
-        message: "Missing required fields: title, date",
+        message: "Missing required fields: title, date, startTime, endTime",
       });
     }
 
-    if (startTime && !isValidTime(startTime)) {
+    if (!isValidTime(startTime) || !isValidTime(endTime)) {
       return res.status(400).json({
         success: false,
-        message: "Invalid start time format. Use HH:mm",
+        message: "Invalid time format. Use HH:mm",
       });
     }
 
-    if (endTime && !isValidTime(endTime)) {
+    if (endTime <= startTime) {
       return res.status(400).json({
         success: false,
-        message: "Invalid end time format. Use HH:mm",
+        message: "End time must be greater than start time",
       });
     }
 
-    const dateObj = new Date(date);
+    // Parse date from DD-MM-YYYY
+    const parts = date.split("-");
+    const dateObj = new Date(
+      parseInt(parts[2]),
+      parseInt(parts[1]) - 1,
+      parseInt(parts[0]),
+    );
     const dayOfWeek = dateObj
       .toLocaleDateString("en-US", { weekday: "long" })
       .toLowerCase();
+
+    const dbDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
 
     const { data, error } = await supabase
       .from("poonams")
       .insert([
         {
           title,
-          event_date: date,
+          event_date: dbDate,
           day: dayOfWeek,
           start_time: startTime || null,
           end_time: endTime || null, // Optional

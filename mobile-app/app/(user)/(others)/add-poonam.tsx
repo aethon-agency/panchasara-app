@@ -17,15 +17,26 @@ import { DateSelectionField } from "@/src/components/DateSelectionField";
 
 import { useTranslation } from "react-i18next";
 
-const poonamSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  date: z.string().min(1, "Date is required"),
-  startTime: z.string().optional(),
-  endTime: z.string().optional(),
-  organizer: z.string().optional(),
-  description: z.string().optional(),
-  location: z.string().min(1, "Location is required"),
-});
+const poonamSchema = z
+  .object({
+    title: z.string().min(1, "Title is required"),
+    date: z.string().min(1, "Date is required"),
+    startTime: z.string().min(1, "Start time is required"),
+    endTime: z.string().min(1, "End time is required"),
+    organizer: z.string().optional(),
+    description: z.string().optional(),
+    location: z.string().min(1, "Location is required"),
+  })
+  .refine(
+    (data) => {
+      if (!data.startTime || !data.endTime) return true;
+      return data.endTime > data.startTime;
+    },
+    {
+      message: "End time must be after start time",
+      path: ["endTime"],
+    },
+  );
 
 const AddPoonamScreen = () => {
   const { t } = useTranslation();
@@ -38,8 +49,8 @@ const AddPoonamScreen = () => {
   } = useZodForm(poonamSchema, {
     title: "",
     date: "",
-    startTime: "",
-    endTime: "",
+    startTime: "09:00",
+    endTime: "13:30",
     organizer: "",
     description: "",
     location: "ભવાની માં મઢ - ભાડુકા",
@@ -110,6 +121,14 @@ const AddPoonamScreen = () => {
             />
           </View>
 
+          <CustomInput
+            label={t("addPoonam.labels.organizer")}
+            placeholder={t("addPoonam.placeholders.organizer")}
+            value={form.organizer}
+            onChangeText={(text) => handleChange("organizer", text)}
+            error={errors.organizer}
+          />
+
           <View style={styles.row}>
             <TimeSelectionField
               label={t("addPoonam.labels.startTime")}
@@ -128,14 +147,6 @@ const AddPoonamScreen = () => {
               required
             />
           </View>
-
-          <CustomInput
-            label={t("addPoonam.labels.organizer")}
-            placeholder={t("addPoonam.placeholders.organizer")}
-            value={form.organizer}
-            onChangeText={(text) => handleChange("organizer", text)}
-            error={errors.organizer}
-          />
 
           <CustomInput
             label={t("addPoonam.labels.location")}

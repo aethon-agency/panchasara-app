@@ -39,7 +39,6 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     fontFamily: FONTS.INTER_600,
     fontSize: 10.877,
-    lineHeight: 10.877,
     letterSpacing: 0.109,
     fontVariant: ["lining-nums", "proportional-nums"],
   },
