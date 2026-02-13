@@ -165,10 +165,10 @@ export const EXPLORE_ITEMS = [
 ];
 
 export const COMMITTEE_MEMBERS = [
-  { name: "Maheshbhai Panchasara", phone: "+919876543210" },
-  { name: "Rameshbhai Panchasara", phone: "+919812345678" },
-  { name: "Sureshbhai Panchasara", phone: "+919823456789" },
-  { name: "Nareshbhai Panchasara", phone: "+919834567890" },
+  { name: "મહેશભાઈ પંચાસરા", phone: "+919876543210" },
+  { name: "રમેશભાઈ પંચાસરા", phone: "+919812345678" },
+  { name: "સુરેશભાઈ પંચાસરા", phone: "+919823456789" },
+  { name: "નરેશભાઈ પંચાસરા", phone: "+919834567890" },
 ];
 
 export const DONATIONS = [

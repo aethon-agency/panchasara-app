@@ -7,7 +7,6 @@ import {
   Image,
   ViewStyle,
 } from "react-native"; // Or 'react-native'
-import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 
 interface GalleryCollageCardProps {
@@ -42,6 +41,77 @@ export const GalleryCollageCard: React.FC<GalleryCollageCardProps> = ({
     } as any);
   };
 
+  const renderImages = () => {
+    const count = displayImages.length;
+
+    if (count === 0) {
+      return (
+        <View style={[styles.imageWrapper, { width: "100%", height: "100%" }]}>
+          <View style={[styles.image, styles.placeholder]} />
+        </View>
+      );
+    }
+
+    if (count === 1) {
+      return (
+        <View style={[styles.imageWrapper, { width: "100%", height: "100%" }]}>
+          <Image source={{ uri: displayImages[0] }} style={styles.image} />
+        </View>
+      );
+    }
+
+    if (count === 2) {
+      return (
+        <>
+          {displayImages.map((uri, index) => (
+            <View
+              key={index}
+              style={[styles.imageWrapper, { width: "100%", height: "50%" }]}
+            >
+              <Image source={{ uri }} style={styles.image} />
+            </View>
+          ))}
+        </>
+      );
+    }
+
+    if (count === 3) {
+      return (
+        <>
+          <View style={[styles.imageWrapper, { width: "50%", height: "100%" }]}>
+            <Image source={{ uri: displayImages[0] }} style={styles.image} />
+          </View>
+          <View style={{ width: "50%", height: "100%" }}>
+            {displayImages.slice(1).map((uri, index) => (
+              <View
+                key={index + 1}
+                style={[styles.imageWrapper, { width: "100%", height: "50%" }]}
+              >
+                <Image source={{ uri }} style={styles.image} />
+              </View>
+            ))}
+          </View>
+        </>
+      );
+    }
+
+    // 4 or more images (2x2 Grid)
+    return (
+      <>
+        {displayImages.map((uri, index) => (
+          <View key={index} style={styles.imageWrapper}>
+            <Image source={{ uri }} style={styles.image} />
+            {index === 3 && remainingCount > 0 && (
+              <View style={styles.moreOverlay}>
+                <Text style={styles.moreText}>+{remainingCount}</Text>
+              </View>
+            )}
+          </View>
+        ))}
+      </>
+    );
+  };
+
   return (
     <TouchableOpacity
       style={[styles.card, containerStyle]}
@@ -50,26 +120,7 @@ export const GalleryCollageCard: React.FC<GalleryCollageCardProps> = ({
     >
       {/* 1. Image Frame Wrapper */}
       <View style={styles.frame}>
-        <View style={styles.gridContainer}>
-          {displayImages.map((uri, index) => (
-            <View key={index} style={styles.imageWrapper}>
-              <Image source={{ uri }} style={styles.image} />
-              {index === 3 && remainingCount > 0 && (
-                <View style={styles.moreOverlay}>
-                  <Text style={styles.moreText}>+{remainingCount}</Text>
-                </View>
-              )}
-            </View>
-          ))}
-
-          {/* Placeholder logic */}
-          {[...Array(Math.max(0, 4 - displayImages.length))].map((_, i) => (
-            <View
-              key={`empty-${i}`}
-              style={[styles.imageWrapper, styles.placeholder]}
-            />
-          ))}
-        </View>
+        <View style={styles.gridContainer}>{renderImages()}</View>
       </View>
 
       {/* 2. Content Section (Outside the image frame) */}
@@ -111,6 +162,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     backgroundColor: "#F1F5F9",
+    resizeMode: "cover",
   },
   placeholder: {
     backgroundColor: "#F1F5F9",
