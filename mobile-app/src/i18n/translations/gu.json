@@ -273,7 +273,11 @@
       },
       "addAnnouncement": {
         "title": "જાહેરાત ઉમેરો",
-        "description": "નવી જાહેરાત બનાવો"
+        "description": "નવી સામુદાયિક જાહેરાત બનાવો"
+      },
+      "addGallery": {
+        "title": "ગેલેરી ફોટા ઉમેરો",
+        "description": "ઇવેન્ટ ફોટા ગેલેરીમાં અપલોડ કરો"
       }
     }
   },
@@ -297,6 +301,44 @@
       "invalidPhone": "મોબાઈલ નંબર ૧૦ અંકનો હોવો જોઈએ.",
       "failed": "જાહેરાત બનાવવામાં નિષ્ફળ"
     }
+  },
+  "addGallery": {
+    "header": "ગેલેરી ફોટા ઉમેરો",
+    "labels": {
+      "title": "શીર્ષક",
+      "month": "મહિનો",
+      "year": "વર્ષ",
+      "images": "છબી URLs"
+    },
+    "placeholders": {
+      "title": "ગેલેરી શીર્ષક દાખલ કરો",
+      "month": "મહિનો પસંદ કરો",
+      "year": "વર્ષ પસંદ કરો",
+      "imageUrl": "છબી URL દાખલ કરો"
+    },
+    "addImage": "છબી URL ઉમેરો",
+    "removeImage": "દૂર કરો",
+    "submit": "ગેલેરી બનાવો",
+    "messages": {
+      "success": "ગેલેરી સફળતાપૂર્વક બનાવવામાં આવી!",
+      "fillRequired": "કૃપા કરીને બધા જરૂરી ફીલ્ડ ભરો.",
+      "atLeastOneImage": "કૃપા કરીને ઓછામાં ઓછી એક છબી URL ઉમેરો.",
+      "failed": "ગેલેરી બનાવવામાં નિષ્ફળ"
+    }
+  },
+  "months": {
+    "january": "જાન્યુઆરી",
+    "february": "ફેબ્રુઆરી",
+    "march": "માર્ચ",
+    "april": "એપ્રિલ",
+    "may": "મે",
+    "june": "જૂન",
+    "july": "જુલાઈ",
+    "august": "ઓગસ્ટ",
+    "september": "સપ્ટેમ્બર",
+    "october": "ઓક્ટોબર",
+    "november": "નવેમ્બર",
+    "december": "ડિસેમ્બર"
   },
   "addPoonam": {
     "header": "પૂનમ કાર્યક્રમ ઉમેરો",

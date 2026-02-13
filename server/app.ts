@@ -6,6 +6,7 @@ import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/user.js";
 import eventRoutes from "./routes/event.js";
 import announcementRoutes from "./routes/announcement.js";
+import galleryRoutes from "./routes/gallery.js";
 
 import { checkDBConnected } from "./database/index.js";
 
@@ -21,6 +22,7 @@ app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
 app.use("/events", eventRoutes);
 app.use("/announcements", announcementRoutes);
+app.use("/galleries", galleryRoutes);
 
 app.get("/", async (req, res) => {
   try {

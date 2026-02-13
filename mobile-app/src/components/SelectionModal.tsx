@@ -9,11 +9,18 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
+type SelectionOption = {
+  label: string;
+  value: string | number;
+};
+
 interface SelectionModalProps {
   visible: boolean;
   onClose: () => void;
-  title: string;
-  data: string[];
+  title?: string;
+  // Support both old format (data) and new format (options)
+  data?: string[];
+  options?: SelectionOption[];
   selectedValue?: string;
   onSelect: (item: string) => void;
   renderItemText?: (item: string) => string;
@@ -24,10 +31,24 @@ export const SelectionModal = ({
   onClose,
   title,
   data,
+  options,
   selectedValue,
   onSelect,
   renderItemText,
 }: SelectionModalProps) => {
+  // Normalize data to work with both formats
+  const normalizedData = options
+    ? options.map((opt) => String(opt.value))
+    : data || [];
+
+  const getDisplayText = (item: string) => {
+    if (options) {
+      const option = options.find((opt) => String(opt.value) === item);
+      return option?.label || item;
+    }
+    return renderItemText ? renderItemText(item) : item;
+  };
+
   return (
     <Modal
       visible={visible}
@@ -41,14 +62,16 @@ export const SelectionModal = ({
         onPress={onClose}
       >
         <View style={styles.modalContent}>
-          <View style={styles.modalHeader}>
-            <Text style={styles.modalTitle}>{title}</Text>
-            <TouchableOpacity onPress={onClose}>
-              <Ionicons name="close" size={24} color="#1F2937" />
-            </TouchableOpacity>
-          </View>
+          {title && (
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>{title}</Text>
+              <TouchableOpacity onPress={onClose}>
+                <Ionicons name="close" size={24} color="#1F2937" />
+              </TouchableOpacity>
+            </View>
+          )}
           <FlatList
-            data={data}
+            data={normalizedData}
             keyExtractor={(item) => item}
             renderItem={({ item }) => (
               <TouchableOpacity
@@ -64,7 +87,7 @@ export const SelectionModal = ({
                     selectedValue === item && styles.selectedItemText,
                   ]}
                 >
-                  {renderItemText ? renderItemText(item) : item}
+                  {getDisplayText(item)}
                 </Text>
                 {selectedValue === item && (
                   <Ionicons name="checkmark" size={20} color="#EA580C" />

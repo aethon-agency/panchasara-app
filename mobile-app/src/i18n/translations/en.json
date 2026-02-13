@@ -273,7 +273,11 @@
       },
       "addAnnouncement": {
         "title": "Add Announcement",
-        "description": "Create a new announcement"
+        "description": "Create new community announcements"
+      },
+      "addGallery": {
+        "title": "Add Gallery Photos",
+        "description": "Upload event photos to gallery"
       }
     }
   },
@@ -297,6 +301,48 @@
       "invalidPhone": "Phone number must be exactly 10 digits.",
       "failed": "Failed to create announcement"
     }
+  },
+  "addGallery": {
+    "header": "Add Gallery Photos",
+    "labels": {
+      "title": "Title",
+      "month": "Month",
+      "year": "Year",
+      "images": "Photos"
+    },
+    "placeholders": {
+      "title": "Enter gallery title",
+      "month": "Select month",
+      "year": "Select year"
+    },
+    "selectImage": "Select Photo",
+    "addImage": "Add Another Photo",
+    "removeImage": "Remove",
+    "uploading": "Uploading photos...",
+    "uploadProgress": "Uploading {{current}} of {{total}}",
+    "submit": "Create Gallery",
+    "messages": {
+      "success": "Gallery created successfully!",
+      "fillRequired": "Please fill in all required fields.",
+      "atLeastOneImage": "Please select at least one photo.",
+      "uploadError": "Failed to upload photos. Please try again.",
+      "permissionDenied": "Permission to access photos was denied.",
+      "failed": "Failed to create gallery"
+    }
+  },
+  "months": {
+    "january": "January",
+    "february": "February",
+    "march": "March",
+    "april": "April",
+    "may": "May",
+    "june": "June",
+    "july": "July",
+    "august": "August",
+    "september": "September",
+    "october": "October",
+    "november": "November",
+    "december": "December"
   },
   "addPoonam": {
     "header": "Add Poonam Event",
