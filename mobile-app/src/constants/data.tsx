@@ -1,115 +1,22 @@
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
 
-export interface MandirEvent {
-  id: string;
-  type: "poonam" | "havan";
-  title: string;
-  date: string;
-  day: string;
-  startTime: string;
-  endTime: string;
-  description: string;
-  location: string;
-  organizerName?: string;
-}
 export const WHATSAPP_GROUP_LINK =
   "https://chat.whatsapp.com/4n01go3yTCp9baMymp5WRH?mode=wwt";
 
 export const MANDIR_MAPS_LINK = "https://maps.app.goo.gl/fgebem7Y745vrR7v9";
 
+export const COMMITTEE_MEMBERS = [
+  { name: "મહેશભાઈ પંચાસરા", phone: "+919876543210" },
+  { name: "રમેશભાઈ પંચાસરા", phone: "+919812345678" },
+  { name: "સુરેશભાઈ પંચાસરા", phone: "+919823456789" },
+  { name: "નરેશભાઈ પંચાસરા", phone: "+919834567890" },
+];
+
 export const HERO_IMAGES = [
   "https://eijolqvtchrmhuvuytbl.supabase.co/storage/v1/object/public/BANNER/Banner.jpeg",
   "https://eijolqvtchrmhuvuytbl.supabase.co/storage/v1/object/public/BANNER/Banner.jpeg",
   "https://eijolqvtchrmhuvuytbl.supabase.co/storage/v1/object/public/BANNER/Banner.jpeg",
-];
-
-export const GALLERY_DATA = [
-  {
-    id: "1",
-    title: "મહા પૂનમ",
-    date: "ફેબ્રુઆરી ૨૦૨૬",
-    images: [
-      "https://images.pexels.com/photos/20793879/pexels-photo-20793879.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-      "https://images.pexels.com/photos/18362038/pexels-photo-18362038.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-      "https://images.pexels.com/photos/8818658/pexels-photo-8818658.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-      "https://images.pexels.com/photos/14834183/pexels-photo-14834183.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-      "https://images.pexels.com/photos/16397388/pexels-photo-16397388.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-      "https://images.pexels.com/photos/32962421/pexels-photo-32962421.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-      "https://images.pexels.com/photos/32058915/pexels-photo-32058915.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-      "https://images.pexels.com/photos/19576757/pexels-photo-19576757.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-      "https://images.pexels.com/photos/5971975/pexels-photo-5971975.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-    ],
-  },
-  {
-    id: "2",
-    title: "ફાગણ પૂનમ (હોળી)",
-    date: "માર્ચ ૨૦૨૬",
-    images: [
-      "https://images.pexels.com/photos/32058915/pexels-photo-32058915.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-      "https://images.pexels.com/photos/5971975/pexels-photo-5971975.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-      "https://images.pexels.com/photos/14834183/pexels-photo-14834183.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-      "https://images.pexels.com/photos/20793879/pexels-photo-20793879.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-      "https://images.pexels.com/photos/8818658/pexels-photo-8818658.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-      "https://images.pexels.com/photos/32962421/pexels-photo-32962421.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-      "https://images.pexels.com/photos/18362038/pexels-photo-18362038.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-    ],
-  },
-  {
-    id: "3",
-    title: "કાર્તક પૂનમ",
-    date: "નવેમ્બર ૨૦૨૫",
-    images: [
-      "https://images.pexels.com/photos/19576757/pexels-photo-19576757.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-      "https://images.pexels.com/photos/8818658/pexels-photo-8818658.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-      "https://images.pexels.com/photos/20793879/pexels-photo-20793879.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-      "https://images.pexels.com/photos/14834183/pexels-photo-14834183.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-      "https://images.pexels.com/photos/5971975/pexels-photo-5971975.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-      "https://images.pexels.com/photos/18362038/pexels-photo-18362038.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-    ],
-  },
-  {
-    id: "4",
-    title: "દિવાળી હવન",
-    date: "નવેમ્બર ૨૦૨૫",
-    images: [
-      "https://images.pexels.com/photos/16397388/pexels-photo-16397388.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-      "https://images.pexels.com/photos/32058915/pexels-photo-32058915.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-      "https://images.pexels.com/photos/18362038/pexels-photo-18362038.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-      "https://images.pexels.com/photos/32962421/pexels-photo-32962421.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-      "https://images.pexels.com/photos/19576757/pexels-photo-19576757.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-      "https://images.pexels.com/photos/5971975/pexels-photo-5971975.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-      "https://images.pexels.com/photos/8818658/pexels-photo-8818658.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-    ],
-  },
-  {
-    id: "5",
-    title: "ચૈત્રી પૂનમ",
-    date: "એપ્રિલ ૨૦૨૬",
-    images: [
-      "https://images.pexels.com/photos/32058915/pexels-photo-32058915.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-      "https://images.pexels.com/photos/20793879/pexels-photo-20793879.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-      "https://images.pexels.com/photos/8818658/pexels-photo-8818658.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-      "https://images.pexels.com/photos/16397388/pexels-photo-16397388.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-      "https://images.pexels.com/photos/32962421/pexels-photo-32962421.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-      "https://images.pexels.com/photos/18362038/pexels-photo-18362038.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-      "https://images.pexels.com/photos/19576757/pexels-photo-19576757.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-    ],
-  },
-  {
-    id: "6",
-    title: "અષાઢી પૂનમ (ગુરુ પૂનમ)",
-    date: "જુલાઈ ૨૦૨૬",
-    images: [
-      "https://images.pexels.com/photos/14834183/pexels-photo-14834183.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-      "https://images.pexels.com/photos/18362038/pexels-photo-18362038.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-      "https://images.pexels.com/photos/8818658/pexels-photo-8818658.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-      "https://images.pexels.com/photos/16397388/pexels-photo-16397388.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-      "https://images.pexels.com/photos/32962421/pexels-photo-32962421.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-      "https://images.pexels.com/photos/20793879/pexels-photo-20793879.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-      "https://images.pexels.com/photos/5971975/pexels-photo-5971975.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-    ],
-  },
 ];
 
 export const EXPLORE_ITEMS = [
@@ -162,13 +69,6 @@ export const EXPLORE_ITEMS = [
     ),
     route: "/history",
   },
-];
-
-export const COMMITTEE_MEMBERS = [
-  { name: "મહેશભાઈ પંચાસરા", phone: "+919876543210" },
-  { name: "રમેશભાઈ પંચાસરા", phone: "+919812345678" },
-  { name: "સુરેશભાઈ પંચાસરા", phone: "+919823456789" },
-  { name: "નરેશભાઈ પંચાસરા", phone: "+919834567890" },
 ];
 
 export const DONATIONS = [

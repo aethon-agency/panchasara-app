@@ -13,7 +13,7 @@ import { useLanguage } from "@/src/hooks/useLanguage";
 import { MandirEventCard } from "@/src/components/MandirEventCard";
 import { LanguageSelector } from "@/src/components/LanguageSelector";
 import { getAllEvents } from "@/src/services/eventServices";
-import { MandirEvent } from "@/src/constants/data";
+import { MandirEvent } from "@/src/constants/types";
 import { formatDate } from "@/src/utils/functions";
 
 export default function EventScreen() {

@@ -15,7 +15,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { LanguageSelector } from "@/src/components/LanguageSelector";
 import { useLanguage } from "@/src/hooks/useLanguage";
-import { HERO_IMAGES, MandirEvent } from "@/src/constants/data";
+import { HERO_IMAGES } from "@/src/constants/data";
 import { Section } from "@/src/components/Section";
 import { GalleryCollageCard } from "@/src/components/GalleryCollageCard";
 import { AnnouncementCard } from "@/src/components/AnnouncementCard";
@@ -25,6 +25,7 @@ import { getAnnouncements } from "@/src/services/announcementServices";
 import { getGalleries } from "@/src/services/galleryServices";
 import { formatDate, toGujarati } from "@/src/utils/functions";
 import { getAllEvents } from "@/src/services/eventServices";
+import { MandirEvent } from "@/src/constants/types";
 
 const { width } = Dimensions.get("window");
 

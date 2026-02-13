@@ -13,7 +13,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { AppHeader } from "@/src/components/AppHeader";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { MandirEvent } from "@/src/constants/data";
+import { MandirEvent } from "@/src/constants/types";
 import { useLanguage } from "@/src/hooks/useLanguage";
 import {
   formatDate,
