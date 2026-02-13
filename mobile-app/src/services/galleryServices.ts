@@ -26,3 +26,13 @@ export const getGalleries = async () => {
     throw error;
   }
 };
+
+export const getGalleryById = async (id: string) => {
+  try {
+    const response: any = await api.get(`/galleries/${id}`);
+    return response;
+  } catch (error) {
+    console.error(`Error fetching gallery ${id}:`, error);
+    throw error;
+  }
+};

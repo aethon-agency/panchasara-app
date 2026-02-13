@@ -15,15 +15,16 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { LanguageSelector } from "@/src/components/LanguageSelector";
 import { useLanguage } from "@/src/hooks/useLanguage";
-import { HERO_IMAGES, GALLERY_DATA, MandirEvent } from "@/src/constants/data";
+import { HERO_IMAGES, MandirEvent } from "@/src/constants/data";
 import { Section } from "@/src/components/Section";
 import { GalleryCollageCard } from "@/src/components/GalleryCollageCard";
 import { AnnouncementCard } from "@/src/components/AnnouncementCard";
 import { MandirEventCard } from "@/src/components/MandirEventCard";
 import { getUserProfile } from "@/src/services/userServices";
 import { getAnnouncements } from "@/src/services/announcementServices";
+import { getGalleries } from "@/src/services/galleryServices";
+import { formatDate, toGujarati } from "@/src/utils/functions";
 import { getAllEvents } from "@/src/services/eventServices";
-import { formatDate } from "@/src/utils/functions";
 
 const { width } = Dimensions.get("window");
 
@@ -34,14 +35,33 @@ const PAGE_WIDTH = width;
 const HomeScreen = () => {
   const { user, updateUser } = useAuthStore();
   const router = useRouter();
-  const { t } = useLanguage();
+  const { t, isGujarati } = useLanguage();
 
   const flatListRef = useRef<FlatList>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const autoScroll = useRef(true);
   const [announcements, setAnnouncements] = useState<any[]>([]);
+  const [galleries, setGalleries] = useState<any[]>([]);
   const [events, setEvents] = useState<MandirEvent[]>([]);
   const [refreshing, setRefreshing] = useState(false);
+
+  const formatGalleryDate = (month: number, year: number) => {
+    const monthNames = [
+      "january",
+      "february",
+      "march",
+      "april",
+      "may",
+      "june",
+      "july",
+      "august",
+      "september",
+      "october",
+      "november",
+      "december",
+    ];
+    return `${t(`months.${monthNames[month - 1]}`)} ${isGujarati ? toGujarati(year?.toString()) : year}`;
+  };
 
   const fetchHomeData = async () => {
     try {
@@ -64,6 +84,17 @@ const HomeScreen = () => {
           }
         } catch (error) {
           console.error("[HomeScreen] Error fetching announcements:", error);
+        }
+      };
+
+      const fetchGalleries = async () => {
+        try {
+          const response = await getGalleries();
+          if (response && response.success) {
+            setGalleries(response.data);
+          }
+        } catch (error) {
+          console.error("[HomeScreen] Error fetching galleries:", error);
         }
       };
 
@@ -90,7 +121,12 @@ const HomeScreen = () => {
         }
       };
 
-      await Promise.all([syncProfile(), fetchAnnouncements(), fetchEvents()]);
+      await Promise.all([
+        syncProfile(),
+        fetchAnnouncements(),
+        fetchEvents(),
+        fetchGalleries(),
+      ]);
     } catch (err) {
       console.error("[HomeScreen] Error fetching home data:", err);
     }
@@ -270,12 +306,12 @@ const HomeScreen = () => {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{ paddingRight: 20 }}
           >
-            {GALLERY_DATA?.slice(0, 3).map((item) => (
+            {galleries?.slice(0, 3).map((item) => (
               <GalleryCollageCard
                 key={item.id}
-                id={item.id}
+                id={String(item.id)}
                 title={item.title}
-                date={item.date}
+                date={formatGalleryDate(item.month, item.year)}
                 images={item.images}
                 containerStyle={styles.galleryCard}
               />

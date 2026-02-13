@@ -70,7 +70,6 @@ export default function GalleryListScreen() {
       <View style={styles.container}>
         <AppHeader
           title={t("home.eventGallery")}
-          subtitle={t("home.whatsNew")}
           showBack={true}
           onBack={() => router.back()}
         />

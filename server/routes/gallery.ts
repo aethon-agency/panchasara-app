@@ -70,4 +70,27 @@ router.get("/", async (req, res) => {
   }
 });
 
+// GET /:id - Fetch a single gallery by ID
+router.get("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const { data, error } = await supabase
+      .from("galleries")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (error) throw error;
+
+    res.json({ success: true, data });
+  } catch (error: any) {
+    console.error("Error fetching gallery:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message || "Failed to fetch gallery",
+    });
+  }
+});
+
 export default router;
