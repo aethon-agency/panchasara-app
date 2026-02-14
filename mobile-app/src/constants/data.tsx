@@ -72,7 +72,7 @@ export const EXPLORE_ITEMS = [
     title: "nived.title",
     subtitle: "nived.subtitle",
     icon: (color: string) => (
-      <Ionicons name="notifications-outline" size={28} color={color} />
+      <MaterialCommunityIcons name="brightness-7" size={28} color={color} />
     ),
     route: "/nived-details",
   },

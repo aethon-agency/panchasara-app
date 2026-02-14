@@ -6,8 +6,9 @@ import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 
 const REQUIREMENTS = [
-  "સુખડી (પરંપરાગત પ્રસાદ)",
-  "કાળા અડદના વડા",
+  "* * * ",
+  "* * * ",
+  "* * * ",
   "શ્રીફળ (નાળિયેર)",
   "દીપક (પરંપરાગત દીવો)",
   "તાજા ફળો અને ફૂલો",
@@ -64,7 +65,7 @@ export default function NivedDetailsScreen() {
         <View style={styles.card}>
           <View style={styles.cardHeaderRow}>
             <Ionicons name="basket-outline" size={20} color="#EA580C" />
-            <Text style={styles.cardHeader}>તૈયારી અને સામગ્રી</Text>
+            <Text style={styles.cardHeader}>નિવેદ ની માહિતી</Text>
           </View>
           <View style={styles.divider} />
           {REQUIREMENTS.map((item, index) => (
