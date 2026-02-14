@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
+import api from "../services/api";
 
 type User = {
   id: string;
@@ -88,3 +89,7 @@ export const useAuthStore = create<AuthState>()(
     },
   ),
 );
+
+// Register API handlers to break circular dependency
+api.setTokenGetter(() => useAuthStore.getState().token);
+api.setUnauthorizedHandler(() => useAuthStore.getState().logout());
