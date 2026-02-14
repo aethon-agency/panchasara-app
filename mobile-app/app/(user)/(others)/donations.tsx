@@ -85,6 +85,23 @@ export default function DonationsScreen() {
                 >
                   {/* Header */}
                   <View style={styles.headerRow}>
+                    <View style={{ flex: 1 }}>
+                      {/* ✅ MAIN NAME */}
+                      <Text style={styles.mainName}>{item.title}</Text>
+
+                      {/* ✅ DONORS */}
+                      {item.donor_name && item.donor_name !== item.title && (
+                        <Text style={styles.donorName}>
+                          {t("donations.by", { donorName: item.donor_name })}
+                        </Text>
+                      )}
+                    </View>
+
+                    <Text style={styles.date}>{formatDate(item.date)}</Text>
+                  </View>
+
+                  {/* Body */}
+                  <View style={styles.row}>
                     <View
                       style={[
                         styles.badge,
@@ -104,24 +121,6 @@ export default function DonationsScreen() {
                         {t(`donations.types.${item.type}`)}
                       </Text>
                     </View>
-
-                    <Text style={styles.date}>{formatDate(item.date)}</Text>
-                  </View>
-
-                  {/* Body */}
-                  <View style={styles.row}>
-                    <View style={{ flex: 1 }}>
-                      {/* ✅ MAIN NAME */}
-                      <Text style={styles.mainName}>{item.title}</Text>
-
-                      {/* ✅ DONORS */}
-                      {item.donor_name && item.donor_name !== item.title && (
-                        <Text style={styles.donorName}>
-                          {t("donations.by", { donorName: item.donor_name })}
-                        </Text>
-                      )}
-                    </View>
-
                     {item.type === "cash" ? (
                       <Text style={styles.amount}>₹ {item.amount}</Text>
                     ) : (
