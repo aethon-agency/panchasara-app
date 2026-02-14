@@ -1,51 +1,25 @@
-import { View, Text, ActivityIndicator } from "react-native";
-import React, { useEffect } from "react";
-import { SplashScreen, useRouter } from "expo-router";
+import { View, ActivityIndicator } from "react-native";
+import React from "react";
 import { useAuthStore } from "@/src/stores/authStore";
-import { useAppFonts } from "@/src/constants/fonts";
 import { COLORS } from "@/src/constants/colors";
+import { Redirect } from "expo-router";
 
 const index = () => {
-  const { token, authLoading } = useAuthStore();
-  const router = useRouter();
-  const { fontsLoaded } = useAppFonts();
+  const { authLoading, token } = useAuthStore();
 
-  useEffect(() => {
-    if (fontsLoaded && !authLoading) {
-      SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded, authLoading]);
-
-  useEffect(() => {
-    if (authLoading || !fontsLoaded) return;
-
-    if (token) {
-      router.replace("/(user)/(tabs)/home");
-    } else {
-      router.replace("/(auth)/login");
-    }
-  }, [token, authLoading, fontsLoaded]);
-
-  if (authLoading || !fontsLoaded) {
+  if (authLoading) {
     return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: COLORS.backgroundPrimary,
-        }}
-      >
-        <ActivityIndicator size="large" color={COLORS.primary} />
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="small" color={COLORS.primary} />
       </View>
     );
   }
 
-  return (
-    <View>
-      <Text>index</Text>
-    </View>
-  );
+  if (token) {
+    return <Redirect href="/(user)/(tabs)/home" />;
+  }
+
+  return <Redirect href="/(auth)/login" />;
 };
 
 export default index;

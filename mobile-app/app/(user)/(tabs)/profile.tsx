@@ -165,6 +165,7 @@ export default function ProfileScreen() {
     );
     setTimeout(() => {
       logout();
+      router.replace("/(auth)/login");
     }, 500);
   };
 
