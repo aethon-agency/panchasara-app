@@ -13,9 +13,12 @@ import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTranslation } from "react-i18next";
 import { getDonations, Donation } from "@/src/services/donationServices";
+import { useLanguage } from "@/src/hooks/useLanguage";
+import { toGujarati } from "@/src/utils/functions";
 
 export default function DonationsScreen() {
   const { t } = useTranslation();
+  const { isGujarati } = useLanguage();
   const router = useRouter();
   const [donations, setDonations] = useState<Donation[]>([]);
   const [loading, setLoading] = useState(true);
@@ -35,13 +38,20 @@ export default function DonationsScreen() {
     }
   };
 
-  const formatDate = (dateString: string) => {
-    const options: Intl.DateTimeFormatOptions = {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    };
-    return new Date(dateString).toLocaleDateString("en-GB", options);
+  const formatDate = (dateStr: string) => {
+    if (!dateStr) return "";
+    const parts = dateStr.split(/[-/]/);
+    let formattedDate = dateStr;
+    if (parts.length === 3) {
+      if (parts[0].length === 4) {
+        // YYYY-MM-DD -> DD/MM/YYYY
+        formattedDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
+      } else {
+        // DD-MM-YYYY -> DD/MM/YYYY
+        formattedDate = `${parts[0]}/${parts[1]}/${parts[2]}`;
+      }
+    }
+    return isGujarati ? toGujarati(formattedDate) : formattedDate;
   };
 
   return (

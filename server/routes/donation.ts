@@ -9,7 +9,9 @@ router.get("/", async (req: Request, res: Response) => {
   try {
     const { data: donations, error } = await supabase
       .from(TABLE_NAME.DONATIONS)
-      .select("*")
+      .select(
+        "id, type, title, donor_name, amount, item_name, item_qty, date:donation_date, created_at",
+      )
       .order("created_at", { ascending: false });
 
     if (error) {
