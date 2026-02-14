@@ -80,6 +80,9 @@
     "fillAllFields": "Please fill all fields",
     "updateSuccess": "Profile updated successfully",
     "updateError": "Failed to update profile",
+    "notificationsEnabled": "Notifications enabled",
+    "notificationsDisabled": "Notifications disabled",
+    "loggingOut": "Logging out...",
     "version": "Version 1.0.0 • Panchasara Samaj"
   },
   "announcements": {

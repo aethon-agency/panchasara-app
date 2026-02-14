@@ -145,11 +145,15 @@ export default function ProfileScreen() {
 
   const toggleNotifications = (value: boolean) => {
     setNotificationsEnabled(value);
-    toast.success(value ? "Notifications enabled" : "Notifications disabled");
+    toast.success(
+      value
+        ? t("profile.notificationsEnabled")
+        : t("profile.notificationsDisabled"),
+    );
   };
 
   const handleLogout = () => {
-    toast.success("Logging out...");
+    toast.success(t("profile.loggingOut") || "Logging out");
     setTimeout(() => {
       logout();
     }, 500);

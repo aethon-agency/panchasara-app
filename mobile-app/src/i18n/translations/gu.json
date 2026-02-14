@@ -80,6 +80,9 @@
     "fillAllFields": "કૃપા કરીને બધા ક્ષેત્રો ભરો",
     "updateSuccess": "પ્રોફાઇલ સફળતાપૂર્વક અપડેટ થઈ",
     "updateError": "પ્રોફાઇલ અપડેટ કરવામાં નિષ્ફળ",
+    "notificationsEnabled": "સૂચનાઓ ચાલુ કરવામાં આવી",
+    "notificationsDisabled": "સૂચનાઓ બંધ કરવામાં આવી",
+    "loggingOut": "લોગઆઉટ થઈ રહ્યું છે...",
     "version": "સંસ્કરણ ૧.૦.૦ • પંચાસરા સમાજ"
   },
   "announcements": {
