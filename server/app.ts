@@ -10,6 +10,8 @@ import galleryRoutes from "./routes/gallery.js";
 
 import { checkDBConnected } from "./database/index.js";
 
+import contactRoutes from "./routes/contact.js";
+
 const app = express();
 
 // Middlewares
@@ -23,6 +25,7 @@ app.use("/user", userRoutes);
 app.use("/events", eventRoutes);
 app.use("/announcements", announcementRoutes);
 app.use("/galleries", galleryRoutes);
+app.use("/contacts", contactRoutes);
 
 app.get("/", async (req, res) => {
   try {

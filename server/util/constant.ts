@@ -1,5 +1,6 @@
 export const TABLE_NAME = {
   USERS: "users",
+  CONTACTUS: "contactus",
 } as const;
 
 export const COLUMN_NAME = {
