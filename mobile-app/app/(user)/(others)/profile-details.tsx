@@ -27,7 +27,6 @@ export default function ProfileDetailsScreen() {
   const [middleName, setMiddleName] = useState(user?.middlename || "");
   const [lastName, setLastName] = useState(user?.lastname || "");
   const [location, setLocation] = useState(user?.location || "");
-
   const [loading, setLoading] = useState(false);
 
   const handleSave = async () => {

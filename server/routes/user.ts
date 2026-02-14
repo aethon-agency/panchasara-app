@@ -40,6 +40,7 @@ router.get("/profile", middleware, async (req: Request, res: Response) => {
         lastName: data.lastname,
         middleName: data.middlename,
         isadmin: data.is_admin,
+        location: data.location,
       },
     });
   } catch (error) {
