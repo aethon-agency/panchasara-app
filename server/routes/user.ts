@@ -13,7 +13,9 @@ router.get("/profile", middleware, async (req: Request, res: Response) => {
     // Fetch all user details
     const { data, error } = await supabase
       .from(TABLE_NAME.USERS)
-      .select("id, mobilenumber, firstname, lastname, middlename, is_admin")
+      .select(
+        "id, mobilenumber, firstname, lastname, middlename, is_admin, location",
+      )
       .eq("id", userId)
       .single();
 
@@ -52,7 +54,8 @@ router.get("/profile", middleware, async (req: Request, res: Response) => {
 router.patch("/profile", middleware, async (req: Request, res: Response) => {
   try {
     const userId = (req as AuthRequest).user.id;
-    const { firstName, lastName, middleName, mobileNumber }: any = req.body;
+    const { firstName, lastName, middleName, mobileNumber, location }: any =
+      req.body;
 
     // Build update object with only provided fields
     const updateData: any = {};
@@ -61,6 +64,7 @@ router.patch("/profile", middleware, async (req: Request, res: Response) => {
     if (lastName !== undefined) updateData.lastname = lastName;
     if (middleName !== undefined) updateData.middlename = middleName;
     if (mobileNumber !== undefined) updateData.mobilenumber = mobileNumber;
+    if (location !== undefined) updateData.location = location;
 
     // Check if there are any fields to update
     if (Object.keys(updateData).length === 0) {
@@ -75,7 +79,9 @@ router.patch("/profile", middleware, async (req: Request, res: Response) => {
       .from(TABLE_NAME.USERS)
       .update(updateData)
       .eq("id", userId)
-      .select("id, mobilenumber, firstname, lastname, middlename, is_admin")
+      .select(
+        "id, mobilenumber, firstname, lastname, middlename, is_admin, location",
+      )
       .single();
 
     if (error) {
@@ -100,6 +106,7 @@ router.patch("/profile", middleware, async (req: Request, res: Response) => {
         lastName: data.lastname,
         middleName: data.middlename,
         isadmin: data.is_admin,
+        location: data.location,
       },
     });
   } catch (error) {

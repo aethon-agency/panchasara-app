@@ -21,6 +21,7 @@ export const registerUser = async (
   middleName: string,
   lastName: string,
   mobileNumber: string,
+  location: string,
 ) => {
   try {
     if (
@@ -28,6 +29,7 @@ export const registerUser = async (
       !middleName ||
       !lastName ||
       !mobileNumber ||
+      !location ||
       mobileNumber.length < 10
     )
       return;
@@ -36,6 +38,7 @@ export const registerUser = async (
       firstName,
       middleName,
       lastName,
+      location,
     });
     if (response?.success) {
       return response?.hash;

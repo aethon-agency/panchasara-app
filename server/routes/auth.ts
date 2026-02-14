@@ -125,13 +125,14 @@ router.post("/verify-otp", async (req: Request, res: Response) => {
 
 router.post("/register", async (req: Request, res: Response) => {
   try {
-    const { mobileNumber, firstName, middleName, lastName } =
+    const { mobileNumber, firstName, middleName, lastName, location } =
       req.body as SignupRequest;
 
-    if (!mobileNumber || !firstName || !middleName || !lastName) {
+    if (!mobileNumber || !firstName || !middleName || !lastName || !location) {
       return res.status(400).json({
         success: false,
-        error: "Required fields: mobileNumber, firstName, middleName, lastName",
+        error:
+          "Required fields: mobileNumber, firstName, middleName, lastName, location",
       });
     }
 
@@ -154,6 +155,7 @@ router.post("/register", async (req: Request, res: Response) => {
             firstname: firstName,
             middlename: middleName,
             lastname: lastName,
+            location: location,
           },
         ])
         .select();

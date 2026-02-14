@@ -9,6 +9,7 @@ type User = {
   middlename: string;
   lastname: string;
   isadmin: boolean;
+  location: string;
 };
 
 type AuthState = {
@@ -53,6 +54,7 @@ export const useAuthStore = create<AuthState>()(
                 lastname: userData.lastName,
                 middlename: userData.middleName,
                 isadmin: userData.isadmin,
+                location: userData.location,
               },
             });
           }

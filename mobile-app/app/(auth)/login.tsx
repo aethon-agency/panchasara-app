@@ -42,6 +42,7 @@ const LoginScreen = () => {
   const [firstName, setFirstName] = useState("");
   const [middleName, setMiddleName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [location, setLocation] = useState("");
   const [loading, setLoading] = useState(false);
 
   const transition = useSharedValue(0);
@@ -52,6 +53,7 @@ const LoginScreen = () => {
       : firstName.trim() !== "" &&
         middleName.trim() !== "" &&
         lastName.trim() !== "" &&
+        location.trim() !== "" &&
         mobileNumber.length === 10;
 
   const handleSendOTP = async () => {
@@ -77,6 +79,7 @@ const LoginScreen = () => {
           middleName,
           lastName,
           mobileNumber,
+          location,
         );
 
         if (hash) {
@@ -278,6 +281,16 @@ const LoginScreen = () => {
                     placeholder={t("login.lastNameLabel") ?? "Enter last name"}
                     value={lastName}
                     onChangeText={setLastName}
+                  />
+
+                  <CustomInput
+                    label={t("login.locationLabel") ?? "Residence Village"}
+                    icon="map-marker-outline"
+                    placeholder={
+                      t("login.locationPlaceholder") ?? "Enter village name"
+                    }
+                    value={location}
+                    onChangeText={setLocation}
                   />
                 </>
               )}

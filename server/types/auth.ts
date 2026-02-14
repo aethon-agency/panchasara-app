@@ -13,6 +13,7 @@ export interface SignupRequest {
   firstName: string;
   middleName: string;
   lastName: string;
+  location: string;
 }
 
 // User type matching database schema
@@ -24,6 +25,7 @@ export interface User {
   vehiclenumber: string;
   upiid: string;
   isadmin: boolean;
+  location: string;
   created_at: string;
 }
 

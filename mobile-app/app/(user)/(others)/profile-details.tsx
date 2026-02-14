@@ -26,11 +26,12 @@ export default function ProfileDetailsScreen() {
   const [firstName, setFirstName] = useState(user?.firstname || "");
   const [middleName, setMiddleName] = useState(user?.middlename || "");
   const [lastName, setLastName] = useState(user?.lastname || "");
+  const [location, setLocation] = useState(user?.location || "");
 
   const [loading, setLoading] = useState(false);
 
   const handleSave = async () => {
-    if (!firstName.trim() || !lastName.trim()) {
+    if (!firstName.trim() || !lastName.trim() || !location.trim()) {
       toast.error(t("profile.fillAllFields"));
       return;
     }
@@ -41,6 +42,7 @@ export default function ProfileDetailsScreen() {
         firstName,
         lastName,
         middleName,
+        location,
       });
 
       if (response.status && response.data) {
@@ -50,6 +52,7 @@ export default function ProfileDetailsScreen() {
           lastname: userData.lastName,
           middlename: userData.middleName,
           mobilenumber: userData.mobileNumber?.toString(),
+          location: userData.location,
           isadmin: userData.isadmin,
         });
 
@@ -119,6 +122,16 @@ export default function ProfileDetailsScreen() {
                 placeholder={t("login.lastNameLabel") ?? "Enter last name"}
                 value={lastName}
                 onChangeText={setLastName}
+              />
+
+              <CustomInput
+                label={t("login.locationLabel") ?? "Residence Village"}
+                icon="map-marker-outline"
+                placeholder={
+                  t("login.locationPlaceholder") ?? "Enter village name"
+                }
+                value={location}
+                onChangeText={setLocation}
               />
             </View>
 

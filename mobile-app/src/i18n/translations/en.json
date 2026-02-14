@@ -104,6 +104,8 @@
     "firstNameLabel": "First Name",
     "middleNameLabel": "Middle Name",
     "lastNameLabel": "Last Name",
+    "locationLabel": "Residence Village",
+    "locationPlaceholder": "Enter village name",
     "cta": "Get OTP",
     "sendingOtp": "Sending OTP...",
     "footer": "Secure login for Panchasara Parivar members 🪔",
