@@ -82,8 +82,13 @@
     "updateError": "પ્રોફાઇલ અપડેટ કરવામાં નિષ્ફળ",
     "notificationsEnabled": "સૂચનાઓ ચાલુ કરવામાં આવી",
     "notificationsDisabled": "સૂચનાઓ બંધ કરવામાં આવી",
-    "loggingOut": "લોગઆઉટ થઈ રહ્યું છે...",
-    "version": "સંસ્કરણ ૧.૦.૦ • પંચાસરા સમાજ"
+    "loggingOut": "લોગઆઉટ કરી રહ્યા છીએ...",
+    "logoutConfirmTitle": "લોગઆઉટની પુષ્ટિ",
+    "logoutConfirmMessage": "શું તમે ખરેખર લોગઆઉટ કરવા માંગો છો?",
+    "confirmLogoutButton": "લોગઆઉટ",
+    "cancelLogoutButton": "રદ કરો",
+    "accountDeactivated": "તમારું એકાઉન્ટ નિષ્ક્રિય થઈ જશે",
+    "version": "આવૃત્તિ ૧.૦.૦ • પંચાસરા સમાજ"
   },
   "announcements": {
     "title": "જાહેરાતો",

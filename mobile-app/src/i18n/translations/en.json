@@ -83,6 +83,11 @@
     "notificationsEnabled": "Notifications enabled",
     "notificationsDisabled": "Notifications disabled",
     "loggingOut": "Logging out...",
+    "logoutConfirmTitle": "Logout Confirmation",
+    "logoutConfirmMessage": "Are you sure you want to logout?",
+    "confirmLogoutButton": "Logout",
+    "cancelLogoutButton": "Cancel",
+    "accountDeactivated": "Your account should be deactivated",
     "version": "Version 1.0.0 • Panchasara Samaj"
   },
   "announcements": {

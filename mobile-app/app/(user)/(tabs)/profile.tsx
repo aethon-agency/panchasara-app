@@ -15,6 +15,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useLanguage } from "@/src/hooks/useLanguage";
 import { LanguageSelector } from "@/src/components/LanguageSelector";
 import { useToast } from "@/src/contexts/ToastProvider";
+import { ConfirmationModal } from "@/src/components/ConfirmationModal";
 
 interface MenuItemData {
   icon: keyof typeof Ionicons.glyphMap;
@@ -142,6 +143,7 @@ export default function ProfileScreen() {
   const { t } = useLanguage();
   const toast = useToast();
   const [notificationsEnabled, setNotificationsEnabled] = React.useState(true);
+  const [isLogoutModalVisible, setIsLogoutModalVisible] = React.useState(false);
 
   const toggleNotifications = (value: boolean) => {
     setNotificationsEnabled(value);
@@ -153,7 +155,14 @@ export default function ProfileScreen() {
   };
 
   const handleLogout = () => {
-    toast.success(t("profile.loggingOut") || "Logging out");
+    setIsLogoutModalVisible(true);
+  };
+
+  const confirmLogout = () => {
+    setIsLogoutModalVisible(false);
+    toast.success(
+      t("profile.accountDeactivated") || "Your account should be deactivated",
+    );
     setTimeout(() => {
       logout();
     }, 500);
@@ -213,6 +222,16 @@ export default function ProfileScreen() {
 
         <Text style={styles.versionText}>{t("profile.version")}</Text>
       </ScrollView>
+
+      <ConfirmationModal
+        visible={isLogoutModalVisible}
+        onClose={() => setIsLogoutModalVisible(false)}
+        onConfirm={confirmLogout}
+        title={t("profile.logoutConfirmTitle")}
+        message={t("profile.logoutConfirmMessage")}
+        confirmLabel={t("profile.confirmLogoutButton")}
+        cancelLabel={t("profile.cancelLogoutButton")}
+      />
     </View>
   );
 }
@@ -371,16 +390,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#EF4444",
-    paddingVertical: 16,
+    backgroundColor: "transparent",
+    paddingVertical: 15,
     borderRadius: 16,
-    borderWidth: 1,
-    borderColor: "#FECACA",
+    borderWidth: 1.5,
+    borderColor: "#EF4444",
     gap: 8,
     marginBottom: 24,
   },
   logoutText: {
-    color: "#FFF",
+    color: "#EF4444",
     fontWeight: "700",
     fontSize: 16,
   },
