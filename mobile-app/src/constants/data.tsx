@@ -28,6 +28,15 @@ export const EXPLORE_ITEMS = [
     route: "/guidelines",
   },
   {
+    id: "nived",
+    title: "nived.title",
+    subtitle: "nived.subtitle",
+    icon: (color: string) => (
+      <MaterialCommunityIcons name="brightness-7" size={28} color={color} />
+    ),
+    route: "/nived-details",
+  },
+  {
     id: "contact",
     title: "contact.title",
     subtitle: "contact.subtitle",
@@ -66,14 +75,5 @@ export const EXPLORE_ITEMS = [
       />
     ),
     route: "/history",
-  },
-  {
-    id: "nived",
-    title: "nived.title",
-    subtitle: "nived.subtitle",
-    icon: (color: string) => (
-      <MaterialCommunityIcons name="brightness-7" size={28} color={color} />
-    ),
-    route: "/nived-details",
   },
 ];
