@@ -25,16 +25,11 @@ export default function ProfileDetailsScreen() {
   const [firstName, setFirstName] = useState(user?.firstname || "");
   const [middleName, setMiddleName] = useState(user?.middlename || "");
   const [lastName, setLastName] = useState(user?.lastname || "");
-  const [mobileNumber, setMobileNumber] = useState(user?.mobilenumber || "");
 
   const [loading, setLoading] = useState(false);
 
   const handleSave = async () => {
-    if (
-      !firstName.trim() ||
-      !lastName.trim() ||
-      !mobileNumber?.toString().trim()
-    ) {
+    if (!firstName.trim() || !lastName.trim()) {
       Alert.alert(t("common.error"), t("profile.fillAllFields"));
       return;
     }
@@ -97,7 +92,7 @@ export default function ProfileDetailsScreen() {
             <View style={styles.readOnlyContainer}>
               <View style={styles.readOnlyValueContainer}>
                 <Text style={styles.readOnlyPrefix}>🇮🇳 +91</Text>
-                <Text style={styles.readOnlyValue}>{mobileNumber}</Text>
+                <Text style={styles.readOnlyValue}>{user?.mobilenumber}</Text>
                 <Ionicons
                   name="lock-closed-outline"
                   size={18}
