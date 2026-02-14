@@ -9,10 +9,16 @@ import { useAuthStore } from "../src/stores/authStore";
 import "../src/i18n";
 
 export default function RootLayout() {
-  const { token, authLoading } = useAuthStore();
+  const { token, authLoading, fetchProfile } = useAuthStore();
   const segments = useSegments();
   const router = useRouter();
   const { fontsLoaded } = useAppFonts();
+
+  useEffect(() => {
+    if (token) {
+      fetchProfile();
+    }
+  }, [token]);
 
   useEffect(() => {
     if (authLoading || !fontsLoaded) return;

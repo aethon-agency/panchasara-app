@@ -59,6 +59,7 @@ router.patch("/profile", middleware, async (req: Request, res: Response) => {
 
     if (firstName !== undefined) updateData.firstname = firstName;
     if (lastName !== undefined) updateData.lastname = lastName;
+    if (middleName !== undefined) updateData.middlename = middleName;
     if (mobileNumber !== undefined) updateData.mobilenumber = mobileNumber;
 
     // Check if there are any fields to update

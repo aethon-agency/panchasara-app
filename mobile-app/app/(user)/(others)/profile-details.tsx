@@ -15,6 +15,7 @@ import { useAuthStore } from "@/src/stores/authStore";
 import { useLanguage } from "@/src/hooks/useLanguage";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { updateUserProfile } from "@/src/services/userServices";
 
 export default function ProfileDetailsScreen() {
   const { user, updateUser } = useAuthStore();
@@ -40,20 +41,37 @@ export default function ProfileDetailsScreen() {
 
     setLoading(true);
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      updateUser({
-        firstname: firstName,
-        lastname: lastName,
-        mobilenumber: parseInt(mobileNumber?.toString()),
+      const response = await updateUserProfile({
+        firstName,
+        lastName,
+        middleName,
       });
 
-      Alert.alert(t("common.success"), t("profile.updateSuccess"), [
-        { text: "OK", onPress: () => router.back() },
-      ]);
-    } catch (error) {
-      Alert.alert(t("common.error"), t("profile.updateError"));
+      if (response.status && response.data) {
+        const userData = response.data;
+        updateUser({
+          firstname: userData.firstName,
+          lastname: userData.lastName,
+          middlename: userData.middleName,
+          mobilenumber: userData.mobileNumber?.toString(),
+          isadmin: userData.isadmin,
+        });
+
+        Alert.alert(t("common.success"), t("profile.updateSuccess"), [
+          { text: "OK", onPress: () => router.back() },
+        ]);
+      } else {
+        Alert.alert(
+          t("common.error"),
+          response.error || t("profile.updateError"),
+        );
+      }
+    } catch (error: any) {
+      console.error("Scale update error", error);
+      Alert.alert(
+        t("common.error"),
+        error?.response?.data?.error || t("profile.updateError"),
+      );
     } finally {
       setLoading(false);
     }
