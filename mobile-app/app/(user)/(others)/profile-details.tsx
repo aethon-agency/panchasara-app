@@ -5,7 +5,6 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Alert,
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
@@ -16,11 +15,13 @@ import { useLanguage } from "@/src/hooks/useLanguage";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { updateUserProfile } from "@/src/services/userServices";
+import { useToast } from "@/src/contexts/ToastProvider";
 
 export default function ProfileDetailsScreen() {
   const { user, updateUser } = useAuthStore();
   const { t } = useLanguage();
   const router = useRouter();
+  const toast = useToast();
 
   const [firstName, setFirstName] = useState(user?.firstname || "");
   const [middleName, setMiddleName] = useState(user?.middlename || "");
@@ -30,7 +31,7 @@ export default function ProfileDetailsScreen() {
 
   const handleSave = async () => {
     if (!firstName.trim() || !lastName.trim()) {
-      Alert.alert(t("common.error"), t("profile.fillAllFields"));
+      toast.error(t("profile.fillAllFields"));
       return;
     }
 
@@ -52,21 +53,16 @@ export default function ProfileDetailsScreen() {
           isadmin: userData.isadmin,
         });
 
-        Alert.alert(t("common.success"), t("profile.updateSuccess"), [
-          { text: "OK", onPress: () => router.back() },
-        ]);
+        toast.success(t("profile.updateSuccess"));
+        setTimeout(() => {
+          router.back();
+        }, 500);
       } else {
-        Alert.alert(
-          t("common.error"),
-          response.error || t("profile.updateError"),
-        );
+        toast.error(response.error || t("profile.updateError"));
       }
     } catch (error: any) {
       console.error("Scale update error", error);
-      Alert.alert(
-        t("common.error"),
-        error?.response?.data?.error || t("profile.updateError"),
-      );
+      toast.error(error?.response?.data?.error || t("profile.updateError"));
     } finally {
       setLoading(false);
     }

@@ -5,7 +5,6 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Alert,
   Switch,
 } from "react-native";
 import { AppHeader } from "@/src/components/AppHeader";
@@ -15,6 +14,7 @@ import { useRouter, Router } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLanguage } from "@/src/hooks/useLanguage";
 import { LanguageSelector } from "@/src/components/LanguageSelector";
+import { useToast } from "@/src/contexts/ToastProvider";
 
 interface MenuItemData {
   icon: keyof typeof Ionicons.glyphMap;
@@ -140,18 +140,19 @@ export default function ProfileScreen() {
   const { user, logout } = useAuthStore();
   const router = useRouter();
   const { t } = useLanguage();
+  const toast = useToast();
   const [notificationsEnabled, setNotificationsEnabled] = React.useState(true);
 
   const toggleNotifications = (value: boolean) => {
     setNotificationsEnabled(value);
-    // Here you would typically also update a setting in store or backend
+    toast.success(value ? "Notifications enabled" : "Notifications disabled");
   };
 
   const handleLogout = () => {
-    Alert.alert(t("common.logout"), t("common.logoutConfirm"), [
-      { text: t("common.cancel"), style: "cancel" },
-      { text: t("common.logout"), style: "destructive", onPress: logout },
-    ]);
+    toast.success("Logging out...");
+    setTimeout(() => {
+      logout();
+    }, 500);
   };
 
   const menuItems: MenuSectionData[] = [
