@@ -102,10 +102,10 @@ export default function DonationsScreen() {
                   <View style={styles.row}>
                     <View style={{ flex: 1 }}>
                       {/* ✅ MAIN NAME */}
-                      <Text style={styles.mainName}>{item.purpose}</Text>
+                      <Text style={styles.mainName}>{item.title}</Text>
 
                       {/* ✅ DONORS */}
-                      {item.donor_name && item.donor_name !== item.purpose && (
+                      {item.donor_name && item.donor_name !== item.title && (
                         <Text style={styles.donorName}>
                           {t("donations.by", { donorName: item.donor_name })}
                         </Text>

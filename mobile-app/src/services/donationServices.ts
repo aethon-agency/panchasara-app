@@ -5,7 +5,7 @@ type DonationType = "cash" | "item";
 export interface Donation {
   id: string;
   type: DonationType;
-  purpose: string;
+  title: string;
   donor_name: string;
   amount?: string;
   item_name?: string;
