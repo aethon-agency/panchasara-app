@@ -122,7 +122,14 @@ export default function DonationsScreen() {
                       </Text>
                     </View>
                     {item.type === "cash" ? (
-                      <Text style={styles.amount}>₹ {item.amount}</Text>
+                      <View style={styles.cashBox}>
+                        <Ionicons
+                          name="cash-outline"
+                          size={18}
+                          color="#16A34A"
+                        />
+                        <Text style={styles.cashText}>₹ {item.amount}</Text>
+                      </View>
                     ) : (
                       <View style={styles.itemBox}>
                         <Ionicons
@@ -241,17 +248,11 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
 
-  amount: {
-    fontSize: 18,
-    fontWeight: "900",
-    color: "#EA580C",
-  },
-
   itemBox: {
     flexDirection: "row",
     alignItems: "center",
     gap: 6,
-    backgroundColor: "#F5F3FF",
+    backgroundColor: "#EDE9FE",
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 10,
@@ -259,7 +260,22 @@ const styles = StyleSheet.create({
 
   itemText: {
     fontWeight: "700",
-    color: "#5B21B6",
+    color: "#7C3AED",
+  },
+
+  cashBox: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    backgroundColor: "#DCFCE7",
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 10,
+  },
+
+  cashText: {
+    fontWeight: "700",
+    color: "#16A34A",
   },
 
   emptyContainer: {
