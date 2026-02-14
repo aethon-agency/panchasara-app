@@ -4,14 +4,12 @@ import { createJSONStorage, persist } from "zustand/middleware";
 
 type User = {
   id: string;
-  mobilenumber: number;
+  mobilenumber: string;
   firstname: string;
   middlename: string;
   lastname: string;
-  vehiclenumber: string;
-  upiid: string;
-  profileimage?: string | null;
-  isriding: boolean;
+  isadmin: boolean;
+  location: string;
 };
 
 type AuthState = {
@@ -21,9 +19,12 @@ type AuthState = {
   authLoading: boolean;
   login: (token: string, user: User) => void;
   updateUser: (user: Partial<User>) => void;
+  fetchProfile: () => Promise<void>;
   setPushToken: (token: string | null) => void;
   logout: () => void;
 };
+
+import { getUserProfile } from "../services/userServices";
 
 export const useAuthStore = create<AuthState>()(
   persist(
@@ -39,6 +40,27 @@ export const useAuthStore = create<AuthState>()(
         set((state) => ({
           user: state.user ? { ...state.user, ...updatedUser } : null,
         }));
+      },
+      fetchProfile: async () => {
+        try {
+          const response = await getUserProfile();
+          if (response.status && response.data) {
+            const userData = response.data;
+            set({
+              user: {
+                id: userData.id,
+                mobilenumber: userData.mobileNumber?.toString(),
+                firstname: userData.firstName,
+                lastname: userData.lastName,
+                middlename: userData.middleName,
+                isadmin: userData.isadmin,
+                location: userData.location,
+              },
+            });
+          }
+        } catch (error) {
+          console.error("[AuthStore] Error fetching profile:", error);
+        }
       },
       setPushToken: (pushToken) => {
         set({ pushToken });

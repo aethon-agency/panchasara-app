@@ -1,17 +1,15 @@
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import React, { useRef, useState, useEffect } from "react";
 import {
   Platform,
-  ScrollView,
   StatusBar,
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
   Image,
   Dimensions,
+  Keyboard,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useAuthStore } from "@/src/stores/authStore";
@@ -21,10 +19,21 @@ import { SwipeButton } from "@/src/components/SwipeButton";
 import { KeyboardAvoidingContainer } from "@/src/components/KeyboardAvoidingContainer";
 import { useLanguage } from "@/src/hooks/useLanguage";
 import { useKeyboardVisible } from "@/src/hooks/useKeyboardVisible";
+import { verifyOTP } from "@/src/services/authServices";
+import { Toast } from "@/src/contexts/ToastProvider";
 
 const { width, height } = Dimensions.get("window");
 
 const OTPScreen = () => {
+  const params = useLocalSearchParams();
+  const mobileNumber = Array.isArray(params.mobileNumber)
+    ? params.mobileNumber[0]
+    : params.mobileNumber;
+  const hash = Array.isArray(params.hash) ? params.hash[0] : params.hash;
+
+  if (!mobileNumber || !hash) {
+    console.error("Missing mobileNumber or hash in OTP screen");
+  }
   const { t } = useLanguage();
   const insets = useSafeAreaInsets();
   const isKeyboardVisible = useKeyboardVisible();
@@ -33,7 +42,6 @@ const OTPScreen = () => {
   const inputs: any = useRef([]);
   const login = useAuthStore((state) => state.login);
 
-  // Auto-focus first input on mount
   useEffect(() => {
     const timer = setTimeout(() => {
       inputs.current[0]?.focus();
@@ -59,18 +67,28 @@ const OTPScreen = () => {
     }
   };
 
-  const handleVerify = () => {
+  const handleVerify = async () => {
     if (otp.join("").length < 4) return;
 
-    setLoading(true);
-
-    setTimeout(() => {
+    try {
+      setLoading(true);
+      Keyboard.dismiss();
+      const verifyDone: any = await verifyOTP({
+        mobileNumber,
+        otp: otp.join(""),
+        hash: hash,
+      });
+      if (verifyDone?.success) {
+        login(verifyDone?.token, verifyDone?.user);
+        router.replace("/(user)/(tabs)/home");
+      } else {
+        Toast.error(verifyDone?.message);
+      }
+    } catch (err) {
+      console.error("Error sending OTP:", err);
+    } finally {
       setLoading(false);
-      const mockToken = "mock-jwt-token";
-      const mockUser: any = { id: "1" };
-      login(mockToken, mockUser);
-      router.replace("/(user)/(tabs)/home");
-    }, 1500);
+    }
   };
 
   const isOtpComplete = otp.join("").length === 4;

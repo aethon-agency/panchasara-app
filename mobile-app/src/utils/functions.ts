@@ -88,6 +88,36 @@ export const toGujarati = (text: string) => {
   return text.replace(/[0-9]/g, (d: any) => map[d]);
 };
 
+export const formatDate = (dateStr: string) => {
+  if (!dateStr) return "";
+  const parts = dateStr.split(/[-/]/);
+  if (parts.length === 3) {
+    if (parts[0].length === 4) {
+      return `${parts[2]}/${parts[1]}/${parts[0]}`;
+    }
+    return `${parts[0]}/${parts[1]}/${parts[2]}`;
+  }
+  return dateStr;
+};
+export const formatDisplayDate = (date: string | Date) => {
+  if (!date) return "";
+  const m = moment(date);
+  if (m.isValid()) {
+    return m.format("DD/MM/YYYY");
+  }
+  return String(date);
+};
+
+export const formatToHHMM = (time: string) => {
+  if (!time) return "";
+
+  const m = moment(time, ["HH:mm:ss", "HH:mm", "hh:mm A"]);
+  if (m.isValid()) {
+    return m.format("hh:mm A");
+  }
+  return time;
+};
+
 export const openWhatsApp = (phoneNumber: string) => {
   if (!phoneNumber) {
     console.warn("No phone number provided for WhatsApp");

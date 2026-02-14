@@ -55,14 +55,8 @@ export default function HistoryScreen() {
           entering={FadeInUp.duration(600)}
           style={styles.quoteBox}
         >
-          <MaterialCommunityIcons
-            name="format-quote-open"
-            size={30}
-            color="#FDE68A"
-            style={styles.quoteIcon}
-          />
           <Text style={styles.quoteText}>
-            આપણા મૂળને જાણવાથી આપણે આવનારી પેઢીઓ માટે મજબૂત પાયો બનાવી શકીએ છીએ.
+            જે પોતાની ઓળખ જાણે છે, તે જ સાચું વારસો બનાવી શકે.
           </Text>
         </Animated.View>
 

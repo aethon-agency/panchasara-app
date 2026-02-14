@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -8,10 +8,12 @@ import {
   Dimensions,
   TouchableOpacity,
   StatusBar,
+  ActivityIndicator,
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { AppHeader } from "@/src/components/AppHeader";
-import { GALLERY_DATA } from "@/src/constants/data";
+import { getGalleryById } from "@/src/services/galleryServices";
+import { Toast } from "@/src/contexts/ToastProvider";
 
 const { width } = Dimensions.get("window");
 const IMAGE_SIZE = (width - 48) / 2;
@@ -21,12 +23,46 @@ export default function GalleryDetailsScreen() {
   const params = useLocalSearchParams();
   const id = params.id as string;
 
-  const item = GALLERY_DATA.find((g) => g.id === id);
-  const title = (params.title as string) || item?.title || "Event Gallery";
-  const date = (params.date as string) || item?.date || "Recent";
-  const images = item?.images.filter(Boolean) as string[];
+  const [gallery, setGallery] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
-  if (!item && !params.title) {
+  useEffect(() => {
+    fetchGallery();
+  }, [id]);
+
+  const fetchGallery = async () => {
+    try {
+      setLoading(true);
+      const response = await getGalleryById(id);
+      if (response && response.success) {
+        setGallery(response.data);
+      } else {
+        Toast.error("Failed to load gallery");
+      }
+    } catch (error) {
+      console.error("Error fetching gallery details:", error);
+      Toast.error("Error loading gallery");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const title = gallery?.title || (params.title as string) || "Event Gallery";
+  const date = (params.date as string) || "Recent";
+  const images = (gallery?.images || []).filter(Boolean) as string[];
+
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <AppHeader title="Gallery" showBack onBack={() => router.back()} />
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="small" color="#EA580C" />
+        </View>
+      </View>
+    );
+  }
+
+  if (!gallery && !loading) {
     return (
       <View style={styles.container}>
         <AppHeader title="Not Found" showBack onBack={() => router.back()} />
@@ -77,6 +113,11 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: 16,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   grid: {
     flexDirection: "row",

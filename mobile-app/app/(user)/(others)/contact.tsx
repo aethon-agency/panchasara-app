@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -17,11 +17,51 @@ import {
 } from "@/src/constants/data";
 import { joinWhatsAppGroup, openMaps } from "@/src/utils/functions";
 import { useTranslation } from "react-i18next";
+import { getContacts } from "@/src/services/contactServices";
 
 export default function ContactScreen() {
   const router = useRouter();
   const { t } = useTranslation();
   const [modalVisible, setModalVisible] = useState(false);
+  const [contacts, setContacts] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetchContacts();
+  }, []);
+
+  const fetchContacts = async () => {
+    try {
+      const data = await getContacts();
+      const formattedContacts = data.map((item) => ({
+        id: item.id,
+        name: item.name,
+        phone: item.number,
+        url: item.url,
+        type: item.type,
+      }));
+      setContacts(formattedContacts);
+    } catch (error) {
+      console.error("Failed to fetch contacts", error);
+      // Fallback to static data if fetch fails
+      setContacts(COMMITTEE_MEMBERS);
+    }
+  };
+
+  const getContactByType = (type: string) => {
+    return contacts.find((contact) => contact.type === type);
+  };
+
+  const getContactByNameOrUrl = (name: string, urlPart: string) => {
+    return contacts.find(
+      (contact) =>
+        contact.type === "url" &&
+        (contact.name.toLowerCase().includes(name.toLowerCase()) ||
+          (contact.url &&
+            contact.url.toLowerCase().includes(urlPart.toLowerCase()))),
+    );
+  };
+
+  const committeeMembers = contacts.filter((c) => c.type === "phone");
 
   return (
     <View style={styles.container}>
@@ -54,7 +94,14 @@ export default function ContactScreen() {
           {/* WhatsApp */}
           <TouchableOpacity
             style={styles.card}
-            onPress={() => joinWhatsAppGroup(WHATSAPP_GROUP_LINK)}
+            onPress={() => {
+              const whatsappContact = getContactByNameOrUrl(
+                "whatsapp",
+                "whatsapp.com",
+              );
+              const link = whatsappContact?.url || WHATSAPP_GROUP_LINK;
+              joinWhatsAppGroup(link);
+            }}
           >
             <View style={[styles.iconBox, { backgroundColor: "#F0FDF4" }]}>
               <Ionicons name="logo-whatsapp" size={24} color="#25D366" />
@@ -71,7 +118,11 @@ export default function ContactScreen() {
           {/* Address */}
           <TouchableOpacity
             style={styles.card}
-            onPress={() => openMaps(MANDIR_MAPS_LINK)}
+            onPress={() => {
+              const mapContact = getContactByNameOrUrl("map", "maps");
+              const link = mapContact?.url || MANDIR_MAPS_LINK;
+              openMaps(link);
+            }}
           >
             <View style={[styles.iconBox, { backgroundColor: "#FFF7ED" }]}>
               <Ionicons name="location" size={24} color="#EA580C" />
@@ -91,7 +142,9 @@ export default function ContactScreen() {
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
         title={t("contact.committee.title")}
-        contacts={COMMITTEE_MEMBERS}
+        contacts={
+          committeeMembers.length > 0 ? committeeMembers : COMMITTEE_MEMBERS
+        }
       />
     </View>
   );

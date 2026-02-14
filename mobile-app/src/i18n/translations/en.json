@@ -31,6 +31,7 @@
   "tabs": {
     "home": "Home",
     "events": "Events",
+    "admin": "Admin",
     "explore": "Explore",
     "profile": "Profile"
   },
@@ -79,6 +80,14 @@
     "fillAllFields": "Please fill all fields",
     "updateSuccess": "Profile updated successfully",
     "updateError": "Failed to update profile",
+    "notificationsEnabled": "Notifications enabled",
+    "notificationsDisabled": "Notifications disabled",
+    "loggingOut": "Logging out...",
+    "logoutConfirmTitle": "Logout Confirmation",
+    "logoutConfirmMessage": "Are you sure you want to logout?",
+    "confirmLogoutButton": "Logout",
+    "cancelLogoutButton": "Cancel",
+    "accountDeactivated": "Your account should be deactivated",
     "version": "Version 1.0.0 • Panchasara Samaj"
   },
   "announcements": {
@@ -100,6 +109,8 @@
     "firstNameLabel": "First Name",
     "middleNameLabel": "Middle Name",
     "lastNameLabel": "Last Name",
+    "locationLabel": "Residence Village",
+    "locationPlaceholder": "Enter village name",
     "cta": "Get OTP",
     "sendingOtp": "Sending OTP...",
     "footer": "Secure login for Panchasara Parivar members 🪔",
@@ -189,7 +200,8 @@
     "types": {
       "cash": "cash",
       "item": "item"
-    }
+    },
+    "emptyState": "Your support empowers our community. Be the first to donate!"
   },
   "history": {
     "title": "Family History",
@@ -222,6 +234,35 @@
       "kuldevi": {
         "title": "Establishment as Kuldevi",
         "text": "Maa Bhavani, residing in Bhaduka, is the Kuldevi of the Panchasara family. History says that when our ancestors (primarily of the Gajjar/Suthar community) settled in the Panchal region of Saurashtra centuries ago, they established Maa Bhavani as their protector. The temple in Bhaduka is considered the 'Mool Sthanak' (original seat) of the Panchasara family."
+      }
+    }
+  },
+  "nived": {
+    "title": "Mataji Nived Info",
+    "subtitle": "Navratri Aatham Nived",
+    "aatham": {
+      "title": "Navratri Aatham Nived",
+      "subtitle": "Details & Rituals",
+      "description": "Information regarding the Navratri Aatham Nived held at Shree Panchasara Parivar Mandir.",
+      "notice": "Observe tradition: All Panchasara family members are encouraged to join the Aatham Nived ceremony in traditional attire.",
+      "requirements": {
+        "title": "Preparation & Items",
+        "items": [
+          "Sukhdi (Traditional sweet)",
+          "Black Urad Vada (Vada)",
+          "Nariyal (Shreephal)",
+          "Traditional Lamp (Deepak)",
+          "Fresh Fruits & Flowers"
+        ]
+      },
+      "schedule": {
+        "title": "Ceremony Schedule",
+        "steps": [
+          "Maha Aarti - 09:00 AM",
+          "Nived Offering - 10:30 AM",
+          "Havan Pooja - 12:00 PM",
+          "Prasad Distribution - 01:00 PM"
+        ]
       }
     }
   },
@@ -262,5 +303,151 @@
   "mandir": {
     "title": "Mandir Details",
     "subtitle": "About Temple"
+  },
+  "admin": {
+    "title": "Admin Dashboard",
+    "menu": {
+      "addPoonam": {
+        "title": "Add Poonam Event",
+        "description": "Create a new Poonam event"
+      },
+      "addAnnouncement": {
+        "title": "Add Announcement",
+        "description": "Create new community announcements"
+      },
+      "addGallery": {
+        "title": "Add Gallery Photos",
+        "description": "Upload event photos to gallery"
+      },
+      "addDonation": {
+        "title": "Add Donation",
+        "description": "Record a new donation"
+      }
+    }
+  },
+
+  "addAnnouncement": {
+    "header": "Add Announcement",
+    "labels": {
+      "title": "Title",
+      "contactNumber": "Contact Number",
+      "description": "Description"
+    },
+    "placeholders": {
+      "title": "Enter announcement title",
+      "contactNumber": "12345 67890",
+      "description": "Enter announcement description"
+    },
+    "submit": "Create Announcement",
+    "messages": {
+      "success": "Announcement created successfully!",
+      "fillRequired": "Please fill in the title.",
+      "descriptionLength": "Description must be at least 10 characters.",
+      "invalidPhone": "Phone number must be exactly 10 digits.",
+      "failed": "Failed to create announcement"
+    }
+  },
+  "addGallery": {
+    "header": "Add Gallery Photos",
+    "labels": {
+      "title": "Title",
+      "month": "Month",
+      "year": "Year",
+      "images": "Photos"
+    },
+    "placeholders": {
+      "title": "Enter gallery title",
+      "month": "Select month",
+      "year": "Select year"
+    },
+    "selectImage": "Select Photo",
+    "addImage": "Add Another Photo",
+    "removeImage": "Remove",
+    "uploading": "Uploading photos...",
+    "uploadProgress": "Uploading {{current}} of {{total}}",
+    "submit": "Create Gallery",
+    "messages": {
+      "success": "Gallery created successfully!",
+      "fillRequired": "Please fill in all required fields.",
+      "atLeastOneImage": "Please select at least one photo.",
+      "uploadError": "Failed to upload photos. Please try again.",
+      "permissionDenied": "Permission to access photos was denied.",
+      "failed": "Failed to create gallery"
+    }
+  },
+  "months": {
+    "january": "January",
+    "february": "February",
+    "march": "March",
+    "april": "April",
+    "may": "May",
+    "june": "June",
+    "july": "July",
+    "august": "August",
+    "september": "September",
+    "october": "October",
+    "november": "November",
+    "december": "December"
+  },
+  "addPoonam": {
+    "header": "Add Poonam Event",
+    "labels": {
+      "title": "Title",
+      "date": "Date",
+      "startTime": "Start Time",
+      "endTime": "End Time",
+      "organizer": "Organizer Name",
+      "location": "Location",
+      "description": "Description"
+    },
+    "placeholders": {
+      "selectTitle": "Select Poonam Title",
+      "selectDate": "Select Date",
+      "selectTime": "Select Time",
+      "organizer": "Shree Jayantibhai Ragvajibhai Panchasara",
+      "location": "Location",
+      "description": "Event Description (Optional)"
+    },
+    "modal": {
+      "selectPoonam": "Select Poonam"
+    },
+    "submit": "Create Poonam",
+    "messages": {
+      "success": "Poonam event created successfully!",
+      "fillRequired": "Please fill in all required fields correctly.",
+      "invalidTime": "End time must be after start time",
+      "failed": "Failed to create event"
+    }
+  },
+  "addDonation": {
+    "header": "Add Donation",
+    "labels": {
+      "mainName": "Main Name",
+      "type": "Donation Type",
+      "donorName": "Donor Name",
+      "amount": "Amount (₹)",
+      "itemName": "Item Name",
+      "itemQty": "Item Quantity",
+      "date": "Donation Date"
+    },
+    "placeholders": {
+      "mainName": "Enter main name",
+      "type": "Select Type",
+      "donorName": "Enter donor name",
+      "amount": "Enter amount",
+      "itemName": "e.g. Fans, Bells",
+      "itemQty": "Enter quantity",
+      "date": "Select date"
+    },
+    "types": {
+      "cash": "Cash",
+      "item": "Item"
+    },
+    "submit": "Add Donation",
+    "messages": {
+      "success": "Donation recorded successfully!",
+      "fillRequired": "Please fill in all required fields.",
+      "failed": "Failed to record donation"
+    }
   }
 }
