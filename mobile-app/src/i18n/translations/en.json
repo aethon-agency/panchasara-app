@@ -379,5 +379,36 @@
       "invalidTime": "End time must be after start time",
       "failed": "Failed to create event"
     }
+  },
+  "addDonation": {
+    "header": "Add Donation",
+    "labels": {
+      "mainName": "Main Name",
+      "type": "Donation Type",
+      "donorName": "Donor Name",
+      "amount": "Amount (₹)",
+      "itemName": "Item Name",
+      "itemQty": "Item Quantity",
+      "date": "Donation Date"
+    },
+    "placeholders": {
+      "mainName": "Enter main name",
+      "type": "Select Type",
+      "donorName": "Enter donor name",
+      "amount": "Enter amount",
+      "itemName": "e.g. Fans, Bells",
+      "itemQty": "Enter quantity",
+      "date": "Select date"
+    },
+    "types": {
+      "cash": "Cash",
+      "item": "Item"
+    },
+    "submit": "Add Donation",
+    "messages": {
+      "success": "Donation recorded successfully!",
+      "fillRequired": "Please fill in all required fields.",
+      "failed": "Failed to record donation"
+    }
   }
 }

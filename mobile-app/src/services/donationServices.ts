@@ -13,6 +13,26 @@ export interface Donation {
   date: string;
 }
 
+export interface CreateDonationData {
+  type: DonationType;
+  title: string;
+  donor_name: string;
+  amount?: string;
+  item_name?: string;
+  item_qty?: string;
+  date: string;
+}
+
+export const createDonation = async (data: CreateDonationData) => {
+  try {
+    const response: any = await api.post("/donations", data);
+    return response;
+  } catch (error) {
+    console.error("Error creating donation:", error);
+    throw error;
+  }
+};
+
 export const getDonations = async (): Promise<Donation[]> => {
   try {
     const response: any = await api.get("/donations");

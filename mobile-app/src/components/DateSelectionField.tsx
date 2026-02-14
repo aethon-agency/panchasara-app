@@ -24,9 +24,28 @@ export const DateSelectionField = ({
 }: DateSelectionFieldProps) => {
   const [showPicker, setShowPicker] = useState(false);
 
+  const parseDate = (dateString: string) => {
+    if (!dateString) return new Date();
+    if (dateString.includes("-")) {
+      const parts = dateString.split("-");
+      if (parts[0].length === 2) {
+        // DD-MM-YYYY
+        return new Date(
+          parseInt(parts[2]),
+          parseInt(parts[1]) - 1,
+          parseInt(parts[0]),
+        );
+      }
+      // YYYY-MM-DD
+      return new Date(dateString);
+    }
+    return new Date(dateString);
+  };
+
   const formatDateDisplay = (dateString: string) => {
     if (!dateString) return "";
-    const date = new Date(dateString);
+    const date = parseDate(dateString);
+    if (isNaN(date.getTime())) return dateString;
     return date.toLocaleDateString("en-GB", {
       day: "2-digit",
       month: "short",
@@ -44,7 +63,7 @@ export const DateSelectionField = ({
     }
   };
 
-  const currentDate = value ? new Date(value) : new Date();
+  const currentDate = value ? parseDate(value) : new Date();
 
   return (
     <>
