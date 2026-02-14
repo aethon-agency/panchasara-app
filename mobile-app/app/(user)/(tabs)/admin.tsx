@@ -34,6 +34,12 @@ const AdminScreen = () => {
       route: "/(user)/(others)/add-gallery" as const,
       description: t("admin.menu.addGallery.description"),
     },
+    {
+      title: t("admin.menu.addDonation.title"),
+      icon: "hand-coin",
+      route: "/(user)/(others)/add-donation" as const,
+      description: t("admin.menu.addDonation.description"),
+    },
   ];
 
   return (

@@ -3,9 +3,7 @@ import React from "react";
 
 export const WHATSAPP_GROUP_LINK =
   "https://chat.whatsapp.com/4n01go3yTCp9baMymp5WRH?mode=wwt";
-
 export const MANDIR_MAPS_LINK = "https://maps.app.goo.gl/fgebem7Y745vrR7v9";
-
 export const COMMITTEE_MEMBERS = [
   { name: "મહેશભાઈ પંચાસરા", phone: "+919876543210" },
   { name: "રમેશભાઈ પંચાસરા", phone: "+919812345678" },
@@ -68,36 +66,5 @@ export const EXPLORE_ITEMS = [
       />
     ),
     route: "/history",
-  },
-];
-
-export const DONATIONS = [
-  {
-    id: "1",
-    type: "cash",
-    purpose: "Shree Kantilal Panchasara (Bhaduka)",
-    donorName: "Rajesh, Mahesh & Suresh Panchasara (Bhaduka)",
-    amount: "11,000",
-    date: "12 Jan 2026",
-  },
-
-  {
-    id: "2",
-    type: "item",
-    purpose: "Late Shree Ramanbhai Panchasara (Bhaduka)",
-    donorName: "Panchasara Family",
-    itemName: "Fans",
-    itemQty: "8",
-    date: "15 Jan 2026",
-  },
-
-  {
-    id: "3",
-    type: "item",
-    purpose: "Panchasara Family",
-    donorName: "પંચાસરા ફામીલી",
-    itemName: "પંખા",
-    itemQty: "8",
-    date: "15 જન્યુઆરી 2026",
   },
 ];

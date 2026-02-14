@@ -7,6 +7,7 @@ import userRoutes from "./routes/user.js";
 import eventRoutes from "./routes/event.js";
 import announcementRoutes from "./routes/announcement.js";
 import galleryRoutes from "./routes/gallery.js";
+import donationRoutes from "./routes/donation.js";
 
 import { checkDBConnected } from "./database/index.js";
 
@@ -26,6 +27,7 @@ app.use("/events", eventRoutes);
 app.use("/announcements", announcementRoutes);
 app.use("/galleries", galleryRoutes);
 app.use("/contacts", contactRoutes);
+app.use("/donations", donationRoutes);
 
 app.get("/", async (req, res) => {
   try {

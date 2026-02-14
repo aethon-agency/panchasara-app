@@ -1,21 +1,48 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import { AppHeader } from "@/src/components/AppHeader";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { DONATIONS } from "@/src/constants/data";
 import { useTranslation } from "react-i18next";
+import { getDonations, Donation } from "@/src/services/donationServices";
 
 export default function DonationsScreen() {
   const { t } = useTranslation();
   const router = useRouter();
+  const [donations, setDonations] = useState<Donation[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchDonations();
+  }, []);
+
+  const fetchDonations = async () => {
+    try {
+      const data = await getDonations();
+      setDonations(data);
+    } catch (error) {
+      console.error("Error fetching donations:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const formatDate = (dateString: string) => {
+    const options: Intl.DateTimeFormatOptions = {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    };
+    return new Date(dateString).toLocaleDateString("en-GB", options);
+  };
 
   return (
     <View style={styles.container}>
@@ -31,67 +58,80 @@ export default function DonationsScreen() {
       >
         <Text style={styles.historyTitle}>{t("donations.historyTitle")}</Text>
 
-        {DONATIONS.map((item, index) => (
-          <View key={item.id} style={styles.cardContainer}>
-            <TouchableOpacity activeOpacity={0.8} style={styles.card}>
-              <LinearGradient
-                colors={["#FFFFFF", "#FFF7ED"]}
-                style={styles.cardGradient}
-              >
-                {/* Header */}
-                <View style={styles.headerRow}>
-                  <View
-                    style={[
-                      styles.badge,
-                      item.type === "item"
-                        ? styles.badgeItem
-                        : styles.badgeCash,
-                    ]}
-                  >
-                    <Text
+        {loading ? (
+          <ActivityIndicator size="large" color="#EA580C" />
+        ) : donations.length === 0 ? (
+          <View style={styles.emptyContainer}>
+            <Ionicons name="heart-outline" size={48} color="#EA580C" />
+            <Text style={styles.emptyText}>{t("donations.emptyState")}</Text>
+          </View>
+        ) : (
+          donations.map((item) => (
+            <View key={item.id} style={styles.cardContainer}>
+              <TouchableOpacity activeOpacity={0.8} style={styles.card}>
+                <LinearGradient
+                  colors={["#FFFFFF", "#FFF7ED"]}
+                  style={styles.cardGradient}
+                >
+                  {/* Header */}
+                  <View style={styles.headerRow}>
+                    <View
                       style={[
-                        styles.badgeText,
+                        styles.badge,
                         item.type === "item"
-                          ? styles.badgeTextItem
-                          : styles.badgeTextCash,
+                          ? styles.badgeItem
+                          : styles.badgeCash,
                       ]}
                     >
-                      {t(`donations.types.${item.type}`)}
-                    </Text>
-                  </View>
-
-                  <Text style={styles.date}>{item.date}</Text>
-                </View>
-
-                {/* Body */}
-                <View style={styles.row}>
-                  <View style={{ flex: 1 }}>
-                    {/* ✅ MAIN NAME */}
-                    <Text style={styles.mainName}>{item.purpose}</Text>
-
-                    {/* ✅ DONORS */}
-                    {item.donorName && item.donorName !== item.purpose && (
-                      <Text style={styles.donorName}>
-                        {t("donations.by", { donorName: item.donorName })}
-                      </Text>
-                    )}
-                  </View>
-
-                  {item.type === "cash" ? (
-                    <Text style={styles.amount}>₹ {item.amount}</Text>
-                  ) : (
-                    <View style={styles.itemBox}>
-                      <Ionicons name="cube-outline" size={18} color="#7C3AED" />
-                      <Text style={styles.itemText}>
-                        {item.itemQty} {item.itemName}
+                      <Text
+                        style={[
+                          styles.badgeText,
+                          item.type === "item"
+                            ? styles.badgeTextItem
+                            : styles.badgeTextCash,
+                        ]}
+                      >
+                        {t(`donations.types.${item.type}`)}
                       </Text>
                     </View>
-                  )}
-                </View>
-              </LinearGradient>
-            </TouchableOpacity>
-          </View>
-        ))}
+
+                    <Text style={styles.date}>{formatDate(item.date)}</Text>
+                  </View>
+
+                  {/* Body */}
+                  <View style={styles.row}>
+                    <View style={{ flex: 1 }}>
+                      {/* ✅ MAIN NAME */}
+                      <Text style={styles.mainName}>{item.purpose}</Text>
+
+                      {/* ✅ DONORS */}
+                      {item.donor_name && item.donor_name !== item.purpose && (
+                        <Text style={styles.donorName}>
+                          {t("donations.by", { donorName: item.donor_name })}
+                        </Text>
+                      )}
+                    </View>
+
+                    {item.type === "cash" ? (
+                      <Text style={styles.amount}>₹ {item.amount}</Text>
+                    ) : (
+                      <View style={styles.itemBox}>
+                        <Ionicons
+                          name="cube-outline"
+                          size={18}
+                          color="#7C3AED"
+                        />
+                        <Text style={styles.itemText}>
+                          {item.item_qty} {item.item_name}
+                        </Text>
+                      </View>
+                    )}
+                  </View>
+                </LinearGradient>
+              </TouchableOpacity>
+            </View>
+          ))
+        )}
       </ScrollView>
     </View>
   );
@@ -211,5 +251,25 @@ const styles = StyleSheet.create({
   itemText: {
     fontWeight: "700",
     color: "#5B21B6",
+  },
+
+  emptyContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 24,
+    marginTop: 20,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: "#FFEDD5",
+    borderStyle: "dashed",
+  },
+
+  emptyText: {
+    fontSize: 14,
+    color: "#9A3412",
+    textAlign: "center",
+    marginTop: 12,
+    fontWeight: "600",
   },
 });

@@ -190,7 +190,8 @@
     "types": {
       "cash": "cash",
       "item": "item"
-    }
+    },
+    "emptyState": "Your support empowers our community. Be the first to donate!"
   },
   "history": {
     "title": "Family History",
@@ -278,9 +279,14 @@
       "addGallery": {
         "title": "Add Gallery Photos",
         "description": "Upload event photos to gallery"
+      },
+      "addDonation": {
+        "title": "Add Donation",
+        "description": "Record a new donation"
       }
     }
   },
+
   "addAnnouncement": {
     "header": "Add Announcement",
     "labels": {
