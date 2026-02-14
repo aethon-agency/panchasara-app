@@ -28,6 +28,8 @@ import { KeyboardAvoidingContainer } from "@/src/components/KeyboardAvoidingCont
 import { useLanguage } from "@/src/hooks/useLanguage";
 import { useCommon } from "@/src/hooks/useCommon";
 import { useKeyboardVisible } from "@/src/hooks/useKeyboardVisible";
+import { sendOTP, registerUser } from "@/src/services/authServices";
+import { Toast } from "@/src/contexts/ToastProvider";
 
 const { width, height } = Dimensions.get("window");
 
@@ -36,14 +38,63 @@ const LoginScreen = () => {
   const { insets } = useCommon();
   const isKeyboardVisible = useKeyboardVisible();
   const [activeTab, setActiveTab] = useState<"login" | "register">("login");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [mobileNumber, setmobileNumber] = useState("");
   const [firstName, setFirstName] = useState("");
   const [middleName, setMiddleName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [location, setLocation] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Transition value: 0 for login, 1 for register
   const transition = useSharedValue(0);
+
+  const isFormValid =
+    activeTab === "login"
+      ? mobileNumber.length === 10
+      : firstName.trim() !== "" &&
+        middleName.trim() !== "" &&
+        lastName.trim() !== "" &&
+        location.trim() !== "" &&
+        mobileNumber.length === 10;
+
+  const handleSendOTP = async () => {
+    try {
+      setLoading(true);
+      Keyboard.dismiss();
+
+      if (activeTab === "login") {
+        const response = await sendOTP(mobileNumber);
+        if (response?.newUser) {
+          setActiveTab("register");
+          Toast.success(response.message || "Please register first");
+        } else if (response?.hash) {
+          const hash = response?.hash;
+          router.push({
+            pathname: "/(auth)/otp",
+            params: { hash, mobileNumber },
+          });
+        }
+      } else {
+        const hash = await registerUser(
+          firstName,
+          middleName,
+          lastName,
+          mobileNumber,
+          location,
+        );
+
+        if (hash) {
+          router.push({
+            pathname: "/(auth)/otp",
+            params: { hash, mobileNumber },
+          });
+        }
+      }
+    } catch (err) {
+      console.error("Error sending OTP:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     transition.value = withTiming(activeTab === "register" ? 1 : 0, {
@@ -52,34 +103,6 @@ const LoginScreen = () => {
     });
   }, [activeTab]);
 
-  const handleSendOTP = () => {
-    if (activeTab === "login") {
-      if (phoneNumber.length < 10) return;
-    } else {
-      if (!firstName || !middleName || !lastName || phoneNumber.length < 10)
-        return;
-    }
-
-    // Dismiss keyboard before navigation
-    Keyboard.dismiss();
-
-    setLoading(true);
-    // Simulate API Call
-    setTimeout(() => {
-      setLoading(false);
-      router.push("/(auth)/otp");
-    }, 1500);
-  };
-
-  const isFormValid =
-    activeTab === "login"
-      ? phoneNumber.length === 10
-      : firstName.trim() !== "" &&
-        middleName.trim() !== "" &&
-        lastName.trim() !== "" &&
-        phoneNumber.length === 10;
-
-  // ANIMATED STYLES
   const animatedTopSectionStyle = useAnimatedStyle(() => {
     const collapsedHeight = insets.top + 40;
 
@@ -259,6 +282,16 @@ const LoginScreen = () => {
                     value={lastName}
                     onChangeText={setLastName}
                   />
+
+                  <CustomInput
+                    label={t("login.locationLabel") ?? "Residence Village"}
+                    icon="map-marker-outline"
+                    placeholder={
+                      t("login.locationPlaceholder") ?? "Enter village name"
+                    }
+                    value={location}
+                    onChangeText={setLocation}
+                  />
                 </>
               )}
 
@@ -268,8 +301,8 @@ const LoginScreen = () => {
                 placeholder={t("login.mobilePlaceholder") ?? "00000 00000"}
                 keyboardType="phone-pad"
                 maxLength={10}
-                value={phoneNumber}
-                onChangeText={setPhoneNumber}
+                value={mobileNumber}
+                onChangeText={setmobileNumber}
                 style={{ letterSpacing: 1.5 }}
               />
             </ScrollView>

@@ -5,7 +5,6 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Alert,
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
@@ -15,45 +14,57 @@ import { useAuthStore } from "@/src/stores/authStore";
 import { useLanguage } from "@/src/hooks/useLanguage";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { updateUserProfile } from "@/src/services/userServices";
+import { useToast } from "@/src/contexts/ToastProvider";
 
 export default function ProfileDetailsScreen() {
   const { user, updateUser } = useAuthStore();
   const { t } = useLanguage();
   const router = useRouter();
+  const toast = useToast();
 
   const [firstName, setFirstName] = useState(user?.firstname || "");
   const [middleName, setMiddleName] = useState(user?.middlename || "");
   const [lastName, setLastName] = useState(user?.lastname || "");
-  const [mobileNumber, setMobileNumber] = useState(user?.mobilenumber || "");
-
+  const [location, setLocation] = useState(user?.location || "");
   const [loading, setLoading] = useState(false);
 
   const handleSave = async () => {
-    if (
-      !firstName.trim() ||
-      !lastName.trim() ||
-      !mobileNumber?.toString().trim()
-    ) {
-      Alert.alert(t("common.error"), t("profile.fillAllFields"));
+    if (!firstName.trim() || !lastName.trim() || !location.trim()) {
+      toast.error(t("profile.fillAllFields"));
       return;
     }
 
     setLoading(true);
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      updateUser({
-        firstname: firstName,
-        lastname: lastName,
-        mobilenumber: parseInt(mobileNumber?.toString()),
+      const response = await updateUserProfile({
+        firstName,
+        lastName,
+        middleName,
+        location,
       });
 
-      Alert.alert(t("common.success"), t("profile.updateSuccess"), [
-        { text: "OK", onPress: () => router.back() },
-      ]);
-    } catch (error) {
-      Alert.alert(t("common.error"), t("profile.updateError"));
+      if (response.status && response.data) {
+        const userData = response.data;
+        updateUser({
+          firstname: userData.firstName,
+          lastname: userData.lastName,
+          middlename: userData.middleName,
+          mobilenumber: userData.mobileNumber?.toString(),
+          location: userData.location,
+          isadmin: userData.isadmin,
+        });
+
+        toast.success(t("profile.updateSuccess"));
+        setTimeout(() => {
+          router.back();
+        }, 500);
+      } else {
+        toast.error(response.error || t("profile.updateError"));
+      }
+    } catch (error: any) {
+      console.error("Scale update error", error);
+      toast.error(error?.response?.data?.error || t("profile.updateError"));
     } finally {
       setLoading(false);
     }
@@ -79,7 +90,7 @@ export default function ProfileDetailsScreen() {
             <View style={styles.readOnlyContainer}>
               <View style={styles.readOnlyValueContainer}>
                 <Text style={styles.readOnlyPrefix}>🇮🇳 +91</Text>
-                <Text style={styles.readOnlyValue}>{mobileNumber}</Text>
+                <Text style={styles.readOnlyValue}>{user?.mobilenumber}</Text>
                 <Ionicons
                   name="lock-closed-outline"
                   size={18}
@@ -110,6 +121,16 @@ export default function ProfileDetailsScreen() {
                 placeholder={t("login.lastNameLabel") ?? "Enter last name"}
                 value={lastName}
                 onChangeText={setLastName}
+              />
+
+              <CustomInput
+                label={t("login.locationLabel") ?? "Residence Village"}
+                icon="map-marker-outline"
+                placeholder={
+                  t("login.locationPlaceholder") ?? "Enter village name"
+                }
+                value={location}
+                onChangeText={setLocation}
               />
             </View>
 

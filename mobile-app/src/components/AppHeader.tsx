@@ -8,8 +8,8 @@ import {
   StatusBar,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
+import { useCommon } from "../hooks/useCommon";
 
 interface AppHeaderProps {
   title?: string;
@@ -28,7 +28,15 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
   rightAction,
   transparent = false,
 }) => {
-  const insets = useSafeAreaInsets();
+  const { router, insets } = useCommon();
+
+  const onBackHandler = () => {
+    if (onBack) {
+      onBack();
+    } else {
+      router.back();
+    }
+  };
 
   return (
     <View
@@ -52,7 +60,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
         <View style={styles.leftGroup}>
           {showBack && (
             <TouchableOpacity
-              onPress={onBack}
+              onPress={onBackHandler}
               style={styles.iconHalo}
               activeOpacity={0.7}
             >

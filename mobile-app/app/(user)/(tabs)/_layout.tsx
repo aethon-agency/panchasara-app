@@ -21,6 +21,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useLanguage } from "@/src/hooks/useLanguage";
+import { useAuthStore } from "@/src/stores/authStore";
 
 const { width } = Dimensions.get("window");
 
@@ -41,6 +42,14 @@ const renderIcon = (routeName: string, focused: boolean) => {
       return (
         <MaterialCommunityIcons
           name={focused ? "calendar" : "calendar-blank"}
+          size={size}
+          color={color}
+        />
+      );
+    case "admin":
+      return (
+        <MaterialCommunityIcons
+          name={focused ? "shield-account" : "shield-account-outline"}
           size={size}
           color={color}
         />
@@ -66,12 +75,16 @@ const renderIcon = (routeName: string, focused: boolean) => {
   }
 };
 
-const CustomTabBar = ({ state, descriptors, navigation }: any) => {
+const CustomTabBar = ({ state, descriptors, navigation, isAdmin }: any) => {
   const insets = useSafeAreaInsets();
 
+  const totaltabes = state.routes?.filter((route: any) =>
+    route.name === "admin" ? isAdmin : true,
+  );
+
   // Layout Constants
-  const numTabs = state.routes.length;
-  const TAB_BAR_MARGIN = 20; // Total horizontal padding for the main box
+  const numTabs = totaltabes?.length;
+  const TAB_BAR_MARGIN = 20;
   const tabWidth = (width - TAB_BAR_MARGIN) / numTabs;
 
   // Shared value for the sliding animation
@@ -111,7 +124,7 @@ const CustomTabBar = ({ state, descriptors, navigation }: any) => {
             ]}
           />
 
-          {state.routes.map((route: any, index: number) => {
+          {totaltabes?.map((route: any, index: number) => {
             const isFocused = state.index === index;
             const label = descriptors[route.key].options.title ?? route.name;
 
@@ -158,14 +171,23 @@ const CustomTabBar = ({ state, descriptors, navigation }: any) => {
 
 export default function TabsLayout() {
   const { t } = useLanguage();
+  const { user } = useAuthStore();
+  const isAdmin = user?.isadmin || false;
 
   return (
     <Tabs
-      tabBar={(props) => <CustomTabBar {...props} />}
+      tabBar={(props) => <CustomTabBar {...props} isAdmin={isAdmin} />}
       screenOptions={{ headerShown: false }}
     >
       <Tabs.Screen name="home" options={{ title: t("tabs.home") }} />
       <Tabs.Screen name="event" options={{ title: t("tabs.events") }} />
+      <Tabs.Screen
+        name="admin"
+        options={{
+          title: t("tabs.admin"),
+          href: isAdmin ? "/admin" : (null as any),
+        }}
+      />
       <Tabs.Screen name="explore" options={{ title: t("tabs.explore") }} />
       <Tabs.Screen name="profile" options={{ title: t("tabs.profile") }} />
     </Tabs>

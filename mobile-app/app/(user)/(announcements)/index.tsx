@@ -1,15 +1,39 @@
-import React from "react";
-import { View, StyleSheet, ScrollView, StatusBar } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  StatusBar,
+  ActivityIndicator,
+} from "react-native";
 import { AppHeader } from "@/src/components/AppHeader";
 import { useRouter } from "expo-router";
-import Animated, { FadeInUp } from "react-native-reanimated";
 import { useLanguage } from "@/src/hooks/useLanguage";
 import { AnnouncementCard } from "@/src/components/AnnouncementCard";
-import { ALL_ANNOUNCEMENTS } from "@/src/constants/data";
+import { getAnnouncements } from "@/src/services/announcementServices";
 
 export default function AnnouncementsListScreen() {
   const router = useRouter();
   const { t } = useLanguage();
+  const [announcements, setAnnouncements] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAnnouncements = async () => {
+      try {
+        const response = await getAnnouncements();
+        if (response && response.success) {
+          setAnnouncements(response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching announcements:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAnnouncements();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -21,22 +45,26 @@ export default function AnnouncementsListScreen() {
         onBack={() => router.back()}
       />
 
-      <ScrollView
-        contentContainerStyle={styles.content}
-        showsVerticalScrollIndicator={false}
-      >
-        {ALL_ANNOUNCEMENTS.map((item, index) => (
-          <AnnouncementCard
-            key={item.id}
-            id={item.id}
-            title={item.title}
-            description={item.description}
-            date={item.date}
-            author={item.author}
-            showDetails={true}
-          />
-        ))}
-      </ScrollView>
+      {loading ? (
+        <View style={styles.loaderContainer}>
+          <ActivityIndicator size="large" color="#EA580C" />
+        </View>
+      ) : (
+        <ScrollView
+          contentContainerStyle={styles.content}
+          showsVerticalScrollIndicator={false}
+        >
+          {announcements.map((item) => (
+            <AnnouncementCard
+              key={item.id}
+              id={item.id}
+              title={item.title}
+              description={item.description}
+              showDetails={true}
+            />
+          ))}
+        </ScrollView>
+      )}
     </View>
   );
 }
@@ -50,5 +78,10 @@ const styles = StyleSheet.create({
     padding: 20,
     paddingBottom: 40,
     gap: 16,
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

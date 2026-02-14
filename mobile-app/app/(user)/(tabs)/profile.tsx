@@ -5,7 +5,6 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Alert,
   Switch,
 } from "react-native";
 import { AppHeader } from "@/src/components/AppHeader";
@@ -15,6 +14,8 @@ import { useRouter, Router } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLanguage } from "@/src/hooks/useLanguage";
 import { LanguageSelector } from "@/src/components/LanguageSelector";
+import { useToast } from "@/src/contexts/ToastProvider";
+import { ConfirmationModal } from "@/src/components/ConfirmationModal";
 
 interface MenuItemData {
   icon: keyof typeof Ionicons.glyphMap;
@@ -43,22 +44,22 @@ const ProfileCard = ({
       <View style={styles.profileHeader}>
         <View style={styles.avatarPlaceholder}>
           <Text style={styles.avatarInitials}>
-            {user?.firstname ? user?.firstname?.[0] : "D"}
+            {user?.firstname ? user?.firstname?.[0] : "U"}
           </Text>
         </View>
 
         <View style={styles.profileInfo}>
           <Text style={styles.profileName}>
-            {user?.firstname
-              ? user?.firstname + " " + user?.lastname
-              : "Devam Panchasara"}
+            {user?.firstname ? user?.firstname + " " + user?.lastname : "User"}
           </Text>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
-            <Text style={styles.profilePhone}>
-              +91 {user?.mobilenumber ? user?.mobilenumber : "8154909268"}
-            </Text>
-            <Ionicons name="checkmark-circle" size={16} color="#EA580C" />
-          </View>
+          {user?.mobilenumber && (
+            <View
+              style={{ flexDirection: "row", alignItems: "center", gap: 6 }}
+            >
+              <Text style={styles.profilePhone}>+91 {user?.mobilenumber}</Text>
+              <Ionicons name="checkmark-circle" size={16} color="#EA580C" />
+            </View>
+          )}
         </View>
       </View>
     </LinearGradient>
@@ -140,18 +141,32 @@ export default function ProfileScreen() {
   const { user, logout } = useAuthStore();
   const router = useRouter();
   const { t } = useLanguage();
+  const toast = useToast();
   const [notificationsEnabled, setNotificationsEnabled] = React.useState(true);
+  const [isLogoutModalVisible, setIsLogoutModalVisible] = React.useState(false);
 
   const toggleNotifications = (value: boolean) => {
     setNotificationsEnabled(value);
-    // Here you would typically also update a setting in store or backend
+    toast.success(
+      value
+        ? t("profile.notificationsEnabled")
+        : t("profile.notificationsDisabled"),
+    );
   };
 
   const handleLogout = () => {
-    Alert.alert(t("common.logout"), t("common.logoutConfirm"), [
-      { text: t("common.cancel"), style: "cancel" },
-      { text: t("common.logout"), style: "destructive", onPress: logout },
-    ]);
+    setIsLogoutModalVisible(true);
+  };
+
+  const confirmLogout = () => {
+    setIsLogoutModalVisible(false);
+    toast.success(
+      t("profile.accountDeactivated") || "Your account should be deactivated",
+    );
+    setTimeout(() => {
+      logout();
+      router.replace("/(auth)/login");
+    }, 500);
   };
 
   const menuItems: MenuSectionData[] = [
@@ -208,6 +223,16 @@ export default function ProfileScreen() {
 
         <Text style={styles.versionText}>{t("profile.version")}</Text>
       </ScrollView>
+
+      <ConfirmationModal
+        visible={isLogoutModalVisible}
+        onClose={() => setIsLogoutModalVisible(false)}
+        onConfirm={confirmLogout}
+        title={t("profile.logoutConfirmTitle")}
+        message={t("profile.logoutConfirmMessage")}
+        confirmLabel={t("profile.confirmLogoutButton")}
+        cancelLabel={t("profile.cancelLogoutButton")}
+      />
     </View>
   );
 }
@@ -366,16 +391,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#EF4444",
-    paddingVertical: 16,
+    backgroundColor: "transparent",
+    paddingVertical: 15,
     borderRadius: 16,
-    borderWidth: 1,
-    borderColor: "#FECACA",
+    borderWidth: 1.5,
+    borderColor: "#EF4444",
     gap: 8,
     marginBottom: 24,
   },
   logoutText: {
-    color: "#FFF",
+    color: "#EF4444",
     fontWeight: "700",
     fontSize: 16,
   },

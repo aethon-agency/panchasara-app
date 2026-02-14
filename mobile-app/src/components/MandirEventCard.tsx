@@ -11,7 +11,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { useLanguage } from "@/src/hooks/useLanguage";
 import { toGujarati } from "@/src/utils/functions";
-import { MandirEvent } from "../constants/data";
+import { MandirEvent } from "../constants/types";
 
 interface MandirEventCardProps {
   event: MandirEvent;

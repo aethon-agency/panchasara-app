@@ -1,7 +1,6 @@
 // src/api/api.ts
 import { router } from "expo-router";
 import { Toast } from "../contexts/ToastProvider";
-import { useAuthStore } from "../stores/authStore";
 
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 
@@ -28,6 +27,15 @@ class ApiClient {
   constructor({ baseURL = "", getToken }: ApiClientConfig = {}) {
     this.baseURL = baseURL;
     this.getToken = getToken;
+  }
+
+  public setTokenGetter(fn: () => string | null | undefined) {
+    this.getToken = fn;
+  }
+
+  private onUnauthorized?: () => void;
+  public setUnauthorizedHandler(fn: () => void) {
+    this.onUnauthorized = fn;
   }
 
   private buildUrl(url: string, params?: RequestOptions["params"]): string {
@@ -71,11 +79,13 @@ class ApiClient {
 
     if (!response.ok) {
       if (response.status === 401) {
-        useAuthStore.getState().logout();
+        this.onUnauthorized?.();
         Toast.error("Session expired. Please relogin");
         router.replace("/login");
       }
-      const error: ApiError = new Error(data?.message ?? "API request failed");
+      const error: ApiError = new Error(
+        data?.message || data?.error || "API request failed",
+      );
       error.status = response.status;
       throw error;
     }
@@ -129,10 +139,9 @@ class ApiClient {
 // ✅ Singleton instance
 const api = new ApiClient({
   baseURL: process.env.EXPO_PUBLIC_API_URL as string,
-  getToken: () => useAuthStore.getState().token,
 });
 
-// Optional safety
-Object.freeze(api);
+// Optional safety - removed because it prevents runtime registration of handlers
+// Object.freeze(api);
 
 export default api;

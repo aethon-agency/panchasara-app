@@ -11,9 +11,9 @@ export interface VerifyOTPRequest {
 export interface SignupRequest {
   mobileNumber: string;
   firstName: string;
+  middleName: string;
   lastName: string;
-  vehicleNo: string;
-  upiId?: string;
+  location: string;
 }
 
 // User type matching database schema
@@ -24,6 +24,8 @@ export interface User {
   lastname: string;
   vehiclenumber: string;
   upiid: string;
+  isadmin: boolean;
+  location: string;
   created_at: string;
 }
 

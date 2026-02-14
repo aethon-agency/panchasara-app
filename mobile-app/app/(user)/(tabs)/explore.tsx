@@ -53,7 +53,9 @@ export default function ExploreScreen() {
                   <View style={styles.iconContainer}>
                     {item.icon("#EA580C")}
                   </View>
-                  <Text style={styles.cardTitle}>{t(item?.title)}</Text>
+                  <Text style={styles.cardTitle} numberOfLines={1}>
+                    {t(item?.title)}
+                  </Text>
                   <Text style={styles.cardSubtitle}>{t(item?.subtitle)}</Text>
                 </LinearGradient>
               </TouchableOpacity>
