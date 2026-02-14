@@ -67,4 +67,13 @@ export const EXPLORE_ITEMS = [
     ),
     route: "/history",
   },
+  {
+    id: "nived",
+    title: "nived.title",
+    subtitle: "nived.subtitle",
+    icon: (color: string) => (
+      <Ionicons name="notifications-outline" size={28} color={color} />
+    ),
+    route: "/nived-details",
+  },
 ];

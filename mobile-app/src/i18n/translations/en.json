@@ -227,6 +227,35 @@
       }
     }
   },
+  "nived": {
+    "title": "Mataji Nived Info",
+    "subtitle": "Navratri Aatham Nived",
+    "aatham": {
+      "title": "Navratri Aatham Nived",
+      "subtitle": "Details & Rituals",
+      "description": "Information regarding the Navratri Aatham Nived held at Shree Panchasara Parivar Mandir.",
+      "notice": "Observe tradition: All Panchasara family members are encouraged to join the Aatham Nived ceremony in traditional attire.",
+      "requirements": {
+        "title": "Preparation & Items",
+        "items": [
+          "Sukhdi (Traditional sweet)",
+          "Black Urad Vada (Vada)",
+          "Nariyal (Shreephal)",
+          "Traditional Lamp (Deepak)",
+          "Fresh Fruits & Flowers"
+        ]
+      },
+      "schedule": {
+        "title": "Ceremony Schedule",
+        "steps": [
+          "Maha Aarti - 09:00 AM",
+          "Nived Offering - 10:30 AM",
+          "Havan Pooja - 12:00 PM",
+          "Prasad Distribution - 01:00 PM"
+        ]
+      }
+    }
+  },
   "guidelines": {
     "title": "Mandir Guidelines",
     "subtitle": "Rules & Information",
