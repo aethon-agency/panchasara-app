@@ -1,5 +1,5 @@
 {
-  "name": "mobile-app",
+  "name": "panchasara",
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
@@ -11,7 +11,9 @@
     "lint": "expo lint",
     "dev": "expo start",
     "build": "cd android && ./gradlew clean && ./gradlew assembleRelease && cd .. && yarn copy",
-    "copy": "cp android/app/build/outputs/apk/release/app-release.apk ~/Desktop/"
+    "copy": "cp android/app/build/outputs/apk/release/app-release.apk ~/Desktop/",
+    "preview:ios": "eas build --profile preview --platform ios",
+    "preview:android": "eas build --profile preview --platform android"
   },
   "dependencies": {
     "@expo-google-fonts/inter": "^0.4.2",

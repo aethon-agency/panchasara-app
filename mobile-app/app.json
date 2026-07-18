@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Panchasara",
+    "name": "Panchasara Bhaduka",
     "slug": "panchasara",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -47,6 +47,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "9a4daff8-ab37-493d-a1af-3cdb34fa9e49"
+      }
+    },
+    "owner": "aethon.ai"
   }
 }
