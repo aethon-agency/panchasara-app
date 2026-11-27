@@ -75,7 +75,22 @@ class ApiClient {
       body: body ? JSON.stringify(body) : undefined,
     });
 
-    const data = await response.json();
+    // Read as text first so non-JSON replies (e.g. "Not found" from a wrong
+    // base URL, or an HTML error page) give a clear error instead of a
+    // JSON parse crash.
+    const raw = await response.text();
+    let data: any = null;
+    if (raw) {
+      try {
+        data = JSON.parse(raw);
+      } catch {
+        const error: ApiError = new Error(
+          `Unexpected response from server (${response.status}) at ${this.buildUrl(url, params)}: ${raw.slice(0, 100)}`,
+        );
+        error.status = response.status;
+        throw error;
+      }
+    }
 
     if (!response.ok) {
       if (response.status === 401) {
@@ -134,6 +149,12 @@ class ApiClient {
   delete<TResponse>(url: string): Promise<TResponse> {
     return this.request<TResponse>(url, { method: "DELETE" });
   }
+}
+
+if (!process.env.EXPO_PUBLIC_API_URL) {
+  console.warn(
+    "EXPO_PUBLIC_API_URL is not set. Add it to mobile-app/.env and restart Expo with --clear.",
+  );
 }
 
 // ✅ Singleton instance
