@@ -6,9 +6,8 @@
     "paths": {
       "@/*": ["./*"],
       "@/constants": ["./src/constants"],
-      "@/hook": ["src/hooks"]
-    },
-    "baseUrl": "."
+      "@/hook": ["./src/hooks"]
+    }
   },
   "include": [
     "**/*.ts",

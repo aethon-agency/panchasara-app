@@ -22,7 +22,7 @@ import { SelectionField } from "@/src/components/SelectionField";
 import { SelectionModal } from "@/src/components/SelectionModal";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
-import { uploadProfileImage } from "@/src/services/supabase";
+import { uploadImages } from "@/src/services/mediaServices";
 import { SelectedImage } from "@/src/constants/types";
 
 const gallerySchema = z.object({
@@ -130,11 +130,27 @@ const AddGalleryScreen = () => {
 
     setLoading(true);
     try {
-      // Upload images to Supabase Storage
+      // Compress on-device and upload straight to R2 via presigned URLs.
       setUploadProgress({ current: 0, total: selectedImages.length });
 
-      const folder = `${form.year}/${String(form.month).padStart(2, "0")}`;
-      const imageUrls = await uploadProfileImage(selectedImages, folder);
+      // Group uploads by event: "gallery/<event-name>-<year>/...". Falls back
+      // to a date folder when the title has no latin characters (e.g. Gujarati).
+      const slug = form.title
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "")
+        .slice(0, 50);
+      const prefix = slug
+        ? `${slug}-${form.year}`
+        : `${form.year}-${String(form.month).padStart(2, "0")}`;
+
+      const imageUrls = await uploadImages(
+        selectedImages,
+        "gallery",
+        prefix,
+        (current, total) => setUploadProgress({ current, total }),
+      );
 
       // Create gallery entry with uploaded URLs
       const response = await createGallery({
