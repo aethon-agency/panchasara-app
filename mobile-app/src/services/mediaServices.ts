@@ -1,9 +1,17 @@
+import { Image } from "react-native";
 import * as ImageManipulator from "expo-image-manipulator";
 import * as FileSystem from "expo-file-system/legacy";
 import api from "./api";
 import { SelectedImage } from "../constants/types";
 
 type UploadFolder = "gallery" | "banner" | "profile";
+
+// Size tuning. We reduce file size by downscaling resolution only (phone photos
+// are often 4000px+); the encode stays at FULL quality (1.0 = no lossy JPEG
+// quality reduction), so pixels aren't degraded — the image just has fewer of
+// them, which is imperceptible on phone screens.
+const MAX_DIMENSION = 2048; // longest edge in px
+const JPEG_QUALITY = 1; // 0..1 — 1 = maximum/full quality, no lossy reduction
 
 interface PresignResponse {
   success: boolean;
@@ -15,14 +23,34 @@ interface PresignResponse {
   error?: string;
 }
 
-// Compress + resize on the device so we upload small files and stay under the
-// server's size cap. Returns a jpeg uri.
+const getImageSize = (uri: string): Promise<{ width: number; height: number }> =>
+  new Promise((resolve, reject) => {
+    Image.getSize(uri, (width, height) => resolve({ width, height }), reject);
+  });
+
+// Compress + resize on the device so we upload small, storage-cheap files
+// without a visible quality drop. Only downscales when the longest edge
+// exceeds the cap (never upscales), and resizes the correct axis for the
+// image's orientation. Returns a jpeg uri.
 const compressImage = async (uri: string): Promise<string> => {
-  const result = await ImageManipulator.manipulateAsync(
-    uri,
-    [{ resize: { width: 1600 } }],
-    { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG },
-  );
+  let actions: ImageManipulator.Action[] = [];
+  try {
+    const { width, height } = await getImageSize(uri);
+    if (Math.max(width, height) > MAX_DIMENSION) {
+      actions =
+        width >= height
+          ? [{ resize: { width: MAX_DIMENSION } }]
+          : [{ resize: { height: MAX_DIMENSION } }];
+    }
+  } catch {
+    // Couldn't read dimensions — fall back to a width cap.
+    actions = [{ resize: { width: MAX_DIMENSION } }];
+  }
+
+  const result = await ImageManipulator.manipulateAsync(uri, actions, {
+    compress: JPEG_QUALITY,
+    format: ImageManipulator.SaveFormat.JPEG,
+  });
   return result.uri;
 };
 

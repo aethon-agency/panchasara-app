@@ -230,7 +230,7 @@ export default function EventDetailsScreen() {
           <View style={styles.venueSection}>
             <Ionicons name="location" size={20} color="#EA580C" />
             <Text style={styles.venueLabel}>
-              {t("eventDetails.venueLabel")} :{" "}
+              {t("eventDetails.venueLabel")} :
             </Text>
             <Text style={styles.venueValue}>{event.location}</Text>
           </View>
@@ -362,11 +362,11 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   dateTimeLabel: {
-    fontSize: 11,
+    fontSize: 12,
     fontWeight: "800",
     color: "#94A3B8",
     letterSpacing: 2,
-    marginBottom: 8,
+    marginBottom: 4,
   },
   infoRow: {
     flexDirection: "row",
@@ -406,7 +406,7 @@ const styles = StyleSheet.create({
     columnGap: 10,
   },
   venueLabel: {
-    fontSize: 11,
+    fontSize: 12,
     fontWeight: "800",
     color: "#64748B",
     letterSpacing: 2,
@@ -448,7 +448,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   descriptionLabel: {
-    fontSize: 11,
+    fontSize: 12,
     fontWeight: "800",
     color: "#64748B",
     letterSpacing: 2,
