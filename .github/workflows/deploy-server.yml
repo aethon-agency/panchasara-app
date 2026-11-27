@@ -22,10 +22,11 @@ jobs:
         with:
           node-version: "20"
 
-      # Install with npm (not the yarn workspace) so node_modules is
-      # self-contained for the Lambda zip — no monorepo hoisting.
+      # Install only the server package in isolation: --no-workspaces stops npm
+      # from running the monorepo root's postinstall (expo install), and
+      # --ignore-scripts skips lifecycle hooks the Lambda build doesn't need.
       - name: Install build deps
-        run: npm install --no-audit --no-fund
+        run: npm install --no-workspaces --ignore-scripts --no-audit --no-fund
 
       - name: Build (tsc -> dist/)
         run: npm run build
@@ -34,7 +35,7 @@ jobs:
       - name: Prune to production deps
         run: |
           rm -rf node_modules
-          npm install --omit=dev --no-audit --no-fund
+          npm install --omit=dev --no-workspaces --ignore-scripts --no-audit --no-fund
 
       - uses: aws-actions/configure-aws-credentials@v4
         with:
