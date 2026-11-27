@@ -26,13 +26,20 @@ const compressImage = async (uri: string): Promise<string> => {
   return result.uri;
 };
 
-// Ask the server for a presigned URL, then PUT the bytes straight to R2.
-// The file never passes through our API server.
-const uploadOne = async (
+export interface UploadedMedia {
+  url: string;
+  key: string;
+}
+
+// Compress a picked image, get a presigned URL, upload the bytes straight to
+// R2 (never through our API), then have the server verify it. Returns the
+// public URL and the R2 key (store the key if you need to delete it later).
+export const uploadImageAsset = async (
   uri: string,
   folder: UploadFolder,
   prefix?: string,
-): Promise<string> => {
+): Promise<UploadedMedia> => {
+  const compressedUri = await compressImage(uri);
   const contentType = "image/jpeg";
 
   const presign = await api.post<PresignResponse>("/media/presign", {
@@ -48,11 +55,15 @@ const uploadOne = async (
   // Upload the local file straight to R2. uploadAsync streams the file as
   // raw bytes — reliable in React Native, unlike fetch(uri).blob() which can
   // send a 0-byte/malformed body.
-  const putResponse = await FileSystem.uploadAsync(presign.uploadUrl, uri, {
-    httpMethod: "PUT",
-    uploadType: FileSystem.FileSystemUploadType.BINARY_CONTENT,
-    headers: { "Content-Type": contentType },
-  });
+  const putResponse = await FileSystem.uploadAsync(
+    presign.uploadUrl,
+    compressedUri,
+    {
+      httpMethod: "PUT",
+      uploadType: FileSystem.FileSystemUploadType.BINARY_CONTENT,
+      headers: { "Content-Type": contentType },
+    },
+  );
 
   if (putResponse.status < 200 || putResponse.status >= 300) {
     throw new Error(`Upload failed (${putResponse.status})`);
@@ -67,7 +78,7 @@ const uploadOne = async (
     throw new Error(confirm?.error || "Upload verification failed");
   }
 
-  return presign.publicUrl;
+  return { url: presign.publicUrl, key: presign.key };
 };
 
 /**
@@ -83,8 +94,7 @@ export const uploadImages = async (
 ): Promise<string[]> => {
   const urls: string[] = [];
   for (let i = 0; i < images.length; i++) {
-    const compressedUri = await compressImage(images[i].uri);
-    const url = await uploadOne(compressedUri, folder, prefix);
+    const { url } = await uploadImageAsset(images[i].uri, folder, prefix);
     urls.push(url);
     onProgress?.(i + 1, images.length);
   }

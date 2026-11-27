@@ -4,19 +4,20 @@ import {
   StatusBar,
   StyleSheet,
   View,
-  Image,
   Dimensions,
   FlatList,
   RefreshControl,
   ActivityIndicator,
 } from "react-native";
+import { Image } from "expo-image";
 import { useAuthStore } from "../../../src/stores/authStore";
 import { AppHeader } from "@/src/components/AppHeader";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { LanguageSelector } from "@/src/components/LanguageSelector";
 import { useLanguage } from "@/src/hooks/useLanguage";
-import { HERO_IMAGES } from "@/src/constants/data";
+import { DEFAULT_BANNER } from "@/src/constants/data";
+import { getBanners } from "@/src/services/bannerServices";
 import { Section } from "@/src/components/Section";
 import { GalleryCollageCard } from "@/src/components/GalleryCollageCard";
 import { AnnouncementCard } from "@/src/components/AnnouncementCard";
@@ -45,6 +46,8 @@ const HomeScreen = () => {
   const [announcements, setAnnouncements] = useState<any[]>([]);
   const [galleries, setGalleries] = useState<any[]>([]);
   const [events, setEvents] = useState<MandirEvent[]>([]);
+  const [bannerImages, setBannerImages] = useState<string[]>([]);
+  const [bannerLoadError, setBannerLoadError] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -101,6 +104,18 @@ const HomeScreen = () => {
         }
       };
 
+      const fetchBanners = async () => {
+        try {
+          const data = await getBanners();
+          setBannerImages(data.map((b) => b.image_url));
+          setBannerLoadError(false);
+        } catch (error) {
+          console.error("[HomeScreen] Error fetching banners:", error);
+          // Clear remote list so the bundled local banner is shown.
+          setBannerImages([]);
+        }
+      };
+
       const fetchEvents = async () => {
         try {
           const response = await getAllEvents();
@@ -129,6 +144,7 @@ const HomeScreen = () => {
         fetchAnnouncements(),
         fetchEvents(),
         fetchGalleries(),
+        fetchBanners(),
       ]);
     } catch (err) {
       console.error("[HomeScreen] Error fetching home data:", err);
@@ -181,24 +197,37 @@ const HomeScreen = () => {
 
   const latestEvent = upcomingEvents[0];
 
-  // AUTO SLIDE
+  // Banners come from R2 via the API. If the fetch returned nothing, or a
+  // remote image failed to load, fall back to the bundled local banner so a
+  // banner always shows (even offline).
+  const useRemoteBanners = bannerImages.length > 0 && !bannerLoadError;
+  const heroSources = useRemoteBanners
+    ? bannerImages.map((uri) => ({ uri }))
+    : [DEFAULT_BANNER];
+
+  const bannerCount = heroSources.length;
+
+  // Keep the current slide in range when the banner set changes (e.g. after a
+  // banner is deleted the count shrinks).
   useEffect(() => {
+    setCurrentIndex((i) => (i >= bannerCount ? 0 : i));
+  }, [bannerCount]);
+
+  // AUTO SLIDE. Depends on bannerCount so the interval never holds a stale
+  // length and tries to scroll past the end.
+  useEffect(() => {
+    if (bannerCount <= 1) return; // nothing to rotate through
+
     const interval = setInterval(() => {
       if (!autoScroll.current) return;
 
-      let next = currentIndex + 1;
-      if (next >= HERO_IMAGES.length) next = 0;
-
-      flatListRef.current?.scrollToIndex({
-        index: next,
-        animated: true,
-      });
-
+      const next = (currentIndex + 1) % bannerCount;
+      flatListRef.current?.scrollToIndex({ index: next, animated: true });
       setCurrentIndex(next);
     }, 4000);
 
     return () => clearInterval(interval);
-  }, [currentIndex]);
+  }, [currentIndex, bannerCount]);
 
   return (
     <View style={styles.container}>
@@ -225,13 +254,17 @@ const HomeScreen = () => {
         <View style={styles.banner}>
           <FlatList
             ref={flatListRef}
-            data={HERO_IMAGES}
+            data={heroSources}
             horizontal
             pagingEnabled
             snapToInterval={PAGE_WIDTH}
             decelerationRate="fast"
             showsHorizontalScrollIndicator={false}
             keyExtractor={(_, i) => i.toString()}
+            onScrollToIndexFailed={() => {
+              // Index briefly out of range (e.g. data just shrank). Ignore
+              // instead of crashing; the next tick will realign.
+            }}
             onScrollBeginDrag={() => (autoScroll.current = false)}
             onMomentumScrollEnd={(e) => {
               const index = Math.round(
@@ -252,7 +285,14 @@ const HomeScreen = () => {
                 }}
               >
                 <View style={styles.heroCard}>
-                  <Image source={{ uri: item }} style={styles.bannerImage} />
+                  <Image
+                    source={item}
+                    style={styles.bannerImage}
+                    contentFit="cover"
+                    cachePolicy="memory-disk"
+                    transition={300}
+                    onError={() => setBannerLoadError(true)}
+                  />
 
                   <LinearGradient
                     colors={[

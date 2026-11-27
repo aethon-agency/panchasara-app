@@ -11,11 +11,9 @@ export const COMMITTEE_MEMBERS = [
   { name: "નરેશભાઈ પંચાસરા", phone: "+919834567890" },
 ];
 
-export const HERO_IMAGES = [
-  "https://eijolqvtchrmhuvuytbl.supabase.co/storage/v1/object/public/BANNER/Banner.jpeg",
-  "https://eijolqvtchrmhuvuytbl.supabase.co/storage/v1/object/public/BANNER/Banner.jpeg",
-  "https://eijolqvtchrmhuvuytbl.supabase.co/storage/v1/object/public/BANNER/Banner.jpeg",
-];
+// Bundled fallback banner. Shown when the banner fetch fails or a remote
+// banner image can't load, so a banner always appears (even offline).
+export const DEFAULT_BANNER = require("../../assets/images/banner.png");
 
 export const EXPLORE_ITEMS = [
   {

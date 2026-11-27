@@ -40,6 +40,12 @@ const AdminScreen = () => {
       route: "/(user)/(others)/add-donation" as const,
       description: t("admin.menu.addDonation.description"),
     },
+    {
+      title: t("admin.menu.changeBanner.title"),
+      icon: "image-edit",
+      route: "/(user)/(others)/manage-banners" as const,
+      description: t("admin.menu.changeBanner.description"),
+    },
   ];
 
   return (

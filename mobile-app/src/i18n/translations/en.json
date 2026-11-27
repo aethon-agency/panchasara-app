@@ -322,10 +322,13 @@
       "addDonation": {
         "title": "Add Donation",
         "description": "Record a new donation"
+      },
+      "changeBanner": {
+        "title": "Change Banner Image",
+        "description": "Manage home screen banners"
       }
     }
   },
-
   "addAnnouncement": {
     "header": "Add Announcement",
     "labels": {
@@ -449,5 +452,16 @@
       "fillRequired": "Please fill in all required fields.",
       "failed": "Failed to record donation"
     }
+  },
+  "manageBanners": {
+    "header": "Banner Images",
+    "subtitle": "Add, reorder, replace or remove the banners shown on the home screen.",
+    "add": "Add Banner",
+    "empty": "No banners yet. Add your first one.",
+    "added": "Banner added",
+    "updated": "Banner updated",
+    "removed": "Banner removed",
+    "permissionDenied": "Permission to access photos was denied",
+    "uploadError": "Failed to upload image"
   }
 }
