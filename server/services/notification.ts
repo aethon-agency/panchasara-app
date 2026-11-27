@@ -2,6 +2,9 @@
  * Service to handle sending push notifications via Expo's Push API.
  */
 
+import { supabase } from "../database/index.js";
+import { TABLE_NAME } from "../util/constant.js";
+
 export interface PushNotificationMessage {
   title?: string;
   body: string;
@@ -86,5 +89,35 @@ export async function sendPushNotifications(
       success: false,
       message: err.message,
     };
+  }
+}
+
+/**
+ * Send a push notification to every user who has notifications enabled and a
+ * registered push token. Fire-and-forget: callers should not await or let a
+ * failure here break the main request.
+ */
+export async function notifyAllUsers(message: PushNotificationMessage) {
+  try {
+    const { data, error } = await supabase
+      .from(TABLE_NAME.USERS)
+      .select("push_token")
+      .eq("notifications_enabled", true)
+      .not("push_token", "is", null);
+
+    if (error) {
+      console.error("notifyAllUsers: failed to load tokens:", error.message);
+      return;
+    }
+
+    const tokens = (data || [])
+      .map((u: { push_token: string | null }) => u.push_token)
+      .filter((t): t is string => Boolean(t));
+
+    if (tokens.length === 0) return;
+
+    await sendPushNotifications(tokens, message);
+  } catch (err: any) {
+    console.error("notifyAllUsers error:", err?.message || err);
   }
 }

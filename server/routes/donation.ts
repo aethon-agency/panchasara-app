@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import { supabase } from "../database/index.js";
+import { notifyAllUsers } from "../services/notification.js";
 import { TABLE_NAME } from "../util/constant.js";
 
 const router = express.Router();
@@ -81,6 +82,12 @@ router.post("/", async (req: Request, res: Response) => {
       });
       return;
     }
+
+    notifyAllUsers({
+      title: "નવું દાન / New Donation",
+      body: `${title} - ${donor_name}`,
+      data: { type: "donation", id: data?.id },
+    });
 
     res.status(201).json({
       success: true,
