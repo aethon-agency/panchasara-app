@@ -20,6 +20,8 @@ import {
   handleShare,
   toGujarati,
   formatToHHMM,
+  parseEventDate,
+  startOfToday,
 } from "@/src/utils/functions";
 import { getEventById } from "@/src/services/eventServices";
 
@@ -83,6 +85,11 @@ export default function EventDetailsScreen() {
     );
   }
 
+  // Past events (before today) use past-tense wording instead of invitation
+  // wording, so opening one from History reads correctly.
+  const isPast =
+    parseEventDate(event.date).getTime() < startOfToday().getTime();
+
   const getEventLabel = (type: string) => {
     switch (type) {
       case "poonam":
@@ -96,7 +103,7 @@ export default function EventDetailsScreen() {
 
   const handleShareClick = async () => {
     const shareTitle = `${getEventLabel(event.type)} - ${t("eventDetails.title")}`;
-    const shareMessage = `જય ભવાની માં\n\nભોજન પ્રસાદ આમંત્રણ\n\nસહર્ષ પરિવારજનોને જણાવવાનું કે ${event.title} નો કાર્યક્રમ તા. ${isGujarati ? toGujarati(event.date) : event.date}, ${t(`days.${event.day.toLowerCase()}`, { lng: "gu" })} ના રોજ રાબેતા મુજબ છે, જેના ભોજન પ્રસાદના દાતા "${event.organizerName}" રહેશે.\n\n${event?.description ? event?.description : ""}\n\nસ્થળ: ${event.location}\nસમય: ${formatToHHMM(event.startTime)} - ${formatToHHMM(event.endTime)}\n\n— બધા જોડાવા માટે સ્વાગત છે`;
+    const shareMessage = `જય ભવાની માં\n\n${isPast ? "ભોજન પ્રસાદ કાર્યક્રમ" : "ભોજન પ્રસાદ આમંત્રણ"}\n\nસહર્ષ પરિવારજનોને જણાવવાનું કે ${event.title} નો કાર્યક્રમ તા. ${isGujarati ? toGujarati(event.date) : event.date}, ${t(`days.${event.day.toLowerCase()}`, { lng: "gu" })} ના રોજ રાબેતા મુજબ ${isPast ? "યોજાયો હતો" : "છે"}, જેના ભોજન પ્રસાદના દાતા "${event.organizerName}" ${isPast ? "રહ્યા હતા" : "રહેશે"}.\n\n${event?.description ? event?.description : ""}\n\nસ્થળ: ${event.location}\nસમય: ${formatToHHMM(event.startTime)} - ${formatToHHMM(event.endTime)}\n\n${isPast ? "— કાર્યક્રમ સંપન્ન થયો —" : "— બધા જોડાવા માટે સ્વાગત છે"}`;
     handleShare(shareTitle, shareMessage);
   };
 
@@ -107,7 +114,7 @@ export default function EventDetailsScreen() {
         title={
           getEventLabel(event.type).toUpperCase() +
           " - " +
-          t("eventDetails.title")
+          (isPast ? t("eventDetails.titlePast") : t("eventDetails.title"))
         }
         showBack={true}
         onBack={() => router.back()}
@@ -194,7 +201,9 @@ export default function EventDetailsScreen() {
           <View style={styles.divider} />
 
           <View style={styles.messageContainer}>
-            <Text style={styles.gujaratiTitle}>ભોજન પ્રસાદ આમંત્રણ</Text>
+            <Text style={styles.gujaratiTitle}>
+              {isPast ? "ભોજન પ્રસાદ કાર્યક્રમ" : "ભોજન પ્રસાદ આમંત્રણ"}
+            </Text>
             <Text style={styles.gujaratiMessage}>
               સહર્ષ પરિવારજનોને જણાવવાનું કે{" "}
               <Text style={styles.donorName}>{event.title}</Text> નો કાર્યક્રમ
@@ -203,9 +212,10 @@ export default function EventDetailsScreen() {
                 {toGujarati(event.date)},{" "}
                 {t(`days.${event.day.toLowerCase()}`, { lng: "gu" })}
               </Text>{" "}
-              ના રોજ રાબેતા મુજબ છે, જેના ભોજન પ્રસાદના દાતા{"\n"}
+              ના રોજ રાબેતા મુજબ {isPast ? "યોજાયો હતો" : "છે"}, જેના ભોજન
+              પ્રસાદના દાતા{"\n"}
               <Text style={styles.donorName}>“{event.organizerName}”</Text>{" "}
-              રહેશે.
+              {isPast ? "રહ્યા હતા." : "રહેશે."}
             </Text>
           </View>
 
@@ -228,7 +238,9 @@ export default function EventDetailsScreen() {
           <View style={styles.divider} />
 
           <Text style={styles.welcomeNote}>
-            {t("eventDetails.welcomeNote")}
+            {isPast
+              ? t("eventDetails.welcomeNotePast")
+              : t("eventDetails.welcomeNote")}
           </Text>
         </LinearGradient>
 

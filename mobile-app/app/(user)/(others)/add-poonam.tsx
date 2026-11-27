@@ -23,7 +23,7 @@ const poonamSchema = z
     date: z.string().min(1, "addPoonam.messages.fillRequired"),
     startTime: z.string().min(1, "addPoonam.messages.fillRequired"),
     endTime: z.string().min(1, "addPoonam.messages.fillRequired"),
-    organizer: z.string().optional(),
+    organizer: z.string().min(1, "addPoonam.messages.fillRequired"),
     description: z.string().optional(),
     location: z.string().min(1, "addPoonam.messages.fillRequired"),
   })
@@ -127,6 +127,7 @@ const AddPoonamScreen = () => {
             value={form.organizer}
             onChangeText={(text) => handleChange("organizer", text)}
             error={errors.organizer ? t(errors.organizer) : ""}
+            required
           />
 
           <View style={styles.row}>

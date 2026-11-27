@@ -48,7 +48,10 @@
       "special": "Special",
       "event": "Event"
     },
-    "emptyState": "No upcoming events scheduled"
+    "emptyState": "No upcoming events scheduled",
+    "history": "Past Events",
+    "historyTitle": "Past Events",
+    "emptyHistory": "No past events yet"
   },
   "profile": {
     "title": "My Profile",
@@ -150,7 +153,9 @@
     "shareButton": "Share Invitation",
     "footerText": "For more information or inquiries, please contact commity members.",
     "errorNotFound": "Event not found",
-    "errorGoBack": "Go Back"
+    "errorGoBack": "Go Back",
+    "titlePast": "Past Event",
+    "welcomeNotePast": "— This program has concluded —"
   },
   "contact": {
     "title": "Contact Us",
@@ -399,7 +404,7 @@
       "date": "Date",
       "startTime": "Start Time",
       "endTime": "End Time",
-      "organizer": "Organizer Name",
+      "organizer": "Donatee Name",
       "location": "Location",
       "description": "Description"
     },

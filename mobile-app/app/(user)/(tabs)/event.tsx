@@ -6,7 +6,9 @@ import {
   ScrollView,
   ActivityIndicator,
   RefreshControl,
+  TouchableOpacity,
 } from "react-native";
+import { router } from "expo-router";
 import { AppHeader } from "@/src/components/AppHeader";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useLanguage } from "@/src/hooks/useLanguage";
@@ -14,7 +16,7 @@ import { MandirEventCard } from "@/src/components/MandirEventCard";
 import { LanguageSelector } from "@/src/components/LanguageSelector";
 import { getAllEvents } from "@/src/services/eventServices";
 import { MandirEvent } from "@/src/constants/types";
-import { formatDate } from "@/src/utils/functions";
+import { formatDate, parseEventDate, startOfToday } from "@/src/utils/functions";
 
 export default function EventScreen() {
   const { t } = useLanguage();
@@ -58,33 +60,14 @@ export default function EventScreen() {
     fetchEvents(false);
   }, []);
 
-  const parseDate = (dateStr: string) => {
-    if (!dateStr) return new Date(0);
-    // Handle both DD-MM-YYYY, YYYY-MM-DD, DD/MM/YYYY, YYYY/MM/DD
-    const parts = dateStr.split(/[-/]/);
-    if (parts.length === 3) {
-      if (parts[0].length === 4) {
-        // YYYY-MM-DD
-        return new Date(
-          Number(parts[0]),
-          Number(parts[1]) - 1,
-          Number(parts[2]),
-        );
-      } else {
-        // DD-MM-YYYY
-        return new Date(
-          Number(parts[2]),
-          Number(parts[1]) - 1,
-          Number(parts[0]),
-        );
-      }
-    }
-    return new Date(dateStr);
-  };
-
-  const sortedEvents = [...events].sort((a, b) => {
-    return parseDate(a.date).getTime() - parseDate(b.date).getTime();
-  });
+  // Only today-and-future events belong on this tab. Yesterday and earlier are
+  // moved to the history screen. Sorted soonest-first.
+  const todayStart = startOfToday().getTime();
+  const upcomingEvents = [...events]
+    .filter((e) => parseEventDate(e.date).getTime() >= todayStart)
+    .sort(
+      (a, b) => parseEventDate(a.date).getTime() - parseEventDate(b.date).getTime(),
+    );
 
   return (
     <View style={styles.container}>
@@ -93,6 +76,17 @@ export default function EventScreen() {
         subtitle={t("events.subtitle")}
         rightAction={<LanguageSelector />}
       />
+
+      <View style={styles.topBar}>
+        <TouchableOpacity
+          style={styles.historyButton}
+          onPress={() => router.push("/(user)/(others)/event-history")}
+          activeOpacity={0.7}
+        >
+          <MaterialCommunityIcons name="history" size={18} color="#EA580C" />
+          <Text style={styles.historyButtonText}>{t("events.history")}</Text>
+        </TouchableOpacity>
+      </View>
 
       {loading && !refreshing ? (
         <View style={styles.loadingContainer}>
@@ -111,11 +105,11 @@ export default function EventScreen() {
             />
           }
         >
-          {sortedEvents.map((item) => (
+          {upcomingEvents.map((item) => (
             <MandirEventCard key={item.id} event={item} />
           ))}
 
-          {sortedEvents.length === 0 && (
+          {upcomingEvents.length === 0 && (
             <View style={styles.emptyState}>
               <MaterialCommunityIcons
                 name="calendar-blank"
@@ -140,6 +134,29 @@ const styles = StyleSheet.create({
     rowGap: 16,
     padding: 20,
     paddingBottom: 100,
+  },
+  topBar: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    paddingHorizontal: 20,
+    paddingTop: 12,
+    paddingBottom: 4,
+  },
+  historyButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    borderRadius: 999,
+    backgroundColor: "#FFF",
+    borderWidth: 1,
+    borderColor: "#FFEDD5",
+  },
+  historyButtonText: {
+    fontSize: 13,
+    fontWeight: "700",
+    color: "#EA580C",
   },
   loadingContainer: {
     flex: 1,
