@@ -2,6 +2,7 @@ export const TABLE_NAME = {
   USERS: "users",
   CONTACTUS: "contactus",
   DONATIONS: "donations",
+  BANNERS: "banners",
 } as const;
 
 export const COLUMN_NAME = {

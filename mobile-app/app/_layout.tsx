@@ -6,11 +6,14 @@ import { COLORS } from "../src/constants/colors";
 import { useAppFonts } from "../src/constants/fonts";
 import { ToastProvider } from "../src/contexts/ToastProvider";
 import { useAuthStore } from "../src/stores/authStore";
+import { useVersionGate } from "../src/hooks/useVersionGate";
+import { ForceUpdateModal } from "../src/components/ForceUpdateModal";
 import "../src/i18n";
 
 export default function RootLayout() {
   const { authLoading, token } = useAuthStore();
   const { fontsLoaded } = useAppFonts();
+  const { forceUpdate, storeUrl, latestVersion } = useVersionGate();
 
   if (!fontsLoaded || authLoading) return null;
 
@@ -39,6 +42,11 @@ export default function RootLayout() {
           <Stack.Screen name="(auth)" options={{ headerShown: false }} />
           <Stack.Screen name="(user)" options={{ headerShown: false }} />
         </Stack>
+        <ForceUpdateModal
+          visible={forceUpdate}
+          storeUrl={storeUrl}
+          latestVersion={latestVersion}
+        />
       </ToastProvider>
     </GestureHandlerRootView>
   );

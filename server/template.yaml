@@ -1,0 +1,73 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: Panchasara API (Express on AWS Lambda + HTTP API Gateway)
+
+# Runtime config comes from the CI deploy as --parameter-overrides (sourced
+# from GitHub Secrets). Secrets are NoEcho so they don't appear in logs.
+Parameters:
+  SupabaseUrl: { Type: String }
+  SupabaseKey: { Type: String, NoEcho: true }
+  JwtSecret: { Type: String, NoEcho: true }
+  Msg91AuthKey: { Type: String, NoEcho: true, Default: "" }
+  Msg91WidgetId: { Type: String, Default: "" }
+  R2AccountId: { Type: String, Default: "" }
+  R2Bucket: { Type: String, Default: "" }
+  R2Endpoint: { Type: String, Default: "" }
+  R2Region: { Type: String, Default: "auto" }
+  R2AccessKeyId: { Type: String, NoEcho: true, Default: "" }
+  R2SecretAccessKey: { Type: String, NoEcho: true, Default: "" }
+  R2PublicUrl: { Type: String, Default: "" }
+  OtpBypassNumbers: { Type: String, Default: "" }
+  OtpBypassCode: { Type: String, NoEcho: true, Default: "" }
+
+Globals:
+  Function:
+    Runtime: nodejs20.x
+    Timeout: 20
+    MemorySize: 512
+  Api:
+    Cors:
+      AllowMethods: "'*'"
+      AllowHeaders: "'*'"
+      AllowOrigins: "'*'"
+
+Resources:
+  ApiFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      # The whole (built) server folder is zipped; dist/lambda.js is the entry.
+      CodeUri: ./
+      Handler: dist/lambda.handler
+      Environment:
+        Variables:
+          NODE_ENV: production
+          SUPABASE_URL: !Ref SupabaseUrl
+          SUPABASE_KEY: !Ref SupabaseKey
+          JWT_SECRET: !Ref JwtSecret
+          MSG91_AUTH_KEY: !Ref Msg91AuthKey
+          MSG91_WIDGET_ID: !Ref Msg91WidgetId
+          R2_ACCOUNT_ID: !Ref R2AccountId
+          R2_BUCKET: !Ref R2Bucket
+          R2_ENDPOINT: !Ref R2Endpoint
+          R2_REGION: !Ref R2Region
+          R2_ACCESS_KEY_ID: !Ref R2AccessKeyId
+          R2_SECRET_ACCESS_KEY: !Ref R2SecretAccessKey
+          R2_PUBLIC_URL: !Ref R2PublicUrl
+          OTP_BYPASS_NUMBERS: !Ref OtpBypassNumbers
+          OTP_BYPASS_CODE: !Ref OtpBypassCode
+      Events:
+        Root:
+          Type: HttpApi
+          Properties:
+            Path: /
+            Method: ANY
+        Proxy:
+          Type: HttpApi
+          Properties:
+            Path: /{proxy+}
+            Method: ANY
+
+Outputs:
+  ApiBaseUrl:
+    Description: Base URL to put in the mobile app's EXPO_PUBLIC_API_URL
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com"

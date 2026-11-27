@@ -14,6 +14,7 @@ interface CustomInputProps extends TextInputProps {
   icon?: keyof typeof MaterialCommunityIcons.glyphMap;
   prefix?: string;
   error?: string;
+  required?: boolean;
 }
 
 export const CustomInput = ({
@@ -21,6 +22,7 @@ export const CustomInput = ({
   icon,
   prefix,
   error,
+  required,
   style,
   ...props
 }: CustomInputProps) => {
@@ -35,6 +37,7 @@ export const CustomInput = ({
           style={[styles.label, { color: isFocused ? "#EA580C" : "#431407" }]}
         >
           {label}
+          {required && <Text style={{ color: "#EF4444" }}> *</Text>}
         </Text>
       )}
 

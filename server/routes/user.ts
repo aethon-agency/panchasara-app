@@ -14,7 +14,7 @@ router.get("/profile", middleware, async (req: Request, res: Response) => {
     const { data, error } = await supabase
       .from(TABLE_NAME.USERS)
       .select(
-        "id, mobilenumber, firstname, lastname, middlename, is_admin, location",
+        "id, mobilenumber, firstname, lastname, middlename, is_admin, location, notifications_enabled",
       )
       .eq("id", userId)
       .single();
@@ -41,6 +41,7 @@ router.get("/profile", middleware, async (req: Request, res: Response) => {
         middleName: data.middlename,
         isadmin: data.is_admin,
         location: data.location,
+        notificationsEnabled: data.notifications_enabled,
       },
     });
   } catch (error) {
@@ -117,5 +118,66 @@ router.patch("/profile", middleware, async (req: Request, res: Response) => {
     });
   }
 });
+
+// POST /user/push-token - register/update this user's Expo push token
+router.post("/push-token", middleware, async (req: Request, res: Response) => {
+  try {
+    const userId = (req as AuthRequest).user.id;
+    const { pushToken } = req.body as { pushToken?: string };
+
+    if (!pushToken || typeof pushToken !== "string") {
+      return res
+        .status(400)
+        .json({ status: false, error: "pushToken is required" });
+    }
+
+    const { error } = await supabase
+      .from(TABLE_NAME.USERS)
+      .update({ push_token: pushToken })
+      .eq("id", userId);
+
+    if (error) throw new Error(error.message);
+
+    return res.status(200).json({ status: true });
+  } catch (error: any) {
+    console.error("Error saving push token:", error);
+    return res
+      .status(500)
+      .json({ status: false, error: error.message || "Internal server error" });
+  }
+});
+
+// PATCH /user/notifications - turn notifications on/off for this user
+router.patch(
+  "/notifications",
+  middleware,
+  async (req: Request, res: Response) => {
+    try {
+      const userId = (req as AuthRequest).user.id;
+      const { enabled } = req.body as { enabled?: boolean };
+
+      if (typeof enabled !== "boolean") {
+        return res
+          .status(400)
+          .json({ status: false, error: "enabled (boolean) is required" });
+      }
+
+      const { error } = await supabase
+        .from(TABLE_NAME.USERS)
+        .update({ notifications_enabled: enabled })
+        .eq("id", userId);
+
+      if (error) throw new Error(error.message);
+
+      return res.status(200).json({ status: true, notificationsEnabled: enabled });
+    } catch (error: any) {
+      console.error("Error updating notifications flag:", error);
+      return res.status(500).json({
+        status: false,
+        error: error.message || "Internal server error",
+      });
+    }
+  },
+);
 
 export default router;

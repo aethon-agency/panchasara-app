@@ -48,7 +48,10 @@
       "special": "Special",
       "event": "Event"
     },
-    "emptyState": "No upcoming events scheduled"
+    "emptyState": "No upcoming events scheduled",
+    "history": "Past Events",
+    "historyTitle": "Past Events",
+    "emptyHistory": "No past events yet"
   },
   "profile": {
     "title": "My Profile",
@@ -150,7 +153,9 @@
     "shareButton": "Share Invitation",
     "footerText": "For more information or inquiries, please contact commity members.",
     "errorNotFound": "Event not found",
-    "errorGoBack": "Go Back"
+    "errorGoBack": "Go Back",
+    "titlePast": "Past Event",
+    "welcomeNotePast": "— This program has concluded —"
   },
   "contact": {
     "title": "Contact Us",
@@ -322,10 +327,13 @@
       "addDonation": {
         "title": "Add Donation",
         "description": "Record a new donation"
+      },
+      "changeBanner": {
+        "title": "Change Banner Image",
+        "description": "Manage home screen banners"
       }
     }
   },
-
   "addAnnouncement": {
     "header": "Add Announcement",
     "labels": {
@@ -396,7 +404,7 @@
       "date": "Date",
       "startTime": "Start Time",
       "endTime": "End Time",
-      "organizer": "Organizer Name",
+      "organizer": "Donatee Name",
       "location": "Location",
       "description": "Description"
     },
@@ -449,5 +457,22 @@
       "fillRequired": "Please fill in all required fields.",
       "failed": "Failed to record donation"
     }
+  },
+  "manageBanners": {
+    "header": "Banner Images",
+    "subtitle": "Add, reorder, replace or remove the banners shown on the home screen.",
+    "add": "Add Banner",
+    "empty": "No banners yet. Add your first one.",
+    "added": "Banner added",
+    "updated": "Banner updated",
+    "removed": "Banner removed",
+    "permissionDenied": "Permission to access photos was denied",
+    "uploadError": "Failed to upload image"
+  },
+  "forceUpdate": {
+    "title": "Update Required",
+    "message": "A new version of the app is available. Please update to continue using the app.",
+    "latest": "Latest version:",
+    "button": "Update Now"
   }
 }

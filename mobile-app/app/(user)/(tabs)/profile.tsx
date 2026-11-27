@@ -16,6 +16,12 @@ import { useLanguage } from "@/src/hooks/useLanguage";
 import { LanguageSelector } from "@/src/components/LanguageSelector";
 import { useToast } from "@/src/contexts/ToastProvider";
 import { ConfirmationModal } from "@/src/components/ConfirmationModal";
+import {
+  getUserProfile,
+  registerPushToken,
+  setNotificationsEnabled as setNotificationsEnabledApi,
+} from "@/src/services/userServices";
+import { registerForPushNotificationsAsync } from "@/src/services/notifications";
 
 interface MenuItemData {
   icon: keyof typeof Ionicons.glyphMap;
@@ -138,20 +144,49 @@ const LogoutButton = ({
 );
 
 export default function ProfileScreen() {
-  const { user, logout } = useAuthStore();
+  const { user, logout, pushToken, setPushToken } = useAuthStore();
   const router = useRouter();
   const { t } = useLanguage();
   const toast = useToast();
   const [notificationsEnabled, setNotificationsEnabled] = React.useState(true);
   const [isLogoutModalVisible, setIsLogoutModalVisible] = React.useState(false);
 
-  const toggleNotifications = (value: boolean) => {
-    setNotificationsEnabled(value);
-    toast.success(
-      value
-        ? t("profile.notificationsEnabled")
-        : t("profile.notificationsDisabled"),
-    );
+  // Load the saved preference from the server on mount.
+  React.useEffect(() => {
+    (async () => {
+      try {
+        const res = await getUserProfile();
+        if (res?.status && typeof res.data?.notificationsEnabled === "boolean") {
+          setNotificationsEnabled(res.data.notificationsEnabled);
+        }
+      } catch {
+        // keep the default; non-blocking
+      }
+    })();
+  }, []);
+
+  const toggleNotifications = async (value: boolean) => {
+    const previous = notificationsEnabled;
+    setNotificationsEnabled(value); // optimistic
+    try {
+      // When enabling, make sure this device has a registered push token.
+      if (value && !pushToken) {
+        const expoToken = await registerForPushNotificationsAsync();
+        if (expoToken) {
+          await registerPushToken(expoToken);
+          setPushToken(expoToken);
+        }
+      }
+      await setNotificationsEnabledApi(value);
+      toast.success(
+        value
+          ? t("profile.notificationsEnabled")
+          : t("profile.notificationsDisabled"),
+      );
+    } catch {
+      setNotificationsEnabled(previous); // revert on failure
+      toast.error(t("common.error"));
+    }
   };
 
   const handleLogout = () => {

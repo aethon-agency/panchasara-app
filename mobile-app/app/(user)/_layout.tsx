@@ -1,7 +1,10 @@
 import React from "react";
 import { Stack } from "expo-router";
+import { usePushRegistration } from "@/src/hooks/usePushRegistration";
 
 export default function UserLayout() {
+  usePushRegistration();
+
   return (
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="(tabs)" />

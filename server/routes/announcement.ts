@@ -1,5 +1,6 @@
 import express from "express";
 import { supabase } from "../database/index.js";
+import { notifyAllUsers } from "../services/notification.js";
 
 const router = express.Router();
 
@@ -37,6 +38,12 @@ router.post("/", async (req, res) => {
       console.error("Supabase error:", error);
       throw new Error(error.message);
     }
+
+    notifyAllUsers({
+      title: "નવી જાહેરાત / New Announcement",
+      body: title,
+      data: { type: "announcement", id: data?.[0]?.id },
+    });
 
     res.status(201).json({ success: true, data });
   } catch (error: any) {

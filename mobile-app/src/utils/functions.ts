@@ -88,6 +88,28 @@ export const toGujarati = (text: string) => {
   return text.replace(/[0-9]/g, (d: any) => map[d]);
 };
 
+// Parse an event date string (DD/MM/YYYY, DD-MM-YYYY, YYYY-MM-DD, YYYY/MM/DD)
+// into a Date at local midnight, so events can be compared by day.
+export const parseEventDate = (dateStr: string): Date => {
+  if (!dateStr) return new Date(0);
+  const parts = dateStr.split(/[-/]/);
+  if (parts.length === 3) {
+    if (parts[0].length === 4) {
+      return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+    }
+    return new Date(Number(parts[2]), Number(parts[1]) - 1, Number(parts[0]));
+  }
+  return new Date(dateStr);
+};
+
+// Today at 00:00 local time. Events on/after this are upcoming; before it,
+// they are history.
+export const startOfToday = (): Date => {
+  const d = new Date();
+  d.setHours(0, 0, 0, 0);
+  return d;
+};
+
 export const formatDate = (dateStr: string) => {
   if (!dateStr) return "";
   const parts = dateStr.split(/[-/]/);

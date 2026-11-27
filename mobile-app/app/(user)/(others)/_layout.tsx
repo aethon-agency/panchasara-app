@@ -14,6 +14,8 @@ export default function OthersLayout() {
       <Stack.Screen name="add-announcement" />
       <Stack.Screen name="add-donation" />
       <Stack.Screen name="add-gallery" />
+      <Stack.Screen name="manage-banners" />
+      <Stack.Screen name="event-history" />
       <Stack.Screen name="guidelines" />
       <Stack.Screen name="nived-details" />
     </Stack>

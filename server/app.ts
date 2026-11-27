@@ -8,6 +8,9 @@ import eventRoutes from "./routes/event.js";
 import announcementRoutes from "./routes/announcement.js";
 import galleryRoutes from "./routes/gallery.js";
 import donationRoutes from "./routes/donation.js";
+import mediaRoutes from "./routes/media.js";
+import bannerRoutes from "./routes/banner.js";
+import appVersionRoutes from "./routes/appVersion.js";
 
 import { checkDBConnected } from "./database/index.js";
 
@@ -26,6 +29,9 @@ app.use("/user", userRoutes);
 app.use("/events", eventRoutes);
 app.use("/announcements", announcementRoutes);
 app.use("/galleries", galleryRoutes);
+app.use("/media", mediaRoutes);
+app.use("/banners", bannerRoutes);
+app.use("/app-version", appVersionRoutes);
 app.use("/contacts", contactRoutes);
 app.use("/donations", donationRoutes);
 

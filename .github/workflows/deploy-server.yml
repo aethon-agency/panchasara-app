@@ -1,0 +1,74 @@
+name: Deploy Server (AWS Lambda)
+
+# Fires when DEVELOP (or anything) is merged into main and the server changed.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "server/**"
+      - ".github/workflows/deploy-server.yml"
+  workflow_dispatch: {} # also allow manual runs from the Actions tab
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # Install with npm (not the yarn workspace) so node_modules is
+      # self-contained for the Lambda zip — no monorepo hoisting.
+      - name: Install build deps
+        run: npm install --no-audit --no-fund
+
+      - name: Build (tsc -> dist/)
+        run: npm run build
+
+      # Re-install only production deps so dev tooling isn't shipped to Lambda.
+      - name: Prune to production deps
+        run: |
+          rm -rf node_modules
+          npm install --omit=dev --no-audit --no-fund
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          # Secret is named AWS_ACCESS_KEY in this repo (from server/.env).
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-south-1
+
+      - uses: aws-actions/setup-sam@v2
+        with:
+          use-installer: true
+
+      - name: Deploy with AWS SAM
+        run: |
+          sam deploy \
+            --template-file template.yaml \
+            --stack-name panchasara-api \
+            --region ap-south-1 \
+            --capabilities CAPABILITY_IAM \
+            --resolve-s3 \
+            --no-confirm-changeset \
+            --no-fail-on-empty-changeset \
+            --parameter-overrides \
+              SupabaseUrl=${{ secrets.SUPABASE_URL }} \
+              SupabaseKey=${{ secrets.SUPABASE_KEY }} \
+              JwtSecret=${{ secrets.JWT_SECRET }} \
+              Msg91AuthKey=${{ secrets.MSG91_AUTH_KEY }} \
+              Msg91WidgetId=${{ secrets.MSG91_WIDGET_ID }} \
+              R2AccountId=${{ secrets.R2_ACCOUNT_ID }} \
+              R2Bucket=${{ secrets.R2_BUCKET }} \
+              R2Endpoint=${{ secrets.R2_ENDPOINT }} \
+              R2Region=auto \
+              R2AccessKeyId=${{ secrets.R2_ACCESS_KEY_ID }} \
+              R2SecretAccessKey=${{ secrets.R2_SECRET_ACCESS_KEY }} \
+              R2PublicUrl=${{ secrets.R2_PUBLIC_URL }} \
+              OtpBypassNumbers='${{ secrets.OTP_BYPASS_NUMBERS }}' \
+              OtpBypassCode=${{ secrets.OTP_BYPASS_CODE }}
