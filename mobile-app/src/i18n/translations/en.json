@@ -468,5 +468,11 @@
     "removed": "Banner removed",
     "permissionDenied": "Permission to access photos was denied",
     "uploadError": "Failed to upload image"
+  },
+  "forceUpdate": {
+    "title": "Update Required",
+    "message": "A new version of the app is available. Please update to continue using the app.",
+    "latest": "Latest version:",
+    "button": "Update Now"
   }
 }
