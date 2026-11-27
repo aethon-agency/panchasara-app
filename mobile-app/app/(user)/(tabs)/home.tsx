@@ -8,6 +8,7 @@ import {
   Dimensions,
   FlatList,
   RefreshControl,
+  ActivityIndicator,
 } from "react-native";
 import { useAuthStore } from "../../../src/stores/authStore";
 import { AppHeader } from "@/src/components/AppHeader";
@@ -45,6 +46,7 @@ const HomeScreen = () => {
   const [galleries, setGalleries] = useState<any[]>([]);
   const [events, setEvents] = useState<MandirEvent[]>([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const formatGalleryDate = (month: number, year: number) => {
     const monthNames = [
@@ -130,6 +132,8 @@ const HomeScreen = () => {
       ]);
     } catch (err) {
       console.error("[HomeScreen] Error fetching home data:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -218,7 +222,6 @@ const HomeScreen = () => {
           />
         }
       >
-        {/* HERO CAROUSEL */}
         <View style={styles.banner}>
           <FlatList
             ref={flatListRef}
@@ -265,60 +268,83 @@ const HomeScreen = () => {
           />
         </View>
 
-        {/* LATEST EVENT */}
-        {latestEvent && (
-          <Section
-            title={t("home.upcomingEvent")}
-            onSeeAll={() => router.push("/(user)/(tabs)/event" as any)}
-          >
-            <MandirEventCard
-              event={latestEvent}
-              containerStyle={styles.latestEventCard}
-            />
+        {loading ? (
+          <Section title={t("home.upcomingEvent")}>
+            <View style={styles.loaderContainer}>
+              <ActivityIndicator size="small" color="#EA580C" />
+            </View>
           </Section>
+        ) : (
+          latestEvent && (
+            <Section
+              title={t("home.upcomingEvent")}
+              onSeeAll={() => router.push("/(user)/(tabs)/event" as any)}
+            >
+              <MandirEventCard
+                event={latestEvent}
+                containerStyle={styles.latestEventCard}
+              />
+            </Section>
+          )
         )}
 
-        {/* ANNOUNCEMENTS SECTION */}
-        {announcements.length > 0 && (
-          <Section
-            title={t("home.announcements")}
-            onSeeAll={() => router.push("/(user)/(announcements)" as any)}
-            contentStyle={{ gap: 12 }}
-          >
-            {announcements.slice(0, 3).map((item) => (
-              <AnnouncementCard
-                key={item.id}
-                id={item.id}
-                title={item.title}
-                description={item.description}
-                containerStyle={styles.announcementCard}
-              />
-            ))}
+        {loading ? (
+          <Section title={t("home.announcements")}>
+            <View style={styles.loaderContainer}>
+              <ActivityIndicator size="small" color="#EA580C" />
+            </View>
           </Section>
+        ) : (
+          announcements.length > 0 && (
+            <Section
+              title={t("home.announcements")}
+              onSeeAll={() => router.push("/(user)/(announcements)" as any)}
+              contentStyle={{ gap: 12 }}
+            >
+              {announcements.slice(0, 3).map((item) => (
+                <AnnouncementCard
+                  key={item.id}
+                  id={item.id}
+                  title={item.title}
+                  description={item.description}
+                  containerStyle={styles.announcementCard}
+                />
+              ))}
+            </Section>
+          )
         )}
 
-        {/* GALLERY */}
-        <Section
-          title={t("home.eventGallery")}
-          onSeeAll={() => router.push("/(user)/(gallery)" as any)}
-        >
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ paddingRight: 20 }}
-          >
-            {galleries?.slice(0, 3).map((item) => (
-              <GalleryCollageCard
-                key={item.id}
-                id={String(item.id)}
-                title={item.title}
-                date={formatGalleryDate(item.month, item.year)}
-                images={item.images}
-                containerStyle={styles.galleryCard}
-              />
-            ))}
-          </ScrollView>
-        </Section>
+        {loading ? (
+          <Section title={t("home.eventGallery")}>
+            <View style={styles.loaderContainer}>
+              <ActivityIndicator size="small" color="#EA580C" />
+            </View>
+          </Section>
+        ) : (
+          galleries?.length > 0 && (
+            <Section
+              title={t("home.eventGallery")}
+              onSeeAll={() => router.push("/(user)/(gallery)" as any)}
+            >
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{ paddingRight: 20 }}
+              >
+                {galleries?.slice(0, 3).map((item) => (
+                  <GalleryCollageCard
+                    key={item.id}
+                    id={String(item.id)}
+                    title={item.title}
+                    date={formatGalleryDate(item.month, item.year)}
+                    images={item.images}
+                    containerStyle={styles.galleryCard}
+                  />
+                ))}
+              </ScrollView>
+            </Section>
+          )
+        )}
       </ScrollView>
     </View>
   );
@@ -390,5 +416,10 @@ const styles = StyleSheet.create({
   },
   latestEventCard: {
     paddingHorizontal: 20,
+  },
+  loaderContainer: {
+    padding: 20,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
