@@ -10,7 +10,7 @@
     "web": "expo start --web",
     "lint": "expo lint",
     "dev": "expo start",
-    "build": "cd android && ./gradlew clean && ./gradlew assembleRelease && cd .. && yarn copy",
+    "build": "cd android && ./gradlew assembleRelease && cd .. && yarn copy",
     "copy": "cp android/app/build/outputs/apk/release/app-release.apk ~/Desktop/",
     "preview:ios": "eas build --profile preview --platform ios",
     "preview:android": "eas build --profile preview --platform android"
