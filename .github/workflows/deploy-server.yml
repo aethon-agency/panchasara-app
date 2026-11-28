@@ -20,7 +20,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
 
       # Install only the server package in isolation: --no-workspaces stops npm
       # from running the monorepo root's postinstall (expo install), and
