@@ -68,6 +68,14 @@ Resources:
           Properties:
             Path: /{proxy+}
             Method: ANY
+        # Keep one environment warm so the first real request after idle
+        # doesn't pay a cold start. Invokes the function directly (not via
+        # API Gateway); the handler short-circuits on {"warmup": true}.
+        Warmup:
+          Type: Schedule
+          Properties:
+            Schedule: rate(5 minutes)
+            Input: '{"warmup": true}'
 
 Outputs:
   ApiBaseUrl:
